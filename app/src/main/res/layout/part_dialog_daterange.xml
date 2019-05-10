@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:id="@+id/rg_begin_and_end"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_Begin"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:button="@null"
+                android:checked="true"
+                android:textColor="#FFBDBDBD"
+                android:gravity="center"
+                android:lineSpacingExtra="2dp"
+                android:textSize="12sp"
+                tools:text="开始于\n2018-06-29 22:11"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_End"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:button="@null"
+                android:gravity="center"
+                android:textColor="#FFBDBDBD"
+                android:lineSpacingExtra="2dp"
+                android:textSize="12sp"
+                tools:text="结束于\n2018-06-29 22:11"/>
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#dedede"/>
+
+    <com.tuuzed.androidx.datepicker.DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:paddingBottom="16dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="16dp"
+            app:dp_selectColor="#DE000000"
+            app:dp_textSize="14sp"
+            app:dp_type="ALL"/>
+
+</LinearLayout>
