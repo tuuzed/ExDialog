@@ -1,4 +1,4 @@
-package com.tuuzed.androidx.dialog.internal
+package com.tuuzed.androidx.dialog.util
 
 import android.util.TypedValue
 import android.util.TypedValue.COMPLEX_UNIT_DIP

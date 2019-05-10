@@ -15,7 +15,7 @@
             android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_Begin"
+                android:id="@+id/beginText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -29,7 +29,7 @@
                 tools:text="开始于\n2018-06-29 22:11"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_End"
+                android:id="@+id/endText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -48,10 +48,9 @@
             android:background="#dedede"/>
 
     <com.tuuzed.androidx.datepicker.DatePicker
-            android:id="@+id/date_picker"
+            android:id="@+id/datePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
             android:paddingBottom="16dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"

@@ -10,7 +10,7 @@ import androidx.annotation.StyleRes
 
 class ExDialog(
     val windowContext: Context
-) : Dialog(windowContext, R.style.ExDialogTheme) {
+) : Dialog(windowContext, R.style.Theme_ExDialog) {
 
 
     companion object Factory {

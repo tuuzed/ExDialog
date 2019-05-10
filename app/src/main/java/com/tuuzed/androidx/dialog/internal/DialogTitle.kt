@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import com.tuuzed.androidx.dialog.R
 
 class DialogTitle(
@@ -29,9 +30,14 @@ class DialogTitle(
         titleText.visibility = View.GONE
     }
 
-    internal fun setIcon(icon: Drawable?) {
+    internal fun setIcon(icon: Drawable) {
         titleIcon.visibility = View.VISIBLE
-        icon?.also { titleIcon.setImageDrawable(it) }
+        icon.also { titleIcon.setImageDrawable(it) }
+    }
+
+    internal fun setIcon(@DrawableRes resId: Int) {
+        titleIcon.visibility = View.VISIBLE
+        titleIcon.setImageResource(resId)
     }
 
     internal fun setText(text: CharSequence?, @ColorInt color: Int?) {

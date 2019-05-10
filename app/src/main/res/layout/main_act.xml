@@ -71,6 +71,11 @@
                     android:layout_height="wrap_content"
                     android:text="Input"/>
 
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="Lists"/>
+
             <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_items_dialog"
                     android:layout_width="match_parent"
@@ -89,6 +94,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Multi Items"/>
+
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="Date"/>
+
+
             <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_date_dialog"
                     android:layout_width="match_parent"

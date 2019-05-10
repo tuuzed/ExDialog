@@ -1,19 +1,15 @@
+@file:Suppress("unused")
+
 package com.tuuzed.androidx.dialog.ext
 
-import android.view.LayoutInflater
 import com.tuuzed.androidx.dialog.ExDialog
-import com.tuuzed.androidx.dialog.R
 
-fun ExDialog.multiChoiceItems(func: MultiChoiceItemsOptions.() -> Unit) {
-    basic {
-        val itemsView = LayoutInflater.from(windowContext).inflate(R.layout.part_dialog_items, null, false)
-        customView(itemsView)
-        val options = MultiChoiceItemsOptions(this@multiChoiceItems, this)
-        func(options)
+fun ExDialog.multiChoiceItems(func: MultiChoiceItemsConfigurator.() -> Unit) {
+    lists {
     }
 }
 
-class MultiChoiceItemsOptions(
+class MultiChoiceItemsConfigurator(
     private val dialog: ExDialog,
-    private val basicOptions: BasicOptions
-) : DialogOptionsInterface by basicOptions
+    private val configurator: ListsConfigurator
+) : DialogConfiguratorInterface by configurator

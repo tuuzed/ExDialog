@@ -28,7 +28,7 @@
         <item name="android:windowExitAnimation">@anim/popup_fade_exit_anim</item>
     </style>
 
-    <style name="ExDialogTheme" parent="Theme.MaterialComponents.Dialog">
+    <style name="Theme_ExDialog" parent="Theme.MaterialComponents.Dialog">
         <!--边框-->
         <item name="android:windowFrame">@null</item>
         <!--浮动窗口-->
@@ -43,7 +43,11 @@
         <!--阴影效果-->
         <item name="android:backgroundDimEnabled">true</item>
         <!--输入法遮挡键盘-->
-        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
+        <!--自定义属性-->
+        <item name="exdialog_basic_background">@drawable/exdialog_basic_background</item>
+        <item name="exdialog_loading_background">@drawable/exdialog_loading_background</item>
+
     </style>
 
 </resources>

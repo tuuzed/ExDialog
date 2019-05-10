@@ -8,6 +8,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.tuuzed.androidx.dialog.ext.*
 import kotlinx.android.synthetic.main.main_act.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         btn_basic_dialog.setOnClickListener {
             ExDialog.show(this) {
                 basic {
+                    icon(R.mipmap.ic_launcher)
                     title("标题")
                     positiveButton("确定", 0xFFFF5722.toInt())
                     negativeButton("取消", 0XFF80CBC4.toInt())
@@ -71,6 +74,9 @@ class MainActivity : AppCompatActivity() {
             ExDialog.show(this) {
                 input {
                     title("标题")
+                    callback {
+                        toast("$it")
+                    }
                     positiveButton("确定", 0xFFFF5722.toInt())
                     negativeButton("取消", 0XFF80CBC4.toInt())
                     neutralButton("关闭", 0XFF757575.toInt())
@@ -79,8 +85,15 @@ class MainActivity : AppCompatActivity() {
         }
         btn_items_dialog.setOnClickListener {
             ExDialog.show(this) {
+                val items = mutableListOf<String>()
+                for (i in 1..100) items.add("Item$i")
                 items {
                     title("标题")
+                    items(items)
+                    callback { dialog, item, position ->
+                        toast("item: $item, position: $position")
+                        dialog.dismiss()
+                    }
                     positiveButton("确定", 0xFFFF5722.toInt())
                     negativeButton("取消", 0XFF80CBC4.toInt())
                     neutralButton("关闭", 0XFF757575.toInt())
@@ -88,9 +101,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
+        btn_date_dialog.setOnClickListener {
+            ExDialog.show(this) {
+                date {
+                    title("标题")
+                    callback {
+                        toast(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(it))
+                    }
+                    positiveButton("确定", 0xFFFF5722.toInt())
+                    negativeButton("取消", 0XFF80CBC4.toInt())
+                    neutralButton("关闭", 0XFF757575.toInt())
+                }
+            }
+        }
         btn_date_range_dialog.setOnClickListener {
             ExDialog.show(this) {
-                dateRangeChooser {
+                dateRange {
                     title("标题")
                     positiveButton("确定", 0xFFFF5722.toInt())
                     negativeButton("取消", 0XFF80CBC4.toInt())
@@ -113,6 +140,10 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
 
+    }
+
+    private fun toast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

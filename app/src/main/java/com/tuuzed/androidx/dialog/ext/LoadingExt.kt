@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "CanBeParameter")
 
 
 package com.tuuzed.androidx.dialog.ext
@@ -14,25 +14,24 @@ import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.R
 
 @SuppressLint("InflateParams")
-inline fun ExDialog.loading(func: LoadingOptions.() -> Unit) {
+inline fun ExDialog.loading(func: LoadingConfigurator.() -> Unit) {
     val inflater = LayoutInflater.from(windowContext)
-    val contentView = inflater.inflate(R.layout.loading_dialog_layout, null, false)
-
-    val loadingIcon: SpinKitView = contentView.findViewById(R.id.loadingIcon)
-    val loadingText: TextView = contentView.findViewById(R.id.loadingText)
-
-    loadingText.visibility = View.GONE
-
-    val options = LoadingOptions(loadingIcon, loadingText)
-    func(options)
-    setContentView(contentView)
-
+    val view = inflater.inflate(R.layout.loading_dialog_layout, null, false)
+    val configurator = LoadingConfigurator(view)
+    func(configurator)
+    setContentView(view)
 }
 
-class LoadingOptions(
-    private val loadingIcon: SpinKitView,
-    private val loadingText: TextView
+class LoadingConfigurator(
+    private val view: View
 ) {
+
+    private val loadingIcon: SpinKitView = view.findViewById(R.id.loadingIcon)
+    private val loadingText: TextView = view.findViewById(R.id.loadingText)
+
+    init {
+        loadingText.visibility = View.GONE
+    }
 
     fun icon(icon: Sprite? = null, @ColorInt color: Int? = null) {
         color?.also { loadingIcon.setColor(it) }

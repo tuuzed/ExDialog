@@ -2,11 +2,10 @@ package com.tuuzed.androidx.dialog.ext
 
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
-import com.tuuzed.androidx.dialog.ExDialog
+import androidx.annotation.DrawableRes
 
-typealias ButtonClick = (dialog: ExDialog, which: Int) -> Unit
-
-internal interface DialogOptionsInterface {
+internal interface DialogConfiguratorInterface {
+    fun icon(@DrawableRes resId: Int)
     fun icon(icon: Drawable? = null)
     fun title(text: CharSequence? = null, @ColorInt color: Int? = null)
     fun positiveButton(
