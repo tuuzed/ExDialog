@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 windowAnimations(ExDialog.WINDOW_ANIMATION_FADE)
                 canceledOnTouchOutside(false)
                 onDismiss { toast("onDismiss") }
+                text("加载中...")
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Basic") {
