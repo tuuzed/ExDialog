@@ -1,10 +1,11 @@
-package com.tuuzed.androidx.dialog.ex.basic
+package com.tuuzed.androidx.dialog.ext.interfaces
 
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import com.tuuzed.androidx.dialog.ext.DialogButtonClick
 
-internal interface DialogNamespaceInterface {
+interface BasicControllerInterface {
     fun icon(@DrawableRes resId: Int)
     fun icon(icon: Drawable? = null)
     fun title(text: CharSequence? = null, @ColorInt color: Int? = null)

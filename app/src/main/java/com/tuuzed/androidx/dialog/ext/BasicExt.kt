@@ -1,8 +1,8 @@
-@file:Suppress("unused", "CanBeParameter")
+@file:Suppress("unused", "CanBeParameter", "InflateParams")
 
-package com.tuuzed.androidx.dialog.ex.basic
+package com.tuuzed.androidx.dialog.ext
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -11,32 +11,42 @@ import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.R
+import com.tuuzed.androidx.dialog.ext.interfaces.BasicControllerInterface
+import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
 import com.tuuzed.androidx.dialog.internal.DialogDefaultButtons
 import com.tuuzed.androidx.dialog.internal.DialogTitle
 
-@SuppressLint("InflateParams")
-inline fun ExDialog.basic(func: BasicNamespace.() -> Unit) {
-    val inflater = LayoutInflater.from(windowContext)
-    val view = inflater.inflate(R.layout.basic_dialog_layout, null, false)
-    val namespace = BasicNamespace(this, view)
-    func(namespace)
-    setContentView(view)
+inline fun ExDialog.Factory.basic(windowContext: Context, func: BasicController.() -> Unit) {
+    ExDialog.show(windowContext) { basic(func) }
+}
+
+inline fun ExDialog.basic(func: BasicController.() -> Unit) {
+    func(BasicController(this) { setContentView(it) })
 }
 
 
-class BasicNamespace(
+class BasicController(
     private val dialog: ExDialog,
-    private val view: View
-) : DialogNamespaceInterface {
+    attachView: (View) -> Unit
+) : ExDialogInterface by dialog,
+    BasicControllerInterface {
 
-
-    private val dialogTitle: DialogTitle = view.findViewById(R.id.dialog_title)
-    private val dialogButtons: DialogDefaultButtons = view.findViewById(R.id.dialog_buttons)
-    private val dialogCustomViewLayout: FrameLayout = view.findViewById(R.id.dialog_customview_layout)
+    private val dialogTitle: DialogTitle
+    private val dialogButtons: DialogDefaultButtons
+    private val dialogCustomViewLayout: FrameLayout
 
     init {
+
+        val inflater = LayoutInflater.from(dialog.windowContext)
+        val view = inflater.inflate(R.layout.basic_dialog_layout, null, false)
+
+        dialogTitle = view.findViewById(R.id.dialog_title)
+        dialogButtons = view.findViewById(R.id.dialog_buttons)
+        dialogCustomViewLayout = view.findViewById(R.id.dialog_customview_layout)
+
         dialogTitle.setupHideViews()
         dialogButtons.setupHideViews()
+        attachView(view)
     }
 
     fun customView(@LayoutRes layoutId: Int) {

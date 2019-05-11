@@ -3,10 +3,7 @@ package com.tuuzed.androidx.dialog.internal
 import android.content.res.ColorStateList
 import androidx.annotation.ColorInt
 import com.google.android.material.button.MaterialButton
-import com.tuuzed.androidx.dialog.util.argbColor
-import com.tuuzed.androidx.dialog.util.colorBlue
-import com.tuuzed.androidx.dialog.util.colorGreen
-import com.tuuzed.androidx.dialog.util.colorRed
+import com.tuuzed.androidx.dialog.ext.*
 
 object MaterialButtonCompat {
 

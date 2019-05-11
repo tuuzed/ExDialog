@@ -6,11 +6,12 @@ import android.app.Dialog
 import android.content.Context
 import android.view.Window
 import androidx.annotation.StyleRes
+import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
 
 
 class ExDialog(
     val windowContext: Context
-) : Dialog(windowContext, R.style.Theme_ExDialog) {
+) : Dialog(windowContext, R.style.Theme_ExDialog), ExDialogInterface {
 
 
     companion object Factory {
@@ -32,34 +33,28 @@ class ExDialog(
         requestWindowFeature(Window.FEATURE_NO_TITLE)
     }
 
-    fun windowAnimations(@StyleRes animationStyle: Int): ExDialog {
+    override fun windowAnimations(@StyleRes animationStyle: Int) {
         this.windowAnimations = animationStyle
-        return this
     }
 
-    fun cancelable(flag: Boolean): ExDialog {
+    override fun cancelable(flag: Boolean) {
         setCancelable(flag)
-        return this
     }
 
-    fun canceledOnTouchOutside(cancel: Boolean): ExDialog {
+    override fun canceledOnTouchOutside(cancel: Boolean) {
         setCanceledOnTouchOutside(cancel)
-        return this
     }
 
-    inline fun onShow(crossinline listener: (ExDialog) -> Unit): ExDialog {
+    override fun onShow(listener: (ExDialog) -> Unit) {
         setOnShowListener { listener(this) }
-        return this
     }
 
-    inline fun onDismiss(crossinline listener: (ExDialog) -> Unit): ExDialog {
+    override fun onDismiss(listener: (ExDialog) -> Unit) {
         setOnDismissListener { listener(this) }
-        return this
     }
 
-    inline fun onCancel(crossinline listener: (ExDialog) -> Unit): ExDialog {
+    override fun onCancel(listener: (ExDialog) -> Unit) {
         setOnCancelListener { listener(this) }
-        return this
     }
 
     inline fun show(func: ExDialog.() -> Unit): ExDialog {

@@ -1,8 +1,8 @@
-@file:Suppress("unused", "CanBeParameter")
+@file:Suppress("unused", "CanBeParameter", "InflateParams")
 
-package com.tuuzed.androidx.dialog.ex.lists
+package com.tuuzed.androidx.dialog.ext
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.ColorInt
@@ -13,38 +13,45 @@ import com.github.ybq.android.spinkit.sprite.Sprite
 import com.google.android.material.button.MaterialButton
 import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.R
-import com.tuuzed.androidx.dialog.ex.basic.CustomViewNamespace
-import com.tuuzed.androidx.dialog.ex.basic.DialogNamespaceInterface
-import com.tuuzed.androidx.dialog.ex.basic.customView
+import com.tuuzed.androidx.dialog.ext.interfaces.BasicControllerInterface
+import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
+import com.tuuzed.androidx.dialog.ext.interfaces.ListsControllerInterface
 import com.tuuzed.androidx.dialog.internal.MaterialButtonCompat
 import com.tuuzed.recyclerview.adapter.RecyclerViewAdapter
 
-@SuppressLint("InflateParams")
-inline fun ExDialog.lists(func: ListsNamespace.() -> Unit) {
+inline fun ExDialog.Factory.lists(windowContext: Context, func: ListsController.() -> Unit) {
+    ExDialog.show(windowContext) { lists(func) }
+}
+
+inline fun ExDialog.lists(func: ListsController.() -> Unit) {
     customView {
-        val inflater = LayoutInflater.from(windowContext)
-        val view = inflater.inflate(R.layout.part_dialog_lists, null, false)
-        val configurator = ListsNamespace(this@lists, this, view)
-        func(configurator)
-        customView(view)
+        func(ListsController(this@lists, this) { customView(it) })
     }
 }
 
-class ListsNamespace(
+class ListsController(
     private val dialog: ExDialog,
-    private val delegate: CustomViewNamespace,
-    private val view: View
-) : DialogNamespaceInterface by delegate, ListsNamespaceInterface {
+    private val delegate: CustomViewController,
+    attachView: (View) -> Unit
+) : ExDialogInterface by dialog,
+    BasicControllerInterface by delegate,
+    ListsControllerInterface {
 
-    private val loadingIcon: SpinKitView = view.findViewById(R.id.loadingIcon)
-    private val button: MaterialButton = view.findViewById(R.id.button)
-    private val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
-
-    private val listAdapter = RecyclerViewAdapter.with(recyclerView)
+    private val loadingIcon: SpinKitView
+    private val button: MaterialButton
+    private val recyclerView: RecyclerView
+    private val listAdapter: RecyclerViewAdapter
 
     init {
+        val inflater = LayoutInflater.from(dialog.windowContext)
+        val view = inflater.inflate(R.layout.part_dialog_lists, null, false)
+        loadingIcon = view.findViewById(R.id.loadingIcon)
+        button = view.findViewById(R.id.button)
+        recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(dialog.windowContext)
+        listAdapter = RecyclerViewAdapter.with(recyclerView)
         showLoadingView()
+        attachView(view)
     }
 
     fun config(func: (RecyclerView, RecyclerViewAdapter) -> Unit) {

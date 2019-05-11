@@ -12,14 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.tuuzed.androidx.dialog.coroutines.async
 import com.tuuzed.androidx.dialog.coroutines.safeCancel
 import com.tuuzed.androidx.dialog.coroutines.then
-import com.tuuzed.androidx.dialog.ex.basic.basic
-import com.tuuzed.androidx.dialog.ex.basic.message
-import com.tuuzed.androidx.dialog.ex.date.date
-import com.tuuzed.androidx.dialog.ex.date.dateRange
-import com.tuuzed.androidx.dialog.ex.input.input
-import com.tuuzed.androidx.dialog.ex.lifecycle.lifecycleOwner
-import com.tuuzed.androidx.dialog.ex.lists.simpleItems
-import com.tuuzed.androidx.dialog.ex.loading.loading
+import com.tuuzed.androidx.dialog.ext.*
 import com.tuuzed.recyclerview.adapter.AbstractItemViewBinder
 import com.tuuzed.recyclerview.adapter.CommonItemViewHolder
 import com.tuuzed.recyclerview.adapter.RecyclerViewAdapter
@@ -59,61 +52,52 @@ class MainActivity : AppCompatActivity() {
 
         SegmentItem("ExDialog").also { listAdapter.appendItems(it) }
         ButtonItem("Loading") {
-            ExDialog.show(this) {
+            ExDialog.loading(this) {
                 windowAnimations(ExDialog.WINDOW_ANIMATION_FADE)
                 canceledOnTouchOutside(false)
                 onDismiss { toast("onDismiss") }
-                loading { text(text = "加载中...") }
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Basic") {
-            ExDialog.show(this) {
-                basic {
-                    icon(R.mipmap.ic_launcher)
-                    title("标题")
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
-                }
+            ExDialog.basic(this) {
+                icon(R.mipmap.ic_launcher)
+                title("标题")
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Message") {
-            ExDialog.show(this) {
-                message {
-                    title("标题")
-                    message("这是一条消息。")
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
-                }
+            ExDialog.message(this) {
+                title("标题")
+                message("这是一条消息。")
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Long Message") {
-            ExDialog.show(this) {
-                message {
-                    title("标题")
-                    message("这是一条很长的消息。".let {
-                        var s = it
-                        for (i in 0..1000) s += it
-                        s
-                    })
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
-                }
+            ExDialog.message(this) {
+                title("标题")
+                message("这是一条很长的消息。".let {
+                    var s = it
+                    for (i in 0..1000) s += it
+                    s
+                })
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Input") {
-            ExDialog.show(this) {
-                input {
-                    title("标题")
-                    callback {
-                        toast("$it")
-                    }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+            ExDialog.input(this) {
+                title("标题")
+                callback {
+                    toast("$it")
                 }
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
             }
         }.also { listAdapter.appendItems(it) }
 
@@ -121,55 +105,51 @@ class MainActivity : AppCompatActivity() {
         SegmentItem("Lists").also { listAdapter.appendItems(it) }
 
         ButtonItem("Items") {
-            ExDialog.show(this) {
+            ExDialog.simpleItems(this) {
                 val items = mutableListOf<String>()
                 for (i in 1..4) items.add("Item$i")
-                simpleItems {
-                    items(items)
-                    callback { dialog, item, position ->
-                        toast("item: $item, position: $position")
-                        dialog.dismiss()
-                    }
+                items(items)
+                callback { dialog, item, position ->
+                    toast("item: $item, position: $position")
+                    dialog.dismiss()
                 }
             }
         }.also { listAdapter.appendItems(it) }
 
         ButtonItem("Lazy Items") {
-            ExDialog.show(this) {
-                simpleItems {
-                    canceledOnTouchOutside(false)
-                    title("Lazy Items")
-                    var lazyLoadTask: (() -> Job)? = null
-                    lazyLoadTask = {
-                        async {
-                            val items = mutableListOf<String>()
-                            for (i in 1..Random().nextInt(100)) items.add("Item$i")
-                            // 模拟耗时操作
-                            SystemClock.sleep(1000)
-                            items
-                        } then {
-                            if (it.size < 50) {
-                                showClickButton("加载失败，点击重试。", 0xFF5DA017.toInt()) {
-                                    showLoadingView()
-                                    lazyLoadTask?.invoke()
-                                }
-                            } else {
-                                items(it)
-                                positiveButton("确定") { dialog, _ ->
-                                    dialog.dismiss()
-                                }
+            ExDialog.simpleItems(this) {
+                canceledOnTouchOutside(false)
+                title("Lazy Items")
+                var lazyLoadTask: (() -> Job)? = null
+                lazyLoadTask = {
+                    async {
+                        val items = mutableListOf<String>()
+                        for (i in 1..Random().nextInt(100)) items.add("Item$i")
+                        // 模拟耗时操作
+                        SystemClock.sleep(1000)
+                        items
+                    } then {
+                        if (it.size < 50) {
+                            showClickButton("加载失败，点击重试。", 0xFF5DA017.toInt()) {
+                                showLoadingView()
+                                lazyLoadTask?.invoke()
+                            }
+                        } else {
+                            items(it)
+                            positiveButton("确定") { dialog, _ ->
+                                dialog.dismiss()
                             }
                         }
                     }
-                    val loadTask = lazyLoadTask()
-                    callback { dialog, item, position ->
-                        toast("item: $item, position: $position")
-                        dialog.dismiss()
-                    }
-                    onDismiss { loadTask.safeCancel() }
-                    positiveButton("取消") { dialog, _ ->
-                        dialog.dismiss()
-                    }
+                }
+                val loadTask = lazyLoadTask()
+                callback { dialog, item, position ->
+                    toast("item: $item, position: $position")
+                    dialog.dismiss()
+                }
+                onDismiss { loadTask.safeCancel() }
+                positiveButton("取消") { dialog, _ ->
+                    dialog.dismiss()
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -187,69 +167,61 @@ class MainActivity : AppCompatActivity() {
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Items + Title + Buttons") {
-            ExDialog.show(this) {
+            ExDialog.simpleItems(this) {
                 val items = mutableListOf<String>()
                 for (i in 1..4) items.add("Item$i")
-                simpleItems {
-                    title("标题")
-                    items(items)
-                    callback { dialog, selected, index ->
-                        toast("selected: $selected, index: $index")
-                        dialog.dismiss()
-                    }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                title("标题")
+                items(items)
+                callback { dialog, selected, index ->
+                    toast("selected: $selected, index: $index")
+                    dialog.dismiss()
                 }
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Long Items + Title + Buttons") {
-            ExDialog.show(this) {
+            ExDialog.simpleItems(this) {
                 val items = mutableListOf<String>()
                 for (i in 1..4) items.add("Item$i")
-                simpleItems {
-                    title("标题")
-                    items(items)
-                    callback { dialog, selected, index ->
-                        toast("selected: $selected, index: $index")
-                        dialog.dismiss()
-                    }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                title("标题")
+                items(items)
+                callback { dialog, selected, index ->
+                    toast("selected: $selected, index: $index")
+                    dialog.dismiss()
                 }
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
             }
         }.also { listAdapter.appendItems(it) }
 
-        SegmentItem("Date").also { listAdapter.appendItems(it) }
-        ButtonItem("Date") {
-            ExDialog.show(this) {
-                date {
-                    title("标题")
-                    callback {
-                        toast(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(it))
-                    }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+        SegmentItem("DatePicker").also { listAdapter.appendItems(it) }
+        ButtonItem("Date Picker") {
+            ExDialog.datePicker(this) {
+                title("标题")
+                callback {
+                    toast(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(it))
                 }
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
             }
         }.also { listAdapter.appendItems(it) }
-        ButtonItem("Date Range") {
-            ExDialog.show(this) {
-                dateRange {
-                    callback { beginDate, endDate ->
-                        toast(
-                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(beginDate)
-                                    + " ~ " +
-                                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(endDate)
-                        )
-                    }
-                    title("标题")
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+        ButtonItem("Date Range Picker") {
+            ExDialog.dateRangePicker(this) {
+                callback { beginDate, endDate ->
+                    toast(
+                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(beginDate)
+                                + " ~ " +
+                                SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(endDate)
+                    )
                 }
+                title("标题")
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
             }
         }.also { listAdapter.appendItems(it) }
 
