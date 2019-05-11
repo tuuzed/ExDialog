@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.tuuzed.androidx.dialog.ext
+package com.tuuzed.androidx.dialog.ex.lifecycle
 
 import androidx.annotation.Keep
 import androidx.lifecycle.Lifecycle

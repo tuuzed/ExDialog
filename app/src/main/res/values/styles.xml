@@ -43,7 +43,7 @@
         <!--阴影效果-->
         <item name="android:backgroundDimEnabled">true</item>
         <!--输入法遮挡键盘-->
-        <item name="android:windowSoftInputMode">adjustResize|stateVisible</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
         <!--自定义属性-->
         <item name="exdialog_basic_background">@drawable/exdialog_basic_background</item>
         <item name="exdialog_loading_background">@drawable/exdialog_loading_background</item>

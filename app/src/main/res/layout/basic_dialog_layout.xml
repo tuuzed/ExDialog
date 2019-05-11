@@ -5,9 +5,9 @@
         android:id="@+id/dialog_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="32dp"
-        android:paddingBottom="32dp"
         android:theme="@style/Theme_ExDialog"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         tools:background="#212121"
 >
 
@@ -37,18 +37,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:minHeight="12dp"
-                android:paddingTop="4dp"
                 android:layout_weight="1"/>
 
-
-        <com.tuuzed.androidx.dialog.internal.DialogActionButtonLayout
-                android:id="@+id/dialog_action_buttons"
+        <FrameLayout
+                android:id="@+id/dialog_buttons_layout"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:orientation="horizontal"
-        />
+                android:layout_height="wrap_content"
+        >
+
+
+            <com.tuuzed.androidx.dialog.internal.DialogDefaultButtons
+                    android:id="@+id/dialog_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+            />
+        </FrameLayout>
 
 
     </com.tuuzed.androidx.dialog.internal.DialogLayout>

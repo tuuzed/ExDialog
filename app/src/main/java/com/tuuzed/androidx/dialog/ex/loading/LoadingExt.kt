@@ -1,7 +1,7 @@
 @file:Suppress("unused", "CanBeParameter")
 
 
-package com.tuuzed.androidx.dialog.ext
+package com.tuuzed.androidx.dialog.ex.loading
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

@@ -1,6 +1,6 @@
 @file:Suppress("unused", "CanBeParameter")
 
-package com.tuuzed.androidx.dialog.ext
+package com.tuuzed.androidx.dialog.ex.basic
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -11,21 +11,21 @@ import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.R
 
 @SuppressLint("InflateParams")
-inline fun ExDialog.message(func: MessageConfigurator.() -> Unit) {
+inline fun ExDialog.message(func: MessageNamespace.() -> Unit) {
     customView {
         val inflater = LayoutInflater.from(windowContext)
         val view = inflater.inflate(R.layout.part_dialog_message, null, false)
-        val configurator = MessageConfigurator(this@message, this, view)
-        func(configurator)
+        val namespace = MessageNamespace(this@message, this, view)
+        func(namespace)
         customView(view)
     }
 }
 
-class MessageConfigurator(
+class MessageNamespace(
     private val dialog: ExDialog,
-    private val configurator: CustomViewConfigurator,
+    private val delegate: CustomViewNamespace,
     private val view: View
-) : DialogConfiguratorInterface by configurator {
+) : DialogNamespaceInterface by delegate  {
 
     private val messageText: TextView = view.findViewById(R.id.messageText)
 

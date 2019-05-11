@@ -1,6 +1,6 @@
 @file:Suppress("unused", "CanBeParameter")
 
-package com.tuuzed.androidx.dialog.ext
+package com.tuuzed.androidx.dialog.ex.date
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
@@ -10,24 +10,28 @@ import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.R
+import com.tuuzed.androidx.dialog.ex.basic.CustomViewNamespace
+import com.tuuzed.androidx.dialog.ex.basic.DialogButtonClick
+import com.tuuzed.androidx.dialog.ex.basic.DialogNamespaceInterface
+import com.tuuzed.androidx.dialog.ex.basic.customView
 import java.util.*
 
 @SuppressLint("InflateParams")
-fun ExDialog.date(func: DateConfigurator.() -> Unit) {
+fun ExDialog.date(func: DateNamespace.() -> Unit) {
     customView {
         val inflater = LayoutInflater.from(windowContext)
         val view = inflater.inflate(R.layout.part_dialog_date, null, false)
-        val configurator = DateConfigurator(this@date, this, view)
-        func(configurator)
+        val namespace = DateNamespace(this@date, this, view)
+        func(namespace)
         customView(view)
     }
 }
 
-class DateConfigurator(
+class DateNamespace(
     private val dialog: ExDialog,
-    private val configurator: CustomViewConfigurator,
+    private val delegate: CustomViewNamespace,
     private val view: View
-) : DialogConfiguratorInterface by configurator {
+) : DialogNamespaceInterface by delegate {
 
     private val datePicker: DatePicker = view.findViewById(R.id.datePicker)
 
@@ -58,10 +62,15 @@ class DateConfigurator(
         this.callback = callback
     }
 
-    override fun positiveButton(text: CharSequence?, color: Int?, icon: Drawable?, click: ButtonClick) {
-        configurator.positiveButton(text, color, icon) { dialog, which ->
-            callback?.invoke(datePicker.date)
-            click(dialog, which)
+    override fun positiveButton(
+        text: CharSequence,
+        color: Int?,
+        icon: Drawable?,
+        click: DialogButtonClick?
+    ) {
+        delegate.positiveButton(text, color, icon) { dialog, which ->
+            callback?.invoke(datePicker.dateFormat.let { it.parse(it.format(datePicker.date)) })
+            click?.invoke(dialog, which)
         }
     }
 

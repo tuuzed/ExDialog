@@ -4,7 +4,6 @@
        tools:layout_height="48dp"
        tools:paddingRight="12dp"
        tools:paddingLeft="12dp"
-       tools:background="#DFDFDF"
        tools:parentTag="android.widget.LinearLayout">
 
     <com.google.android.material.button.MaterialButton

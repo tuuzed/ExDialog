@@ -33,7 +33,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginBottom="4dp"
-                    app:SpinKit_Color="@color/colorAccent"/>
+                    app:SpinKit_Color="?attr/colorAccent"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/loadingText"

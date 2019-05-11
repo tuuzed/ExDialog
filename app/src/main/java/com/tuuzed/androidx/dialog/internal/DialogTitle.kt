@@ -11,9 +11,9 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import com.tuuzed.androidx.dialog.R
 
-class DialogTitle(
-    context: Context, attrs: AttributeSet
-) : LinearLayout(context, attrs) {
+class DialogTitle @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val titleIcon: ImageView
     private val titleText: TextView

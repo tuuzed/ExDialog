@@ -21,113 +21,21 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
     >
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                tools:showIn="@layout/main_act">
+                android:scrollbars="vertical"
+                tools:listitem="@android:layout/simple_list_item_checked"/>
 
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_marginTop="8dp"
-                      android:text="ExDialog"/>
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_loading_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Loading"/>
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_basic_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Basic"/>
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_message_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Message"/>
-
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_long_message_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Long Message"/>
-
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_input_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Input"/>
-
-
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="Lists"/>
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_items_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Items"/>
-
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_single_items_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Single Items"/>
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_multi_items_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Multi Items"/>
-
-
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="Date"/>
-
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_date_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Date"/>
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_date_range_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Date Range"/>
-
-
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:text="System"/>
-
-            <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_system_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="System"/>
-
-
-        </LinearLayout>
-
-    </ScrollView>
+    </FrameLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -47,17 +47,17 @@ class ExDialog(
         return this
     }
 
-    inline fun onShowEvent(crossinline listener: (ExDialog) -> Unit): ExDialog {
+    inline fun onShow(crossinline listener: (ExDialog) -> Unit): ExDialog {
         setOnShowListener { listener(this) }
         return this
     }
 
-    inline fun onDismissEvent(crossinline listener: (ExDialog) -> Unit): ExDialog {
+    inline fun onDismiss(crossinline listener: (ExDialog) -> Unit): ExDialog {
         setOnDismissListener { listener(this) }
         return this
     }
 
-    inline fun onCancelEvent(crossinline listener: (ExDialog) -> Unit): ExDialog {
+    inline fun onCancel(crossinline listener: (ExDialog) -> Unit): ExDialog {
         setOnCancelListener { listener(this) }
         return this
     }
