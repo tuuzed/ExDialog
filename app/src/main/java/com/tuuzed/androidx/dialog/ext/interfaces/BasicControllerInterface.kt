@@ -3,27 +3,30 @@ package com.tuuzed.androidx.dialog.ext.interfaces
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.tuuzed.androidx.dialog.ext.DialogButtonClick
 
 interface BasicControllerInterface {
-    fun icon(@DrawableRes resId: Int)
-    fun icon(icon: Drawable? = null)
-    fun title(text: CharSequence? = null, @ColorInt color: Int? = null)
+    fun icon(@DrawableRes resId: Int? = null, icon: Drawable? = null)
+    fun title(@StringRes resId: Int? = null, text: CharSequence? = null, @ColorInt color: Int? = null)
 
     fun positiveButton(
-        text: CharSequence, @ColorInt color: Int? = null,
+        text: CharSequence,
+        @ColorInt color: Int? = null,
         icon: Drawable? = null,
         click: DialogButtonClick? = { dialog, _ -> dialog.dismiss() }
     )
 
     fun negativeButton(
-        text: CharSequence, @ColorInt color: Int? = null,
+        text: CharSequence,
+        @ColorInt color: Int? = null,
         icon: Drawable? = null,
         click: DialogButtonClick? = { dialog, _ -> dialog.dismiss() }
     )
 
     fun neutralButton(
-        text: CharSequence, @ColorInt color: Int? = null,
+        text: CharSequence,
+        @ColorInt color: Int? = null,
         icon: Drawable? = null,
         click: DialogButtonClick? = { dialog, _ -> dialog.dismiss() }
     )

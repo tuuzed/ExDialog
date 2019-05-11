@@ -63,7 +63,7 @@ class DialogDefaultButtons @JvmOverloads constructor(
         button.visibility = View.VISIBLE
         text?.also { button.text = text }
         color?.also {
-            button.setTextColor(it)
+            MaterialButtonCompat.setTextColor(button, it)
             MaterialButtonCompat.setRippleColor(button, it)
         }
         icon?.also { button.icon = icon }

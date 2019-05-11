@@ -58,18 +58,24 @@ class BasicController(
         dialogCustomViewLayout.addView(view)
     }
 
-    override fun icon(resId: Int) {
+    override fun icon(resId: Int?, icon: Drawable?) {
         dialogTitle.visibility = View.VISIBLE
-        dialogTitle.setIcon(resId)
+        if (resId != null) {
+            dialogTitle.setIcon(resId)
+        } else {
+            icon?.also { dialogTitle.setIcon(it) }
+        }
     }
 
-    override fun icon(icon: Drawable?) {
-        dialogTitle.visibility = View.VISIBLE
-        icon?.also { dialogTitle.setIcon(it) }
-    }
 
-    override fun title(text: CharSequence?, @ColorInt color: Int?) {
+    override fun title(resId: Int?, text: CharSequence?, @ColorInt color: Int?) {
         dialogTitle.visibility = View.VISIBLE
+        if (resId != null) {
+            dialogTitle.setText(resId, color)
+        } else {
+            text?.also { dialogTitle.setText(it, color) }
+        }
+
         dialogTitle.setText(text, color)
     }
 

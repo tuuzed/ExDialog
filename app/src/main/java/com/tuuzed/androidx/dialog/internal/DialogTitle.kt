@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.tuuzed.androidx.dialog.R
 
 class DialogTitle @JvmOverloads constructor(
@@ -38,6 +39,12 @@ class DialogTitle @JvmOverloads constructor(
     internal fun setIcon(@DrawableRes resId: Int) {
         titleIcon.visibility = View.VISIBLE
         titleIcon.setImageResource(resId)
+    }
+
+    internal fun setText(@StringRes resId: Int?, @ColorInt color: Int?) {
+        titleText.visibility = View.VISIBLE
+        resId?.also { titleText.setText(resId) }
+        color?.also { titleText.setTextColor(it) }
     }
 
     internal fun setText(text: CharSequence?, @ColorInt color: Int?) {

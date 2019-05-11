@@ -12,6 +12,11 @@ object MaterialButtonCompat {
         button.rippleColor = colorStateList(color)
     }
 
+    @JvmStatic
+    fun setTextColor(button: MaterialButton, @ColorInt color: Int) {
+        button.setTextColor(textColor(color))
+    }
+
     private fun colorStateList(@ColorInt color: Int): ColorStateList {
         return ColorStateList(
             // state
@@ -58,4 +63,28 @@ object MaterialButtonCompat {
         )
     }
 
+    private fun textColor(@ColorInt color: Int): ColorStateList {
+        return ColorStateList(
+            // state
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf()
+            ),
+            // colors
+            intArrayOf(
+                argbColor(
+                    1.00f,
+                    colorRed(color),
+                    colorGreen(color),
+                    colorBlue(color)
+                ),
+                argbColor(
+                    0.20f,
+                    colorRed(color),
+                    colorGreen(color),
+                    colorBlue(color)
+                )
+            )
+        )
+    }
 }
