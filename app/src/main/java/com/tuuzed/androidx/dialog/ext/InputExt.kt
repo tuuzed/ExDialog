@@ -7,12 +7,13 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
+import androidx.annotation.ColorInt
 import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.R
 import com.tuuzed.androidx.dialog.ext.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
 
-inline fun ExDialog.Factory.input(windowContext: Context, func: InputController.() -> Unit) {
+inline fun ExDialog.Factory.showInput(windowContext: Context, func: InputController.() -> Unit) {
     ExDialog.show(windowContext) { input(func) }
 }
 
@@ -53,15 +54,10 @@ class InputController(
         this.callback = callback
     }
 
-    override fun positiveButton(
-        text: CharSequence,
-        color: Int?,
-        icon: Drawable?,
-        click: DialogButtonClick?
-    ) {
+    override fun positiveButton(text: CharSequence, @ColorInt color: Int?, icon: Drawable?, click: DialogButtonClick) {
         delegate.positiveButton(text, color, icon) { dialog, which ->
             callback?.invoke(editText.text)
-            click?.invoke(dialog, which)
+            click.invoke(dialog, which)
         }
     }
 }

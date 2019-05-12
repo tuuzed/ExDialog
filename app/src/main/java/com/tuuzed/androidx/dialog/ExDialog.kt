@@ -33,6 +33,12 @@ class ExDialog(
         requestWindowFeature(Window.FEATURE_NO_TITLE)
     }
 
+    inline fun show(func: ExDialog.() -> Unit): ExDialog {
+        this.func()
+        show()
+        return this
+    }
+
     override fun windowAnimations(@StyleRes animationStyle: Int) {
         this.windowAnimations = animationStyle
     }
@@ -45,22 +51,16 @@ class ExDialog(
         setCanceledOnTouchOutside(cancel)
     }
 
-    override fun onShow(listener: (ExDialog) -> Unit) {
+    override fun onDialogShow(listener: (ExDialog) -> Unit) {
         setOnShowListener { listener(this) }
     }
 
-    override fun onDismiss(listener: (ExDialog) -> Unit) {
+    override fun onDialogDismiss(listener: (ExDialog) -> Unit) {
         setOnDismissListener { listener(this) }
     }
 
-    override fun onCancel(listener: (ExDialog) -> Unit) {
+    override fun onDialogCancel(listener: (ExDialog) -> Unit) {
         setOnCancelListener { listener(this) }
-    }
-
-    inline fun show(func: ExDialog.() -> Unit): ExDialog {
-        this.func()
-        show()
-        return this
     }
 
     override fun onAttachedToWindow() {

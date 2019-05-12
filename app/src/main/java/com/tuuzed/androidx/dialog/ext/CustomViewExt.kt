@@ -7,10 +7,9 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.ext.interfaces.BasicControllerInterface
-import com.tuuzed.androidx.dialog.ext.interfaces.CustomViewControllerInterface
 import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
 
-inline fun ExDialog.Factory.customView(windowContext: Context, func: CustomViewController.() -> Unit) {
+inline fun ExDialog.Factory.showCustomView(windowContext: Context, func: CustomViewController.() -> Unit) {
     ExDialog.show(windowContext) { customView(func) }
 }
 
@@ -22,8 +21,7 @@ class CustomViewController(
     private val dialog: ExDialog,
     private val delegate: BasicController
 ) : ExDialogInterface by dialog,
-    BasicControllerInterface by delegate,
-    CustomViewControllerInterface {
-    override fun customView(@LayoutRes layoutId: Int) = delegate.customView(layoutId)
-    override fun customView(view: View) = delegate.customView(view)
+    BasicControllerInterface by delegate {
+    fun customView(@LayoutRes layoutId: Int) = delegate.customView(layoutId)
+    fun customView(view: View) = delegate.customView(view)
 }

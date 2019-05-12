@@ -52,15 +52,15 @@ class MainActivity : AppCompatActivity() {
 
         SegmentItem("ExDialog").also { listAdapter.appendItems(it) }
         ButtonItem("Loading") {
-            ExDialog.loading(this) {
+            ExDialog.showLoading(this) {
                 windowAnimations(ExDialog.WINDOW_ANIMATION_FADE)
                 canceledOnTouchOutside(false)
-                onDismiss { toast("onDismiss") }
+                onDialogDismiss { toast("onDismiss") }
                 text("加载中...")
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Basic") {
-            ExDialog.basic(this) {
+            ExDialog.showBasic(this) {
                 icon(R.mipmap.ic_launcher)
                 title(text = "标题")
                 positiveButton("确定", 0xFFFF5722.toInt())
@@ -70,18 +70,18 @@ class MainActivity : AppCompatActivity() {
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Message") {
-            ExDialog.message(this) {
+            ExDialog.showMessage(this) {
                 title(text = "标题")
-                message("这是一条消息。")
+                message(text = "这是一条消息。")
                 positiveButton("确定", 0xFFFF5722.toInt())
                 negativeButton("取消", 0XFF80CBC4.toInt())
                 neutralButton("关闭", 0XFF757575.toInt())
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Long Message") {
-            ExDialog.message(this) {
+            ExDialog.showMessage(this) {
                 title(text = "标题")
-                message("这是一条很长的消息。".let {
+                message(text = "这是一条很长的消息。".let {
                     var s = it
                     for (i in 0..1000) s += it
                     s
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Input") {
-            ExDialog.input(this) {
+            ExDialog.showInput(this) {
                 title(text = "标题")
                 callback {
                     toast("$it")
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         SegmentItem("Lists").also { listAdapter.appendItems(it) }
 
         ButtonItem("Items") {
-            ExDialog.simpleItems(this) {
+            ExDialog.showSimpleItems<String>(this) {
                 val items = mutableListOf<String>()
                 for (i in 1..4) items.add("Item$i")
                 items(items)
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         }.also { listAdapter.appendItems(it) }
 
         ButtonItem("Lazy Items") {
-            ExDialog.simpleItems(this) {
+            ExDialog.showSimpleItems<String>(this) {
                 canceledOnTouchOutside(false)
                 title(text = "Lazy Items")
                 var lazyLoadTask: (() -> Job)? = null
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                         items
                     } then {
                         if (it.size < 50) {
-                            showButtonView("加载失败，点击重试。", 0xFF5DA017.toInt()) {
+                            showMessageView("加载失败，点击重试。", 0xFF5DA017.toInt()) {
                                 showLoadingView()
                                 lazyLoadTask?.invoke()
                             }
@@ -149,27 +149,25 @@ class MainActivity : AppCompatActivity() {
                     toast("item: $item, position: $position")
                     dialog.dismiss()
                 }
-                onDismiss { loadTask.safeCancel() }
+                onDialogDismiss { loadTask.safeCancel() }
                 positiveButton("取消") { dialog, _ ->
                     dialog.dismiss()
                 }
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Long Items") {
-            ExDialog.show(this) {
+            ExDialog.showSimpleItems<String>(this) {
                 val items = mutableListOf<String>()
                 for (i in 1..100) items.add("Item$i")
-                simpleItems {
-                    items(items)
-                    callback { dialog, item, position ->
-                        toast("item: $item, position: $position")
-                        dialog.dismiss()
-                    }
+                items(items)
+                callback { dialog, item, position ->
+                    toast("item: $item, position: $position")
+                    dialog.dismiss()
                 }
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Items + Title + Buttons") {
-            ExDialog.simpleItems(this) {
+            ExDialog.showSimpleItems<String>(this) {
                 val items = mutableListOf<String>()
                 for (i in 1..4) items.add("Item$i")
                 title(text = "标题")
@@ -184,7 +182,7 @@ class MainActivity : AppCompatActivity() {
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Long Items + Title + Buttons") {
-            ExDialog.simpleItems(this) {
+            ExDialog.showSimpleItems<String>(this) {
                 val items = mutableListOf<String>()
                 for (i in 1..4) items.add("Item$i")
                 title(text = "标题")
@@ -200,7 +198,7 @@ class MainActivity : AppCompatActivity() {
         }.also { listAdapter.appendItems(it) }
 
         ButtonItem("Single Choice Items") {
-            ExDialog.singleChoiceItems(this) {
+            ExDialog.showSingleChoiceItems<String>(this) {
                 val items = mutableListOf<String>()
                 for (i in 1..4) items.add("Item$i")
                 title(text = "标题")
@@ -217,7 +215,7 @@ class MainActivity : AppCompatActivity() {
 
 
         ButtonItem("Multi Choice Items") {
-            ExDialog.multiChoiceItems(this) {
+            ExDialog.showMultiChoiceItems<String>(this) {
                 val items = mutableListOf<String>()
                 for (i in 1..4) items.add("Item$i")
                 title(text = "标题")
@@ -236,7 +234,7 @@ class MainActivity : AppCompatActivity() {
 
         SegmentItem("DatePicker").also { listAdapter.appendItems(it) }
         ButtonItem("Date Picker") {
-            ExDialog.datePicker(this) {
+            ExDialog.showDatePicker(this) {
                 title(text = "标题")
                 callback {
                     toast(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(it))
@@ -247,7 +245,7 @@ class MainActivity : AppCompatActivity() {
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Date Range Picker") {
-            ExDialog.dateRangePicker(this) {
+            ExDialog.showDateRangePicker(this) {
                 callback { beginDate, endDate ->
                     toast(
                         SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(beginDate)

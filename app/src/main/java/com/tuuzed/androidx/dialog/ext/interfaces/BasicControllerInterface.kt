@@ -6,29 +6,23 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.tuuzed.androidx.dialog.ext.DialogButtonClick
 
-interface BasicControllerInterface {
+internal interface BasicControllerInterface {
     fun icon(@DrawableRes resId: Int? = null, icon: Drawable? = null)
     fun title(@StringRes resId: Int? = null, text: CharSequence? = null, @ColorInt color: Int? = null)
 
     fun positiveButton(
-        text: CharSequence,
-        @ColorInt color: Int? = null,
-        icon: Drawable? = null,
-        click: DialogButtonClick? = { dialog, _ -> dialog.dismiss() }
+        text: CharSequence, @ColorInt color: Int? = null, icon: Drawable? = null,
+        click: DialogButtonClick = { dialog, _ -> dialog.dismiss() }
     )
 
     fun negativeButton(
-        text: CharSequence,
-        @ColorInt color: Int? = null,
-        icon: Drawable? = null,
-        click: DialogButtonClick? = { dialog, _ -> dialog.dismiss() }
+        text: CharSequence, @ColorInt color: Int? = null, icon: Drawable? = null,
+        click: DialogButtonClick = { dialog, _ -> dialog.dismiss() }
     )
 
     fun neutralButton(
-        text: CharSequence,
-        @ColorInt color: Int? = null,
-        icon: Drawable? = null,
-        click: DialogButtonClick? = { dialog, _ -> dialog.dismiss() }
+        text: CharSequence, @ColorInt color: Int? = null, icon: Drawable? = null,
+        click: DialogButtonClick = { dialog, _ -> dialog.dismiss() }
     )
 
     fun disablePositiveButton(disable: Boolean = true)

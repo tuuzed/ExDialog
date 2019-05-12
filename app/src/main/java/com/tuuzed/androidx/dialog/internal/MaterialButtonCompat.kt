@@ -3,16 +3,17 @@ package com.tuuzed.androidx.dialog.internal
 import android.content.res.ColorStateList
 import androidx.annotation.ColorInt
 import com.google.android.material.button.MaterialButton
-import com.tuuzed.androidx.dialog.ext.*
+import com.tuuzed.androidx.dialog.ext.argbColor
+import com.tuuzed.androidx.dialog.ext.colorBlue
+import com.tuuzed.androidx.dialog.ext.colorGreen
+import com.tuuzed.androidx.dialog.ext.colorRed
 
-object MaterialButtonCompat {
+internal object MaterialButtonCompat {
 
-    @JvmStatic
     fun setRippleColor(button: MaterialButton, @ColorInt color: Int) {
         button.rippleColor = colorStateList(color)
     }
 
-    @JvmStatic
     fun setTextColor(button: MaterialButton, @ColorInt color: Int) {
         button.setTextColor(textColor(color))
     }

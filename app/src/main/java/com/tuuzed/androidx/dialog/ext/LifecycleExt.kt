@@ -18,7 +18,7 @@ fun ExDialog.lifecycleOwner(lifecycle: Lifecycle): ExDialog {
 }
 
 @Keep
-class MaterialDialogLifecycleObserver(
+private class MaterialDialogLifecycleObserver(
     private val dialog: ExDialog
 ) : LifecycleObserver {
 

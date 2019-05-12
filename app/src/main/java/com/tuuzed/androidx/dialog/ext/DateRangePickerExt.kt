@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import com.tuuzed.androidx.dialog.ExDialog
@@ -15,7 +16,7 @@ import com.tuuzed.androidx.dialog.ext.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
 import java.util.*
 
-inline fun ExDialog.Factory.dateRangePicker(windowContext: Context, func: DateRangeController.() -> Unit) {
+inline fun ExDialog.Factory.showDateRangePicker(windowContext: Context, func: DateRangeController.() -> Unit) {
     ExDialog.show(windowContext) { dateRangePicker(func) }
 }
 
@@ -72,6 +73,45 @@ class DateRangeController(
         attachView(view)
     }
 
+    fun yearRange(max: Int = -1, min: Int = -1) {
+        if (max > 0) {
+            datePicker.setMaxYear(max)
+        }
+        if (min > 0) {
+            datePicker.setMinYear(min)
+        }
+    }
+
+    fun type(@DatePickerType type: Int) {
+        datePicker.type = type
+    }
+
+    fun beginDate(date: Date) {
+        beginDate = datePicker.dateFormat.let { it.parse(it.format(date)) }
+    }
+
+    fun endDate(date: Date) {
+        endDate = datePicker.dateFormat.let { it.parse(it.format(date)) }
+    }
+
+    fun onDateChanged(callback: DateRangeCallback) {
+        this.dateChangedCallback = callback
+    }
+
+    fun callback(callback: DateRangeCallback) {
+        this.callback = callback
+    }
+
+    override fun positiveButton(text: CharSequence, @ColorInt color: Int?, icon: Drawable?, click: DialogButtonClick) {
+        delegate.positiveButton(text, color, icon) { dialog, which ->
+            callback?.invoke(
+                datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
+                datePicker.dateFormat.let { it.parse(it.format(endDate)) }
+            )
+            click.invoke(dialog, which)
+        }
+    }
+
     private fun selectBegin() {
         selectedBegin = true
         beginText.setTextColor(0xFFD81B60.toInt())
@@ -84,45 +124,6 @@ class DateRangeController(
         beginText.setTextColor(0xFFBDBDBD.toInt())
         endText.setTextColor(0xFFD81B60.toInt())
         datePicker.date = endDate
-    }
-
-    fun beginDate(date: Date) {
-        beginDate = datePicker.dateFormat.let { it.parse(it.format(date)) }
-    }
-
-    fun endDate(date: Date) {
-        endDate = datePicker.dateFormat.let { it.parse(it.format(date)) }
-    }
-
-    fun maxYear(maxYear: Int) {
-        datePicker.setMaxYear(maxYear)
-        datePicker.type
-    }
-
-    fun minYear(minYear: Int) {
-        datePicker.setMinYear(minYear)
-    }
-
-    fun type(@DatePickerType type: Int) {
-        datePicker.type = type
-    }
-
-    fun onDateChanged(callback: DateRangeCallback) {
-        this.dateChangedCallback = callback
-    }
-
-    fun callback(callback: DateRangeCallback) {
-        this.callback = callback
-    }
-
-    override fun positiveButton(text: CharSequence, color: Int?, icon: Drawable?, click: DialogButtonClick?) {
-        delegate.positiveButton(text, color, icon) { dialog, which ->
-            callback?.invoke(
-                datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
-                datePicker.dateFormat.let { it.parse(it.format(endDate)) }
-            )
-            click?.invoke(dialog, which)
-        }
     }
 
 }

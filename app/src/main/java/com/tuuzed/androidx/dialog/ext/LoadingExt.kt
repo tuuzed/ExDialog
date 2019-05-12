@@ -14,7 +14,7 @@ import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.R
 import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
 
-inline fun ExDialog.Factory.loading(windowContext: Context, func: LoadingController.() -> Unit) {
+inline fun ExDialog.Factory.showLoading(windowContext: Context, func: LoadingController.() -> Unit) {
     ExDialog.show(windowContext) { loading(func) }
 }
 

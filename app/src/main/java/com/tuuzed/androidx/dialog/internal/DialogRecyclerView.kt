@@ -11,7 +11,7 @@ import android.widget.ScrollView
 import androidx.recyclerview.widget.RecyclerView
 import com.tuuzed.androidx.dialog.ext.dp
 
-class DialogRecyclerView @JvmOverloads constructor(
+internal class DialogRecyclerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 

@@ -12,32 +12,35 @@ import com.tuuzed.androidx.dialog.ext.interfaces.ListsControllerInterface
 import com.tuuzed.recyclerview.adapter.AbstractItemViewBinder
 import com.tuuzed.recyclerview.adapter.CommonItemViewHolder
 
-inline fun ExDialog.Factory.multiChoiceItems(windowContext: Context, func: MultiChoiceItemsController.() -> Unit) {
+inline fun <T> ExDialog.Factory.showMultiChoiceItems(
+    windowContext: Context,
+    func: MultiChoiceItemsController<T>.() -> Unit
+) {
     ExDialog.show(windowContext) { multiChoiceItems(func) }
 }
 
 
-inline fun ExDialog.multiChoiceItems(func: MultiChoiceItemsController.() -> Unit) {
+inline fun <T> ExDialog.multiChoiceItems(func: MultiChoiceItemsController<T>.() -> Unit) {
     lists {
         func(MultiChoiceItemsController(this@multiChoiceItems, this))
     }
 }
 
-class MultiChoiceItemsController(
+class MultiChoiceItemsController<T>(
     private val dialog: ExDialog,
     private val delegate: ListsController
 ) : ExDialogInterface by dialog,
     BasicControllerInterface by delegate,
     ListsControllerInterface by delegate {
 
-    private var callback: MultiChoiceItemsCallback<String>? = null
+    private var callback: MultiChoiceItemsCallback<T>? = null
 
     init {
         delegate.config { _, listAdapter ->
-            listAdapter.bind(MultiChoiceItem::class.java, object : AbstractItemViewBinder<MultiChoiceItem>() {
+            listAdapter.bind(MultiChoiceItem::class.java, object : AbstractItemViewBinder<MultiChoiceItem<T>>() {
                 override fun getLayoutId(): Int = R.layout.listitem_multichoiceitems
-                override fun onBindViewHolder(holder: CommonItemViewHolder, item: MultiChoiceItem, position: Int) {
-                    holder.text(R.id.text, item.data)
+                override fun onBindViewHolder(holder: CommonItemViewHolder, item: MultiChoiceItem<T>, position: Int) {
+                    holder.text(R.id.text, item.data.toString())
                     holder.find<CheckBox>(R.id.checkbox).isChecked = item.checked
                     holder.click(R.id.item_layout) {
                         item.checked = !item.checked
@@ -48,14 +51,14 @@ class MultiChoiceItemsController(
         }
     }
 
-    fun callback(callback: MultiChoiceItemsCallback<String>) {
+    fun callback(callback: MultiChoiceItemsCallback<T>) {
         this.callback = callback
     }
 
-    override fun items(items: List<*>) {
-        delegate.items(items.map { MultiChoiceItem(it.toString(), false) })
+    fun items(items: List<T>) {
+        delegate.items(items.map { MultiChoiceItem(it, false) })
     }
 
 }
 
-private class MultiChoiceItem(var data: String, var checked: Boolean)
+private class MultiChoiceItem<T>(val data: T, var checked: Boolean)

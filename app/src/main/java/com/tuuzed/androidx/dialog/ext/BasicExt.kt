@@ -16,7 +16,7 @@ import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
 import com.tuuzed.androidx.dialog.internal.DialogButtonLayout
 import com.tuuzed.androidx.dialog.internal.DialogTitle
 
-inline fun ExDialog.Factory.basic(windowContext: Context, func: BasicController.() -> Unit) {
+inline fun ExDialog.Factory.showBasic(windowContext: Context, func: BasicController.() -> Unit) {
     ExDialog.show(windowContext) { basic(func) }
 }
 
@@ -44,8 +44,6 @@ class BasicController(
         dialogButtons = view.findViewById(R.id.dialog_buttons)
         dialogContentLayout = view.findViewById(R.id.dialog_content_layout)
 
-        dialogTitle.setupHideViews()
-        dialogButtons.setupHideViews()
         attachView(view)
     }
 
@@ -82,49 +80,54 @@ class BasicController(
     override fun positiveButton(
         text: CharSequence, @ColorInt color: Int?,
         icon: Drawable?,
-        click: DialogButtonClick?
+        click: DialogButtonClick
     ) {
         dialogButtons.visibility = View.VISIBLE
-        dialogButtons.setPositiveButton(
+        dialogButtons.dialogButton(
+            DialogButtonLayout.BUTTON_NEUTRAL,
             text, color, icon,
-            View.OnClickListener { click?.invoke(dialog, ExDialog.BUTTON_POSITIVE) }
+            View.OnClickListener { click.invoke(dialog, ExDialog.BUTTON_POSITIVE) }
         )
     }
 
     override fun negativeButton(
         text: CharSequence, @ColorInt color: Int?,
         icon: Drawable?,
-        click: DialogButtonClick?
+        click: DialogButtonClick
     ) {
         dialogButtons.visibility = View.VISIBLE
-        dialogButtons.setNegativeButton(
+        dialogButtons.dialogButton(
+
+            DialogButtonLayout.BUTTON_NEUTRAL,
             text, color, icon,
-            View.OnClickListener { click?.invoke(dialog, ExDialog.BUTTON_NEGATIVE) }
+            View.OnClickListener { click.invoke(dialog, ExDialog.BUTTON_NEGATIVE) }
         )
     }
 
     override fun neutralButton(
         text: CharSequence, @ColorInt color: Int?,
         icon: Drawable?,
-        click: DialogButtonClick?
+        click: DialogButtonClick
     ) {
         dialogButtons.visibility = View.VISIBLE
-        dialogButtons.setNeutralButton(
+        dialogButtons.dialogButton(
+            DialogButtonLayout.BUTTON_NEUTRAL,
             text, color, icon,
-            View.OnClickListener { click?.invoke(dialog, ExDialog.BUTTON_NEUTRAL) }
+            View.OnClickListener { click.invoke(dialog, ExDialog.BUTTON_NEUTRAL) }
         )
     }
 
     override fun disablePositiveButton(disable: Boolean) {
-        dialogButtons.disablePositiveButton(disable)
+        dialogButtons.disableDialogButton(DialogButtonLayout.BUTTON_POSITIVE, disable)
     }
 
     override fun disableNegativeButton(disable: Boolean) {
-        dialogButtons.disableNegativeButton(disable)
+        dialogButtons.disableDialogButton(DialogButtonLayout.BUTTON_NEGATIVE, disable)
     }
 
     override fun disableNeutralButton(disable: Boolean) {
-        dialogButtons.disableNeutralButton(disable)
+        dialogButtons.disableDialogButton(DialogButtonLayout.BUTTON_NEUTRAL, disable)
+
     }
 
 }

@@ -19,7 +19,7 @@ import com.tuuzed.androidx.dialog.ext.interfaces.ListsControllerInterface
 import com.tuuzed.androidx.dialog.internal.MaterialButtonCompat
 import com.tuuzed.recyclerview.adapter.RecyclerViewAdapter
 
-inline fun ExDialog.Factory.lists(windowContext: Context, func: ListsController.() -> Unit) {
+inline fun ExDialog.Factory.showLists(windowContext: Context, func: ListsController.() -> Unit) {
     ExDialog.show(windowContext) { lists(func) }
 }
 
@@ -58,6 +58,14 @@ class ListsController(
         func(recyclerView, listAdapter)
     }
 
+    fun items(items: List<*>, showItemView: Boolean = true) {
+        listAdapter.items.clear()
+        listAdapter.appendItems(items).notifyDataSetChanged()
+        if (showItemView) {
+            showItemsView()
+        }
+    }
+
     override fun showLoadingView(icon: Sprite?, @ColorInt color: Int?) {
         color?.also { loadingIcon.setColor(it) }
         icon?.also { loadingIcon.setIndeterminateDrawable(it) }
@@ -67,7 +75,7 @@ class ListsController(
         recyclerView.visibility = View.GONE
     }
 
-    override fun showButtonView(text: CharSequence, @ColorInt color: Int?, click: () -> Unit) {
+    override fun showMessageView(text: CharSequence, @ColorInt color: Int?, click: () -> Unit) {
         button.text = text
         button.setOnClickListener { click() }
 
@@ -80,17 +88,10 @@ class ListsController(
         recyclerView.visibility = View.GONE
     }
 
-    internal fun showItemsView() {
+    override fun showItemsView() {
         loadingIcon.visibility = View.GONE
         button.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
-
-    }
-
-    override fun items(items: List<*>) {
-        listAdapter.items.clear()
-        listAdapter.appendItems(items).notifyDataSetChanged()
-        showItemsView()
     }
 
 

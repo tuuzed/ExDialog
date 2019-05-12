@@ -11,9 +11,8 @@ import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.R
 import com.tuuzed.androidx.dialog.ext.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
-import com.tuuzed.androidx.dialog.ext.interfaces.MessageControllerInterface
 
-inline fun ExDialog.Factory.message(windowContext: Context, func: MessageController.() -> Unit) {
+inline fun ExDialog.Factory.showMessage(windowContext: Context, func: MessageController.() -> Unit) {
     ExDialog.show(windowContext) { message(func) }
 }
 
@@ -28,8 +27,7 @@ class MessageController(
     private val delegate: CustomViewController,
     attachView: (View) -> Unit
 ) : ExDialogInterface by dialog,
-    BasicControllerInterface by delegate,
-    MessageControllerInterface {
+    BasicControllerInterface by delegate {
 
     private val messageText: TextView
 
@@ -41,12 +39,12 @@ class MessageController(
         attachView(view)
     }
 
-    override fun message(text: CharSequence?) {
-        messageText.text = text
-    }
-
-    override fun message(@StringRes resId: Int) {
-        messageText.setText(resId)
+    fun message(@StringRes resId: Int? = null, text: CharSequence? = null) {
+        if (resId != null) {
+            messageText.setText(resId)
+        } else {
+            messageText.text = text
+        }
     }
 
 }

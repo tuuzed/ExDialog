@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.ColorInt
 import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import com.tuuzed.androidx.dialog.ExDialog
@@ -14,7 +15,7 @@ import com.tuuzed.androidx.dialog.ext.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
 import java.util.*
 
-inline fun ExDialog.Factory.datePicker(windowContext: Context, func: DateController.() -> Unit) {
+inline fun ExDialog.Factory.showDatePicker(windowContext: Context, func: DateController.() -> Unit) {
     ExDialog.show(windowContext) { datePicker(func) }
 }
 
@@ -41,13 +42,13 @@ class DateController(
         attachView(view)
     }
 
-    fun maxYear(maxYear: Int) {
-        datePicker.setMaxYear(maxYear)
-        datePicker.type
-    }
-
-    fun minYear(minYear: Int) {
-        datePicker.setMinYear(minYear)
+    fun yearRange(max: Int = -1, min: Int = -1) {
+        if (max > 0) {
+            datePicker.setMaxYear(max)
+        }
+        if (min > 0) {
+            datePicker.setMinYear(min)
+        }
     }
 
     fun type(@DatePickerType type: Int) {
@@ -66,10 +67,10 @@ class DateController(
         this.callback = callback
     }
 
-    override fun positiveButton(text: CharSequence, color: Int?, icon: Drawable?, click: DialogButtonClick?) {
+    override fun positiveButton(text: CharSequence, @ColorInt color: Int?, icon: Drawable?, click: DialogButtonClick) {
         delegate.positiveButton(text, color, icon) { dialog, which ->
             callback?.invoke(datePicker.dateFormat.let { it.parse(it.format(datePicker.date)) })
-            click?.invoke(dialog, which)
+            click.invoke(dialog, which)
         }
     }
 

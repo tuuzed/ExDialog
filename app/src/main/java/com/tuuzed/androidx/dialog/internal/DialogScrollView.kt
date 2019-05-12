@@ -10,7 +10,7 @@ import android.util.Log
 import android.widget.ScrollView
 import com.tuuzed.androidx.dialog.ext.dp
 
-class DialogScrollView @JvmOverloads constructor(
+internal class DialogScrollView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ScrollView(context, attrs, defStyleAttr) {
     private val TAG = "DialogScrollView"
