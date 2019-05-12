@@ -67,7 +67,7 @@ class ListsController(
         recyclerView.visibility = View.GONE
     }
 
-    override fun showClickButton(text: CharSequence, @ColorInt color: Int?, click: () -> Unit) {
+    override fun showButtonView(text: CharSequence, @ColorInt color: Int?, click: () -> Unit) {
         button.text = text
         button.setOnClickListener { click() }
 
@@ -80,13 +80,17 @@ class ListsController(
         recyclerView.visibility = View.GONE
     }
 
-    override fun items(items: List<*>) {
-        listAdapter.items.clear()
-        listAdapter.appendItems(items).notifyDataSetChanged()
-
+    internal fun showItemsView() {
         loadingIcon.visibility = View.GONE
         button.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
+
+    }
+
+    override fun items(items: List<*>) {
+        listAdapter.items.clear()
+        listAdapter.appendItems(items).notifyDataSetChanged()
+        showItemsView()
     }
 
 

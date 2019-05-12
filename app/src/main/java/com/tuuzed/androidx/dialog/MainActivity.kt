@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                         items
                     } then {
                         if (it.size < 50) {
-                            showClickButton("加载失败，点击重试。", 0xFF5DA017.toInt()) {
+                            showButtonView("加载失败，点击重试。", 0xFF5DA017.toInt()) {
                                 showLoadingView()
                                 lazyLoadTask?.invoke()
                             }
@@ -213,7 +213,8 @@ class MainActivity : AppCompatActivity() {
                 negativeButton("取消", 0XFF80CBC4.toInt())
                 neutralButton("关闭", 0XFF757575.toInt())
             }
-        }
+        }.also { listAdapter.appendItems(it) }
+
 
         ButtonItem("Multi Choice Items") {
             ExDialog.multiChoiceItems(this) {
@@ -229,7 +230,8 @@ class MainActivity : AppCompatActivity() {
                 negativeButton("取消", 0XFF80CBC4.toInt())
                 neutralButton("关闭", 0XFF757575.toInt())
             }
-        }
+        }.also { listAdapter.appendItems(it) }
+
 
 
         SegmentItem("DatePicker").also { listAdapter.appendItems(it) }
