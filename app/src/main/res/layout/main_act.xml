@@ -33,7 +33,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:scrollbars="vertical"
-                tools:listitem="@android:layout/simple_list_item_checked"/>
+                tools:listitem="@layout/main_listitem_button"/>
 
     </FrameLayout>
 
