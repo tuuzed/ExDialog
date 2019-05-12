@@ -2,15 +2,17 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/item_root"
+              android:id="@+id/item_layout"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:minHeight="48dp"
               android:paddingLeft="24dp"
               android:paddingRight="24dp"
+              android:background="?attr/selectableItemBackground"
               android:gravity="center_vertical"
               android:orientation="horizontal"
 >
+
 
     <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/checkbox"
@@ -26,7 +28,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
             tools:text="Item1"
     />
 

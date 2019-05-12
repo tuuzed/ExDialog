@@ -8,12 +8,12 @@
         android:orientation="vertical"
 >
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.tuuzed.androidx.dialog.internal.DialogRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            tools:listitem="@layout/listitem_items"
+            tools:listitem="@layout/listitem_simpleitems"
     />
 
     <com.github.ybq.android.spinkit.SpinKitView
@@ -28,13 +28,13 @@
     />
 
     <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:id="@+id/button"
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:layout_marginBottom="36dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="36dp"
+            android:paddingBottom="36dp"
             tools:text="加载失败，点击重试"
     />
 

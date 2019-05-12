@@ -46,7 +46,7 @@ class DateRangeController(
 
     init {
         val inflater = LayoutInflater.from(dialog.windowContext)
-        val view = inflater.inflate(R.layout.part_dialog_daterange, null, false)
+        val view = inflater.inflate(R.layout.part_dialog_daterangepicker, null, false)
 
         beginText = view.findViewById(R.id.beginText)
         endText = view.findViewById(R.id.endText)

@@ -13,7 +13,7 @@ import com.tuuzed.androidx.dialog.ExDialog
 import com.tuuzed.androidx.dialog.R
 import com.tuuzed.androidx.dialog.ext.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
-import com.tuuzed.androidx.dialog.internal.DialogDefaultButtons
+import com.tuuzed.androidx.dialog.internal.DialogButtonLayout
 import com.tuuzed.androidx.dialog.internal.DialogTitle
 
 inline fun ExDialog.Factory.basic(windowContext: Context, func: BasicController.() -> Unit) {
@@ -32,8 +32,8 @@ class BasicController(
     BasicControllerInterface {
 
     private val dialogTitle: DialogTitle
-    private val dialogButtons: DialogDefaultButtons
-    private val dialogCustomViewLayout: FrameLayout
+    private val dialogButtons: DialogButtonLayout
+    private val dialogContentLayout: FrameLayout
 
     init {
 
@@ -42,7 +42,7 @@ class BasicController(
 
         dialogTitle = view.findViewById(R.id.dialog_title)
         dialogButtons = view.findViewById(R.id.dialog_buttons)
-        dialogCustomViewLayout = view.findViewById(R.id.dialog_customview_layout)
+        dialogContentLayout = view.findViewById(R.id.dialog_content_layout)
 
         dialogTitle.setupHideViews()
         dialogButtons.setupHideViews()
@@ -50,12 +50,12 @@ class BasicController(
     }
 
     fun customView(@LayoutRes layoutId: Int) {
-        LayoutInflater.from(dialog.windowContext).inflate(layoutId, dialogCustomViewLayout, true)
+        LayoutInflater.from(dialog.windowContext).inflate(layoutId, dialogContentLayout, true)
     }
 
     fun customView(view: View) {
-        dialogCustomViewLayout.removeAllViews()
-        dialogCustomViewLayout.addView(view)
+        dialogContentLayout.removeAllViews()
+        dialogContentLayout.addView(view)
     }
 
     override fun icon(resId: Int?, icon: Drawable?) {

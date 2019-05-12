@@ -199,6 +199,39 @@ class MainActivity : AppCompatActivity() {
             }
         }.also { listAdapter.appendItems(it) }
 
+        ButtonItem("Single Choice Items") {
+            ExDialog.singleChoiceItems(this) {
+                val items = mutableListOf<String>()
+                for (i in 1..4) items.add("Item$i")
+                title(text = "标题")
+                items(items)
+                callback { dialog, selected, index ->
+                    toast("selected: $selected, index: $index")
+                    dialog.dismiss()
+                }
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
+            }
+        }
+
+        ButtonItem("Multi Choice Items") {
+            ExDialog.multiChoiceItems(this) {
+                val items = mutableListOf<String>()
+                for (i in 1..4) items.add("Item$i")
+                title(text = "标题")
+                items(items)
+                callback { dialog, selected, index ->
+                    toast("selected: $selected, index: $index")
+                    dialog.dismiss()
+                }
+                positiveButton("确定", 0xFFFF5722.toInt())
+                negativeButton("取消", 0XFF80CBC4.toInt())
+                neutralButton("关闭", 0XFF757575.toInt())
+            }
+        }
+
+
         SegmentItem("DatePicker").also { listAdapter.appendItems(it) }
         ButtonItem("Date Picker") {
             ExDialog.datePicker(this) {

@@ -33,27 +33,20 @@
         />
 
         <FrameLayout
-                android:id="@+id/dialog_customview_layout"
+                android:id="@+id/dialog_content_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:minHeight="12dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                tools:layout_height="100dp"
+                tools:background="#ffefefef"
+        />
 
-        <FrameLayout
-                android:id="@+id/dialog_buttons_layout"
+        <com.tuuzed.androidx.dialog.internal.DialogButtonLayout
+                android:id="@+id/dialog_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-        >
-
-
-            <com.tuuzed.androidx.dialog.internal.DialogDefaultButtons
-                    android:id="@+id/dialog_buttons"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-            />
-        </FrameLayout>
+        />
 
 
     </com.tuuzed.androidx.dialog.internal.DialogLayout>

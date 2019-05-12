@@ -7,7 +7,6 @@
        tools:paddingTop="24dp"
        tools:paddingRight="24dp"
        tools:paddingLeft="24dp"
-       tools:background="#DFDFDF"
        tools:parentTag="android.widget.LinearLayout"
 >
 

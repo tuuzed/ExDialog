@@ -10,7 +10,6 @@ import com.tuuzed.androidx.dialog.ext.interfaces.ExDialogInterface
 import com.tuuzed.androidx.dialog.ext.interfaces.ListsControllerInterface
 import com.tuuzed.recyclerview.adapter.AbstractItemViewBinder
 import com.tuuzed.recyclerview.adapter.CommonItemViewHolder
-import java.util.*
 
 inline fun ExDialog.Factory.simpleItems(windowContext: Context, func: SimpleItemsController.() -> Unit) {
     ExDialog.show(windowContext) { simpleItems(func) }
@@ -34,7 +33,7 @@ class SimpleItemsController(
     init {
         delegate.config { _, listAdapter ->
             listAdapter.bind(String::class.java, object : AbstractItemViewBinder<String>() {
-                override fun getLayoutId(): Int = R.layout.listitem_items
+                override fun getLayoutId(): Int = R.layout.listitem_simpleitems
                 override fun onBindViewHolder(holder: CommonItemViewHolder, item: String, position: Int) {
                     holder.text(R.id.text, item)
                     holder.click(R.id.text) { callback?.invoke(dialog, item, position) }

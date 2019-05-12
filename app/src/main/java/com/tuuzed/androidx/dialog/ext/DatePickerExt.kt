@@ -36,7 +36,7 @@ class DateController(
 
     init {
         val inflater = LayoutInflater.from(dialog.windowContext)
-        val view = inflater.inflate(R.layout.part_dialog_date, null, false)
+        val view = inflater.inflate(R.layout.part_dialog_datepicker, null, false)
         datePicker = view.findViewById(R.id.datePicker)
         attachView(view)
     }

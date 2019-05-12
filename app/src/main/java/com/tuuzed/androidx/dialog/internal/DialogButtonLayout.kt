@@ -8,19 +8,23 @@ import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import com.google.android.material.button.MaterialButton
 import com.tuuzed.androidx.dialog.R
+import com.tuuzed.androidx.dialog.ext.dp
 
-class DialogDefaultButtons @JvmOverloads constructor(
+class DialogButtonLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr), DialogButtons {
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val buttonPositive: MaterialButton
     private val buttonNegative: MaterialButton
     private val buttonNeutral: MaterialButton
 
     init {
-        View.inflate(context, R.layout.basic_dialog_layout_part_defaultbuttons, this)
+        View.inflate(context, R.layout.basic_dialog_layout_part_buttons, this)
 
         this.orientation = HORIZONTAL
+        setPadding(dp(12f), 0, dp(12f), 0)
+
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, dp(48f))
 
         buttonPositive = findViewById(R.id.buttonPositive)
         buttonNegative = findViewById(R.id.buttonNegative)
@@ -35,19 +39,19 @@ class DialogDefaultButtons @JvmOverloads constructor(
         buttonNeutral.visibility = View.GONE
     }
 
-    override fun setPositiveButton(
+    fun setPositiveButton(
         text: CharSequence?, @ColorInt color: Int?,
         icon: Drawable?,
         click: OnClickListener?
     ) = setup(buttonPositive, text, color, icon, click)
 
-    override fun setNegativeButton(
+    fun setNegativeButton(
         text: CharSequence?, @ColorInt color: Int?,
         icon: Drawable?,
         click: OnClickListener?
     ) = setup(buttonNegative, text, color, icon, click)
 
-    override fun setNeutralButton(
+    fun setNeutralButton(
         text: CharSequence?, @ColorInt color: Int?,
         icon: Drawable?,
         click: OnClickListener?
@@ -70,15 +74,15 @@ class DialogDefaultButtons @JvmOverloads constructor(
         button.setOnClickListener(click)
     }
 
-    override fun disablePositiveButton(disable: Boolean) {
+    fun disablePositiveButton(disable: Boolean) {
         buttonPositive.isEnabled = !disable
     }
 
-    override fun disableNegativeButton(disable: Boolean) {
+    fun disableNegativeButton(disable: Boolean) {
         buttonNegative.isEnabled = !disable
     }
 
-    override fun disableNeutralButton(disable: Boolean) {
+    fun disableNeutralButton(disable: Boolean) {
         buttonNeutral.isEnabled = !disable
     }
 
