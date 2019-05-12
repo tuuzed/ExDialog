@@ -5,6 +5,7 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
+import android.view.View
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
@@ -27,7 +28,7 @@ inline fun <T> ExDialog.simpleItems(
 class SimpleItemsController<T>(
     private val dialog: ExDialog,
     private val delegate: ListsController,
-    toReadable: ItemToReadable<T>
+    private val toReadable: ItemToReadable<T>
 ) : ExDialogInterface by dialog,
     BasicControllerInterface by delegate,
     ListsControllerInterface by delegate {
@@ -37,33 +38,62 @@ class SimpleItemsController<T>(
     init {
         delegate.config { _, listAdapter ->
             listAdapter.bind(Space::class.java, SpaceItemViewBinder)
-            listAdapter.bind(SimpleItem::class.java, object : AbstractItemViewBinder<SimpleItem<T>>() {
-                override fun getLayoutId(): Int = R.layout.listitem_simpleitems
-                override fun onBindViewHolder(holder: CommonItemViewHolder, item: SimpleItem<T>, position: Int) {
-                    holder.text(R.id.text, toReadable(item.data))
-                    holder.click(R.id.text) { itemClickCallback?.invoke(dialog, reviseIndex(position), item.data) }
-                }
-            })
+            listAdapter.bind(Item::class.java, ItemViewBinder())
         }
     }
-
 
     fun itemClick(callback: ItemsCallback<T>) {
         this.itemClickCallback = callback
     }
 
-    private fun reviseIndex(index: Int): Int = index - 1
-    fun items(items: List<T>) {
+    @JvmOverloads
+    fun items(items: List<T>, disableIndices: List<Int> = emptyList()) {
         delegate.items(
             listOf(
                 Space,
-                *items.map { SimpleItem(it) }.toTypedArray(),
+                *items.mapIndexed { index, item ->
+                    Item(item, disableIndices.contains(index))
+                }.toTypedArray(),
                 Space
             )
         )
     }
 
+    private fun reviseIndex(index: Int): Int = index - 1
+
+    private class Item<T>(val data: T, val disable: Boolean)
+
+    private inner class ItemViewBinder : AbstractItemViewBinder<Item<T>>() {
+        override fun getLayoutId(): Int = R.layout.listitem_simpleitems
+        override fun onBindViewHolder(holder: CommonItemViewHolder, item: Item<T>, position: Int) {
+            if (item.disable) {
+                holder.find<View>(R.id.text).also {
+                    it.isClickable = false
+                    it.isEnabled = false
+                    it.alpha = 0.5f
+                }
+            } else {
+                holder.find<View>(R.id.text).also {
+                    it.isClickable = true
+                    it.isEnabled = true
+                    it.alpha = 1.0f
+                }
+            }
+            holder.text(R.id.text, toReadable(item.data))
+            holder.click(R.id.text) {
+                itemClickCallback?.invoke(
+                    dialog,
+                    reviseIndex(position),
+                    item.data,
+                    true
+                )
+            }
+        }
+    }
+
+
 }
 
-private class SimpleItem<T>(val data: T)
+
+
 

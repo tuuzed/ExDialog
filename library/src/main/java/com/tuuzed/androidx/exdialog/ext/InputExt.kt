@@ -46,6 +46,7 @@ class InputController(
         editText.inputType = inputType
     }
 
+    @JvmOverloads
     fun hint(@StringRes resId: Int = View.NO_ID, text: CharSequence? = null) {
         if (resId != View.NO_ID) {
             editText.setHint(resId)
@@ -54,6 +55,7 @@ class InputController(
         }
     }
 
+    @JvmOverloads
     fun prefillText(@StringRes resId: Int = View.NO_ID, text: CharSequence? = null) {
         if (resId != View.NO_ID) {
             editText.setText(resId)

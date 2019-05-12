@@ -56,6 +56,7 @@ class ListsController(
         func(recyclerView, listAdapter)
     }
 
+    @JvmOverloads
     fun items(items: List<*>, showItemView: Boolean = true) {
         listAdapter.items.clear()
         listAdapter.appendItems(items).notifyDataSetChanged()

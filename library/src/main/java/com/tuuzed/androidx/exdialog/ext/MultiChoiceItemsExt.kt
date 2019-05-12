@@ -6,7 +6,9 @@
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.CheckBox
+import android.widget.ListAdapter
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
@@ -29,30 +31,21 @@ inline fun <T> ExDialog.multiChoiceItems(
 class MultiChoiceItemsController<T>(
     private val dialog: ExDialog,
     private val delegate: ListsController,
-    toReadable: ItemToReadable<T>
+    private val toReadable: ItemToReadable<T>
 ) : ExDialogInterface by dialog,
     BasicControllerInterface by delegate,
     ListsControllerInterface by delegate {
 
     private var listAdapter: RecyclerViewAdapter? = null
     private var callback: MultiChoiceItemsCallback<T>? = null
+    private var itemClickCallback: ItemsCallback<T>? = null
 
 
     init {
         delegate.config { _, listAdapter ->
             this.listAdapter = listAdapter
             listAdapter.bind(Space::class.java, SpaceItemViewBinder)
-            listAdapter.bind(MultiChoiceItem::class.java, object : AbstractItemViewBinder<MultiChoiceItem<T>>() {
-                override fun getLayoutId(): Int = R.layout.listitem_multichoiceitems
-                override fun onBindViewHolder(holder: CommonItemViewHolder, item: MultiChoiceItem<T>, position: Int) {
-                    holder.text(R.id.text, toReadable(item.data))
-                    holder.find<CheckBox>(R.id.checkbox).isChecked = item.checked
-                    holder.click(R.id.item_layout) {
-                        item.checked = !item.checked
-                        listAdapter.notifyItemChanged(position)
-                    }
-                }
-            })
+            listAdapter.bind(Item::class.java, ItemViewBinder(listAdapter))
         }
     }
 
@@ -60,13 +53,17 @@ class MultiChoiceItemsController<T>(
         this.callback = callback
     }
 
-    private fun reviseIndex(index: Int): Int = index - 1
-    fun items(items: List<T>, indices: List<Int> = emptyList()) {
+    fun itemClick(callback: ItemsCallback<T>) {
+        this.itemClickCallback = callback
+    }
+
+    @JvmOverloads
+    fun items(items: List<T>, selectedIndices: List<Int> = emptyList(), disableIndices: List<Int> = emptyList()) {
         delegate.items(
             listOf(
                 Space,
                 *items.mapIndexed { index, item ->
-                    MultiChoiceItem(item, indices.contains(index))
+                    Item(item, selectedIndices.contains(index), disableIndices.contains(index))
                 }.toTypedArray(),
                 Space
             )
@@ -76,22 +73,58 @@ class MultiChoiceItemsController<T>(
     override fun positiveButton(text: CharSequence, color: Int?, icon: Drawable?, click: DialogButtonClick) {
         delegate.positiveButton(text, color, icon) { dialog, which ->
             callback?.also { callback ->
-                val indices = mutableListOf<Int>()
-                val items = mutableListOf<T>()
-                listAdapter?.items?.forEachIndexed { index, item ->
-                    if (item is MultiChoiceItem<*> && item.checked) {
-                        indices.add(reviseIndex(index))
-                        @Suppress("UNCHECKED_CAST")
-                        items.add(item.data as T)
-                    }
-                }
-                if (items.isNotEmpty()) {
+                getCheckedItems { indices, items ->
                     callback(dialog, indices, items)
                 }
             }
             click.invoke(dialog, which)
         }
     }
+
+    private fun reviseIndex(index: Int): Int = index - 1
+    private inline fun getCheckedItems(receiver: (indices: List<Int>, items: List<T>) -> Unit) {
+        val indices = mutableListOf<Int>()
+        val items = mutableListOf<T>()
+        listAdapter?.items?.forEachIndexed { index, item ->
+            if (item is Item<*> && item.checked) {
+                indices.add(reviseIndex(index))
+                @Suppress("UNCHECKED_CAST")
+                items.add(item.data as T)
+            }
+        }
+        receiver(indices, items)
+    }
+
+
+    private class Item<T>(val data: T, var checked: Boolean, val disable: Boolean)
+    private inner class ItemViewBinder(
+        private val listAdapter: RecyclerViewAdapter
+    ) : AbstractItemViewBinder<Item<T>>() {
+        override fun getLayoutId(): Int = R.layout.listitem_multichoiceitems
+        override fun onBindViewHolder(holder: CommonItemViewHolder, item: Item<T>, position: Int) {
+            if (item.disable) {
+                holder.find<View>(R.id.item_layout).also {
+                    it.isClickable = false
+                    it.isEnabled = false
+                    it.alpha = 0.5f
+                }
+            } else {
+                holder.find<View>(R.id.item_layout).also {
+                    it.isClickable = true
+                    it.isEnabled = true
+                    it.alpha = 1.0f
+                }
+            }
+            holder.text(R.id.text, toReadable(item.data))
+            holder.find<CheckBox>(R.id.checkbox).isChecked = item.checked
+            holder.click(R.id.item_layout) {
+                item.checked = !item.checked
+                listAdapter.notifyItemChanged(position)
+                itemClickCallback?.invoke(dialog, reviseIndex(position), item.data, item.checked)
+            }
+        }
+    }
+
 }
 
-private class MultiChoiceItem<T>(val data: T, var checked: Boolean)
+

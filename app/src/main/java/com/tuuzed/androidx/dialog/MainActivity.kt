@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                     val items = mutableListOf<String>()
                     for (i in 1..4) items.add("Item$i")
                     items(items)
-                    itemClick { dialog, index, item ->
+                    itemClick { dialog, index, item, checked ->
                         toast("index: $index, item: $item")
                         dialog.dismiss()
                     }
@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     val loadTask = lazyLoadTask()
-                    itemClick { dialog, index, item ->
+                    itemClick { dialog, index, item, checked ->
                         toast("index: $index, item: $item")
                         dialog.dismiss()
                     }
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity() {
                     val items = mutableListOf<String>()
                     for (i in 1..100) items.add("Item$i")
                     items(items)
-                    itemClick { dialog, index, item ->
+                    itemClick { dialog, index, item, checked ->
                         toast("index: $index, item: $item")
                         dialog.dismiss()
                     }
@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity() {
                     for (i in 1..4) items.add("Item$i")
                     title(text = "标题")
                     items(items)
-                    itemClick { dialog, index, item ->
+                    itemClick { dialog, index, item, checked ->
                         toast("index: $index, item: $item")
                         dialog.dismiss()
                     }
@@ -208,7 +208,7 @@ class MainActivity : AppCompatActivity() {
                     for (i in 1..4) items.add("Item$i")
                     title(text = "标题")
                     items(items)
-                    itemClick { dialog, index, item ->
+                    itemClick { dialog, index, item, checked ->
                         toast("index: $index, item: $item")
                         dialog.dismiss()
                     }
@@ -225,7 +225,10 @@ class MainActivity : AppCompatActivity() {
                     val items = mutableListOf<String>()
                     for (i in 1..4) items.add("Item$i")
                     title(text = "标题")
-                    items(items)
+                    items(items, disableIndices = listOf(0))
+                    itemClick { dialog, index, item, checked ->
+                        toast("index: $index, selected: $item")
+                    }
                     callback { _, index, selectedItem ->
                         toast("index: $index, selected: $selectedItem")
                     }
@@ -243,7 +246,7 @@ class MainActivity : AppCompatActivity() {
                     val items = mutableListOf<String>()
                     for (i in 1..4) items.add("Item$i")
                     title(text = "标题")
-                    items(items)
+                    items(items, listOf(1, 3))
                     callback { _, indices, selectedItems ->
                         toast("indices: $indices, selectedItems: $selectedItems")
                     }

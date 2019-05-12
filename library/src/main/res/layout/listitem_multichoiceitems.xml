@@ -17,14 +17,16 @@
     <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
             android:background="@null"
-            android:layout_height="wrap_content"/>
+    />
 
     <TextView
             android:id="@+id/text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="#DE000000"
@@ -33,5 +35,6 @@
             android:gravity="center_vertical"
             tools:text="Item1"
     />
+
 
 </LinearLayout>
