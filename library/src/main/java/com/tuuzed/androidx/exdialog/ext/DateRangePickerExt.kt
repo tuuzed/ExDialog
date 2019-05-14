@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.ColorInt
 import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import com.tuuzed.androidx.exdialog.ExDialog
@@ -64,6 +63,7 @@ class DateRangeController(
                 endText.text = "结束于\n${datePicker.dateFormat.format(endDate)}"
             }
             dateChangedCallback?.invoke(
+                dialog,
                 datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
                 datePicker.dateFormat.let { it.parse(it.format(endDate)) }
             )
@@ -71,7 +71,8 @@ class DateRangeController(
         attachView(view)
     }
 
-    
+
+
     fun yearRange(max: Int = -1, min: Int = -1) {
         if (max > 0) {
             datePicker.setMaxYear(max)
@@ -81,7 +82,7 @@ class DateRangeController(
         }
     }
 
-    fun type(@DatePickerType type: Int) {
+    fun datePickerType(@DatePickerType type: Int) {
         datePicker.type = type
     }
 
@@ -101,27 +102,38 @@ class DateRangeController(
         this.callback = callback
     }
 
-    override fun positiveButton(text: CharSequence, @ColorInt color: Int?, icon: Drawable?, click: DialogButtonClick) {
-        delegate.positiveButton(text, color, icon) { dialog, which ->
+    override fun positiveButton(
+        textRes: Int?,
+        text: CharSequence?,
+        colorRes: Int?,
+        color: Int?,
+        iconRes: Int?,
+        icon: Drawable?,
+        enable: Boolean,
+        visible: Boolean,
+        click: DialogButtonClick
+    ) {
+        delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.invoke(
+                dialog,
                 datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
                 datePicker.dateFormat.let { it.parse(it.format(endDate)) }
             )
-            click.invoke(dialog, which)
+            click(dialog)
         }
     }
 
     private fun selectBegin() {
         selectedBegin = true
-        beginText.setTextColor(0xFFD81B60.toInt())
-        endText.setTextColor(0xFFBDBDBD.toInt())
+        beginText.alpha = 1.0f
+        endText.alpha = 0.2f
         datePicker.date = beginDate
     }
 
     private fun selectEnd() {
         selectedBegin = false
-        beginText.setTextColor(0xFFBDBDBD.toInt())
-        endText.setTextColor(0xFFD81B60.toInt())
+        beginText.alpha = 0.2f
+        endText.alpha = 1.0f
         datePicker.date = endDate
     }
 

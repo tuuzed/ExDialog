@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 
 group = rootProject.group
 version = rootProject.version
-ext.name = 'exdialog'
+ext.library = 'exdialog'
 
 android {
     compileSdkVersion 28

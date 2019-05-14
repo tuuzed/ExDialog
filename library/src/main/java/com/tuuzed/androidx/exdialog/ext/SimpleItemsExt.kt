@@ -5,7 +5,6 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
-import android.view.View
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
@@ -14,7 +13,6 @@ import com.tuuzed.androidx.exdialog.internal.interfaces.ListsControllerInterface
 import com.tuuzed.recyclerview.adapter.AbstractItemViewBinder
 import com.tuuzed.recyclerview.adapter.CommonItemViewHolder
 
-@JvmOverloads
 inline fun <T> ExDialog.simpleItems(
     noinline toReadable: ItemToReadable<T> = { it.toString() },
     func: SimpleItemsController<T>.() -> Unit
@@ -46,7 +44,6 @@ class SimpleItemsController<T>(
         this.itemClickCallback = callback
     }
 
-    @JvmOverloads
     fun items(items: List<T>, disableIndices: List<Int> = emptyList()) {
         delegate.items(
             listOf(
@@ -67,13 +64,13 @@ class SimpleItemsController<T>(
         override fun getLayoutId(): Int = R.layout.listitem_simpleitems
         override fun onBindViewHolder(holder: CommonItemViewHolder, item: Item<T>, position: Int) {
             if (item.disable) {
-                holder.find<View>(R.id.text).also {
+                holder.itemView.also {
                     it.isClickable = false
                     it.isEnabled = false
-                    it.alpha = 0.5f
+                    it.alpha = 0.2f
                 }
             } else {
-                holder.find<View>(R.id.text).also {
+                holder.itemView.also {
                     it.isClickable = true
                     it.isEnabled = true
                     it.alpha = 1.0f

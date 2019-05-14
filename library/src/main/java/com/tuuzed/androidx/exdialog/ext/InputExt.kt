@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
-import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
@@ -38,7 +37,6 @@ class InputController(
         val inflater = LayoutInflater.from(dialog.windowContext)
         val view = inflater.inflate(R.layout.part_dialog_input, null, false)
         editText = view.findViewById(R.id.editText)
-
         attachView(view)
     }
 
@@ -46,22 +44,14 @@ class InputController(
         editText.inputType = inputType
     }
 
-    @JvmOverloads
-    fun hint(@StringRes resId: Int = View.NO_ID, text: CharSequence? = null) {
-        if (resId != View.NO_ID) {
-            editText.setHint(resId)
-        } else {
-            text?.also { editText.hint = text }
-        }
+    fun hint(@StringRes textRes: Int? = null, text: CharSequence? = null) {
+        textRes?.also { editText.setHint(textRes) }
+        text?.also { editText.hint = text }
     }
 
-    @JvmOverloads
-    fun prefillText(@StringRes resId: Int = View.NO_ID, text: CharSequence? = null) {
-        if (resId != View.NO_ID) {
-            editText.setText(resId)
-        } else {
-            text?.also { editText.setText(text) }
-        }
+    fun prefillText(@StringRes textRes: Int? = null, text: CharSequence? = null) {
+        textRes?.also { editText.setText(textRes) }
+        text?.also { editText.setText(text) }
         editText.setSelection(editText.text?.length ?: 0)
     }
 
@@ -69,10 +59,20 @@ class InputController(
         this.callback = callback
     }
 
-    override fun positiveButton(text: CharSequence, @ColorInt color: Int?, icon: Drawable?, click: DialogButtonClick) {
-        delegate.positiveButton(text, color, icon) { dialog, which ->
-            callback?.invoke(editText.text)
-            click.invoke(dialog, which)
+    override fun positiveButton(
+        textRes: Int?,
+        text: CharSequence?,
+        colorRes: Int?,
+        color: Int?,
+        iconRes: Int?,
+        icon: Drawable?,
+        enable: Boolean,
+        visible: Boolean,
+        click: DialogButtonClick
+    ) {
+        delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
+            callback?.invoke(dialog, editText.text)
+            click(dialog)
         }
     }
 }

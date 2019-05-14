@@ -8,7 +8,6 @@ package com.tuuzed.androidx.exdialog.ext
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
-import androidx.annotation.ColorInt
 import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import com.tuuzed.androidx.exdialog.ExDialog
@@ -49,7 +48,7 @@ class DateController(
         }
     }
 
-    fun type(@DatePickerType type: Int) {
+    fun datePickerType(@DatePickerType type: Int) {
         datePicker.type = type
     }
 
@@ -58,17 +57,27 @@ class DateController(
     }
 
     fun onDateChanged(callback: DatePickerCallback) {
-        datePicker.setOnDateChangedListener { callback(it) }
+        datePicker.setOnDateChangedListener { callback(dialog, it) }
     }
 
     fun callback(callback: DatePickerCallback) {
         this.callback = callback
     }
 
-    override fun positiveButton(text: CharSequence, @ColorInt color: Int?, icon: Drawable?, click: DialogButtonClick) {
-        delegate.positiveButton(text, color, icon) { dialog, which ->
-            callback?.invoke(datePicker.dateFormat.let { it.parse(it.format(datePicker.date)) })
-            click.invoke(dialog, which)
+    override fun positiveButton(
+        textRes: Int?,
+        text: CharSequence?,
+        colorRes: Int?,
+        color: Int?,
+        iconRes: Int?,
+        icon: Drawable?,
+        enable: Boolean,
+        visible: Boolean,
+        click: DialogButtonClick
+    ) {
+        delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
+            callback?.invoke(dialog, datePicker.dateFormat.let { it.parse(it.format(datePicker.date)) })
+            click(dialog)
         }
     }
 

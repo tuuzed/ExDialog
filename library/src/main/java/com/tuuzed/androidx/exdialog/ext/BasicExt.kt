@@ -9,13 +9,16 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
+import androidx.core.content.res.ResourcesCompat
+import com.google.android.material.button.MaterialButton
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.DialogButtonLayout
 import com.tuuzed.androidx.exdialog.internal.DialogLayout
 import com.tuuzed.androidx.exdialog.internal.DialogTitle
+import com.tuuzed.androidx.exdialog.internal.MaterialButtonCompat
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 
@@ -30,10 +33,11 @@ class BasicController(
 ) : ExDialogInterface by dialog,
     BasicControllerInterface {
 
+
     private val dialogLayout: DialogLayout
     private val dialogTitle: DialogTitle
-    private val dialogButtons: DialogButtonLayout
-    private val dialogContent: FrameLayout
+    private val dialogButtonLayout: DialogButtonLayout
+    private val dialogContentLayout: FrameLayout
 
     init {
 
@@ -42,93 +46,168 @@ class BasicController(
 
         dialogLayout = view.findViewById(R.id.dialog_layout)
 
-        dialogTitle = dialogLayout.dialogTitle
-        dialogButtons = dialogLayout.dialogButtons
-        dialogContent = dialogLayout.dialogContent
+        dialogTitle = dialogLayout.dialogTitle.apply {
+            this.visibility = View.GONE
+            titleIcon.visibility = View.GONE
+            titleText.visibility = View.GONE
+        }
+        dialogButtonLayout = dialogLayout.dialogButtonLayout.apply {
+            this.visibility = View.GONE
+            positiveButton.visibility = View.GONE
+            negativeButton.visibility = View.GONE
+            neutralButton.visibility = View.GONE
+        }
+        dialogContentLayout = dialogLayout.dialogContentLayout
 
         attachView(view)
     }
 
     fun customView(@LayoutRes layoutId: Int) {
-        LayoutInflater.from(dialog.windowContext).inflate(layoutId, dialogContent, true)
+        LayoutInflater.from(dialog.windowContext).inflate(layoutId, dialogContentLayout, true)
     }
 
     fun customView(view: View) {
-        dialogContent.removeAllViews()
-        dialogContent.addView(view)
-    }
-
-    override fun icon(resId: Int?, icon: Drawable?) {
-        dialogTitle.visibility = View.VISIBLE
-        if (resId != null) {
-            dialogTitle.setIcon(resId)
-        } else {
-            icon?.also { dialogTitle.setIcon(it) }
+        dialogContentLayout.also {
+            it.removeAllViews()
+            it.addView(view)
         }
     }
 
+    override fun icon(iconRes: Int?, icon: Drawable?, visible: Boolean) {
+        dialogTitle.titleIcon.also { titleIcon ->
+            iconRes?.let { titleIcon.setImageResource(it) }
+            icon?.let { titleIcon.setImageDrawable(it) }
 
-    override fun title(resId: Int?, text: CharSequence?, @ColorInt color: Int?) {
-        dialogTitle.visibility = View.VISIBLE
-        if (resId != null) {
-            dialogTitle.setText(resId, color)
-        } else {
-            text?.also { dialogTitle.setText(it, color) }
+            titleIcon.visibility = if (visible) View.VISIBLE else View.GONE
         }
+        dialogTitle.requestUpdateLayout()
+    }
 
-        dialogTitle.setText(text, color)
+    override fun title(textRes: Int?, text: CharSequence?, colorRes: Int?, color: Int?, visible: Boolean) {
+        dialogTitle.titleText.also { titleText ->
+            textRes?.let { titleText.setText(it) }
+            text?.let { titleText.text = it }
+
+            colorRes?.let { titleText.setTextColor(resColor(it)) }
+            color?.let { titleText.setTextColor(it) }
+
+            titleText.visibility = if (visible) View.VISIBLE else View.GONE
+        }
+        dialogTitle.requestUpdateLayout()
     }
 
     override fun positiveButton(
-        text: CharSequence, @ColorInt color: Int?,
+        textRes: Int?,
+        text: CharSequence?,
+        colorRes: Int?,
+        color: Int?,
+        iconRes: Int?,
         icon: Drawable?,
+        enable: Boolean,
+        visible: Boolean,
         click: DialogButtonClick
     ) {
-        dialogButtons.visibility = View.VISIBLE
-        dialogButtons.dialogButton(
-            DialogButtonLayout.BUTTON_POSITIVE,
-            text, color, icon,
-            View.OnClickListener { click.invoke(dialog, ExDialog.BUTTON_POSITIVE) }
+        setUpButton(
+            dialogButtonLayout.positiveButton,
+            textRes,
+            text,
+            colorRes,
+            color,
+            iconRes,
+            icon,
+            enable,
+            visible,
+            click
         )
     }
 
     override fun negativeButton(
-        text: CharSequence, @ColorInt color: Int?,
+        textRes: Int?,
+        text: CharSequence?,
+        colorRes: Int?,
+        color: Int?,
+        iconRes: Int?,
         icon: Drawable?,
+        enable: Boolean,
+        visible: Boolean,
         click: DialogButtonClick
     ) {
-        dialogButtons.visibility = View.VISIBLE
-        dialogButtons.dialogButton(
-            DialogButtonLayout.BUTTON_NEGATIVE,
-            text, color, icon,
-            View.OnClickListener { click.invoke(dialog, ExDialog.BUTTON_NEGATIVE) }
+        setUpButton(
+            dialogButtonLayout.negativeButton,
+            textRes,
+            text,
+            colorRes,
+            color,
+            iconRes,
+            icon,
+            enable,
+            visible,
+            click
         )
     }
 
     override fun neutralButton(
-        text: CharSequence, @ColorInt color: Int?,
+        textRes: Int?,
+        text: CharSequence?,
+        colorRes: Int?,
+        color: Int?,
+        iconRes: Int?,
         icon: Drawable?,
+        enable: Boolean,
+        visible: Boolean,
         click: DialogButtonClick
     ) {
-        dialogButtons.visibility = View.VISIBLE
-        dialogButtons.dialogButton(
-            DialogButtonLayout.BUTTON_NEUTRAL,
-            text, color, icon,
-            View.OnClickListener { click.invoke(dialog, ExDialog.BUTTON_NEUTRAL) }
+        setUpButton(
+            dialogButtonLayout.neutralButton,
+            textRes,
+            text,
+            colorRes,
+            color,
+            iconRes,
+            icon,
+            enable,
+            visible,
+            click
         )
-    }
-
-    override fun disablePositiveButton(disable: Boolean) {
-        dialogButtons.disableDialogButton(DialogButtonLayout.BUTTON_POSITIVE, disable)
-    }
-
-    override fun disableNegativeButton(disable: Boolean) {
-        dialogButtons.disableDialogButton(DialogButtonLayout.BUTTON_NEGATIVE, disable)
-    }
-
-    override fun disableNeutralButton(disable: Boolean) {
-        dialogButtons.disableDialogButton(DialogButtonLayout.BUTTON_NEUTRAL, disable)
 
     }
 
+
+    private fun resColor(@ColorRes colorRes: Int): Int =
+        ResourcesCompat.getColor(dialog.windowContext.resources, colorRes, dialog.windowContext.theme)
+
+    private fun setUpButton(
+        button: MaterialButton,
+        textRes: Int?,
+        text: CharSequence?,
+        colorRes: Int?,
+        color: Int?,
+        iconRes: Int?,
+        icon: Drawable?,
+        enable: Boolean,
+        visible: Boolean,
+        click: DialogButtonClick
+    ) {
+        textRes?.let { button.setText(it) }
+        text?.let { button.text = it }
+
+        colorRes?.let {
+            MaterialButtonCompat.setTextColor(button, resColor(it))
+            MaterialButtonCompat.setRippleColor(button, resColor(it))
+        }
+        color?.let {
+            MaterialButtonCompat.setTextColor(button, it)
+            MaterialButtonCompat.setRippleColor(button, it)
+        }
+
+        iconRes?.let { button.setIconResource(iconRes) }
+        icon?.let { button.icon = icon }
+
+        button.isEnabled = enable
+        button.visibility = if (visible) View.VISIBLE else View.GONE
+        button.setOnClickListener {
+            click(dialog)
+        }
+        dialogButtonLayout.requestUpdateLayout()
+    }
 }

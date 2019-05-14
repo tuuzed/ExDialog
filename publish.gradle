@@ -3,9 +3,9 @@ apply plugin: 'com.novoda.bintray-release'
 
 def pomMetadata = [
         'groupId'   : project.group ?: rootProject.group,
-        'artifactId': project.name,
+        'artifactId': project.library ?: project.name,
         'version'   : project.version ?: rootProject.version,
-        'desc'      : project.name,
+        'desc'      : project.library ?: project.name,
         'website'   : 'https://github.com/tuuzed/ExDialog'
 ]
 

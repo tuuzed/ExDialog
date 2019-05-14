@@ -67,10 +67,9 @@ class MainActivity : AppCompatActivity() {
                 basic {
                     icon(R.mipmap.ic_launcher)
                     title(text = "标题")
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
-                    disableNeutralButton()
+                    positiveButton(text = "确定", color = 0xFFFF5722.toInt())
+                    negativeButton(text = "取消", color = 0XFF80CBC4.toInt())
+                    neutralButton(text = "关闭", color = 0XFF757575.toInt(), enable = false)
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -79,9 +78,9 @@ class MainActivity : AppCompatActivity() {
                 message {
                     title(text = "标题")
                     message(text = "这是一条消息。")
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                    positiveButton(text = "确定", color = 0xFFFF5722.toInt())
+                    negativeButton(text = "取消", color = 0XFF80CBC4.toInt())
+                    neutralButton(text = "关闭", color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -94,9 +93,9 @@ class MainActivity : AppCompatActivity() {
                         for (i in 0..1000) s += it
                         s
                     })
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                    positiveButton(text = "确定", color = 0xFFFF5722.toInt())
+                    negativeButton(text = "取消", color = 0XFF80CBC4.toInt())
+                    neutralButton(text = "关闭", color = 0XFF757575.toInt())
                 }
             }
 
@@ -106,12 +105,12 @@ class MainActivity : AppCompatActivity() {
             ExDialog(this).show {
                 input {
                     title(text = "标题")
-                    callback {
-                        toast("$it")
+                    callback { _, text ->
+                        toast("$text")
                     }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                    positiveButton(text = "确定", color = 0xFFFF5722.toInt())
+                    negativeButton(text = "取消", color = 0XFF80CBC4.toInt())
+                    neutralButton(text = "关闭", color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -153,7 +152,8 @@ class MainActivity : AppCompatActivity() {
                                 }
                             } else {
                                 items(it)
-                                positiveButton("确定") { dialog, _ ->
+                                negativeButton(visible = false)
+                                positiveButton(text = "确定") { dialog ->
                                     dialog.dismiss()
                                 }
                             }
@@ -165,9 +165,7 @@ class MainActivity : AppCompatActivity() {
                         dialog.dismiss()
                     }
                     onDialogDismiss { loadTask.safeCancel() }
-                    positiveButton("取消") { dialog, _ ->
-                        dialog.dismiss()
-                    }
+                    negativeButton { it.dismiss() }
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -195,9 +193,9 @@ class MainActivity : AppCompatActivity() {
                         toast("index: $index, item: $item")
                         dialog.dismiss()
                     }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
+                    neutralButton(color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -212,9 +210,9 @@ class MainActivity : AppCompatActivity() {
                         toast("index: $index, item: $item")
                         dialog.dismiss()
                     }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
+                    neutralButton(color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -232,9 +230,9 @@ class MainActivity : AppCompatActivity() {
                     callback { _, index, selectedItem ->
                         toast("index: $index, selected: $selectedItem")
                     }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
+                    neutralButton(color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -250,9 +248,9 @@ class MainActivity : AppCompatActivity() {
                     callback { _, indices, selectedItems ->
                         toast("indices: $indices, selectedItems: $selectedItems")
                     }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
+                    neutralButton(color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -264,19 +262,19 @@ class MainActivity : AppCompatActivity() {
             ExDialog(this).show {
                 datePicker {
                     title(text = "标题")
-                    callback {
-                        toast(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(it))
+                    callback { _, date ->
+                        toast(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(date))
                     }
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
+                    neutralButton(color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Date Range Picker") {
             ExDialog(this).show {
                 dateRangePicker {
-                    callback { beginDate, endDate ->
+                    callback { _, beginDate, endDate ->
                         toast(
                             SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(beginDate)
                                     + " ~ " +
@@ -284,9 +282,9 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
                     title(text = "标题")
-                    positiveButton("确定", 0xFFFF5722.toInt())
-                    negativeButton("取消", 0XFF80CBC4.toInt())
-                    neutralButton("关闭", 0XFF757575.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
+                    neutralButton(color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }

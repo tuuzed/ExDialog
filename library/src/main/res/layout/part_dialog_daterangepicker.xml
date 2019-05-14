@@ -22,7 +22,7 @@
                 android:background="@null"
                 android:button="@null"
                 android:checked="true"
-                android:textColor="#FFBDBDBD"
+                android:textColor="#FF212121"
                 android:gravity="center"
                 android:lineSpacingExtra="2dp"
                 android:textSize="12sp"
@@ -36,7 +36,7 @@
                 android:background="@null"
                 android:button="@null"
                 android:gravity="center"
-                android:textColor="#FFBDBDBD"
+                android:textColor="#FF212121"
                 android:lineSpacingExtra="2dp"
                 android:textSize="12sp"
                 tools:text="结束于\n2018-06-29 22:11"/>
@@ -55,7 +55,6 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="16dp"
-            app:dp_selectColor="#DE000000"
             app:dp_textSize="14sp"
             app:dp_type="ALL"/>
 

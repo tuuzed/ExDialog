@@ -37,13 +37,11 @@ class LoadingController(
         attachView(view)
     }
 
-    @JvmOverloads
     fun icon(icon: Sprite? = null, @ColorInt color: Int? = null) {
         color?.also { loadingIcon.setColor(it) }
         icon?.also { loadingIcon.setIndeterminateDrawable(it) }
     }
 
-    @JvmOverloads
     fun text(text: String? = null, @ColorInt color: Int? = null) {
         loadingText.visibility = View.VISIBLE
         text?.also { loadingText.text = text }

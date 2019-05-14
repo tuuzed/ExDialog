@@ -12,7 +12,6 @@
             style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:visibility="visible"
             tools:text="Neutral"/>
 
     <View android:layout_width="0dp"
@@ -24,7 +23,6 @@
             style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:visibility="visible"
             tools:text="Negative"
             tools:textColor="@android:color/holo_orange_light"/>
 
@@ -33,7 +31,6 @@
             style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:visibility="visible"
             tools:text="Positive"/>
 
 </merge>

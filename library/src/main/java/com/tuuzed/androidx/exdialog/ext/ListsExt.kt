@@ -15,10 +15,10 @@ import com.github.ybq.android.spinkit.sprite.Sprite
 import com.google.android.material.button.MaterialButton
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
+import com.tuuzed.androidx.exdialog.internal.MaterialButtonCompat
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ListsControllerInterface
-import com.tuuzed.androidx.exdialog.internal.MaterialButtonCompat
 import com.tuuzed.recyclerview.adapter.RecyclerViewAdapter
 
 inline fun ExDialog.lists(func: ListsController.() -> Unit) {
@@ -56,7 +56,6 @@ class ListsController(
         func(recyclerView, listAdapter)
     }
 
-    @JvmOverloads
     fun items(items: List<*>, showItemView: Boolean = true) {
         listAdapter.items.clear()
         listAdapter.appendItems(items).notifyDataSetChanged()

@@ -6,9 +6,7 @@
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
-import android.view.View
 import android.widget.CheckBox
-import android.widget.ListAdapter
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
@@ -70,14 +68,24 @@ class MultiChoiceItemsController<T>(
         )
     }
 
-    override fun positiveButton(text: CharSequence, color: Int?, icon: Drawable?, click: DialogButtonClick) {
-        delegate.positiveButton(text, color, icon) { dialog, which ->
+    override fun positiveButton(
+        textRes: Int?,
+        text: CharSequence?,
+        colorRes: Int?,
+        color: Int?,
+        iconRes: Int?,
+        icon: Drawable?,
+        enable: Boolean,
+        visible: Boolean,
+        click: DialogButtonClick
+    ) {
+        delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.also { callback ->
                 getCheckedItems { indices, items ->
                     callback(dialog, indices, items)
                 }
             }
-            click.invoke(dialog, which)
+            click(dialog)
         }
     }
 
@@ -103,13 +111,13 @@ class MultiChoiceItemsController<T>(
         override fun getLayoutId(): Int = R.layout.listitem_multichoiceitems
         override fun onBindViewHolder(holder: CommonItemViewHolder, item: Item<T>, position: Int) {
             if (item.disable) {
-                holder.find<View>(R.id.item_layout).also {
+                holder.itemView.also {
                     it.isClickable = false
                     it.isEnabled = false
-                    it.alpha = 0.5f
+                    it.alpha = 0.2f
                 }
             } else {
-                holder.find<View>(R.id.item_layout).also {
+                holder.itemView.also {
                     it.isClickable = true
                     it.isEnabled = true
                     it.alpha = 1.0f

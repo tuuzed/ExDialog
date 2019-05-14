@@ -8,7 +8,7 @@ import com.tuuzed.androidx.exdialog.ext.colorBlue
 import com.tuuzed.androidx.exdialog.ext.colorGreen
 import com.tuuzed.androidx.exdialog.ext.colorRed
 
-internal object MaterialButtonCompat {
+object MaterialButtonCompat {
 
     fun setRippleColor(button: MaterialButton, @ColorInt color: Int) {
         button.rippleColor = colorStateList(color)

@@ -5,16 +5,16 @@ import java.util.*
 
 // Dialog
 
-typealias DialogButtonClick = (dialog: ExDialog, which: Int) -> Unit
+typealias DialogButtonClick = (dialog: ExDialog) -> Unit
 
 // Input
 
-typealias InputCallback = (text: CharSequence) -> Unit
+typealias InputCallback = (dialog: ExDialog, text: CharSequence) -> Unit
 
 // DatePicker
 
-typealias DatePickerCallback = (date: Date) -> Unit
-typealias DateRangePickerCallback = (beginDate: Date, endDate: Date) -> Unit
+typealias DatePickerCallback = (dialog: ExDialog, date: Date) -> Unit
+typealias DateRangePickerCallback = (dialog: ExDialog, beginDate: Date, endDate: Date) -> Unit
 
 // Lists
 

@@ -37,13 +37,9 @@ class MessageController(
         attachView(view)
     }
 
-    @JvmOverloads
-    fun message(@StringRes resId: Int = View.NO_ID, text: CharSequence? = null) {
-        if (resId != View.NO_ID) {
-            messageText.setText(resId)
-        } else {
-            messageText.text = text
-        }
+    fun message(@StringRes textRes: Int? = null, text: CharSequence? = null) {
+        textRes?.also { messageText.setText(textRes) }
+        text?.also { messageText.text = text }
     }
 
 }

@@ -15,14 +15,12 @@ class ExDialog(
 
 
     companion object Factory {
-        const val BUTTON_POSITIVE = -1
-        const val BUTTON_NEGATIVE = -2
-        const val BUTTON_NEUTRAL = -3
 
         var WINDOW_ANIMATION_FADE = R.style.ExDialog_Fade_AnimationStyle
             private set
         var WINDOW_ANIMATION_SLIDE = R.style.ExDialog_Slide_AnimationStyle
             private set
+
     }
 
 
