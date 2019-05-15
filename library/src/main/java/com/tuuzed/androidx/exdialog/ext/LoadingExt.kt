@@ -27,7 +27,9 @@ fun ExDialog.loading(
         setContentView(it)
     }.also {
         it.icon(icon, iconColorRes, iconColor)
-        it.text(text, textColorRes, textColor)
+        if (text != null) {
+            it.text(text, textColorRes, textColor)
+        }
         func?.invoke(it)
     }
 }
