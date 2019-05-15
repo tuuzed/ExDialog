@@ -36,7 +36,7 @@ class MultiChoiceItemsController<T>(
 
     private var listAdapter: RecyclerViewAdapter? = null
     private var callback: MultiChoiceItemsCallback<T>? = null
-    private var itemClickCallback: ItemsCallback<T>? = null
+    private var itemClickCallback: MultiChoiceItemsCallback<T>? = null
 
 
     init {
@@ -51,7 +51,7 @@ class MultiChoiceItemsController<T>(
         this.callback = callback
     }
 
-    fun itemClick(callback: ItemsCallback<T>) {
+    fun itemClick(callback: MultiChoiceItemsCallback<T>) {
         this.itemClickCallback = callback
     }
 
@@ -128,7 +128,11 @@ class MultiChoiceItemsController<T>(
             holder.click(R.id.item_layout) {
                 item.checked = !item.checked
                 listAdapter.notifyItemChanged(position)
-                itemClickCallback?.invoke(dialog, reviseIndex(position), item.data, item.checked)
+                itemClickCallback?.also { callback ->
+                    getCheckedItems { indices, items ->
+                        callback(dialog, indices, items)
+                    }
+                }
             }
         }
     }

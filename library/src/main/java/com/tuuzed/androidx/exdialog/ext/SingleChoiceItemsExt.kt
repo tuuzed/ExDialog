@@ -36,7 +36,7 @@ class SingleChoiceItemsController<T>(
 
     private var listAdapter: RecyclerViewAdapter? = null
     private var callback: SingleChoiceItemsCallback<T>? = null
-    private var itemClickCallback: ItemsCallback<T>? = null
+    private var itemClickCallback: SingleChoiceItemsCallback<T>? = null
 
     init {
         delegate.config { _, listAdapter ->
@@ -50,7 +50,7 @@ class SingleChoiceItemsController<T>(
         this.callback = callback
     }
 
-    fun itemClick(callback: ItemsCallback<T>) {
+    fun itemClick(callback: SingleChoiceItemsCallback<T>) {
         this.itemClickCallback = callback
     }
 
@@ -79,12 +79,12 @@ class SingleChoiceItemsController<T>(
     ) {
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.also { callback ->
-                val outIndex = intArrayOf(-1)
-                val item = getLastCheckedItem(outIndex)
-                if (item == null) {
-                    callback(dialog, -1, null)
-                } else {
-                    callback(dialog, reviseIndex(outIndex[0]), item.data)
+                lastCheckedItem { index, checkedItem ->
+                    if (checkedItem == null) {
+                        callback(dialog, -1, null)
+                    } else {
+                        callback(dialog, index, checkedItem.data)
+                    }
                 }
             }
             click(dialog)
@@ -93,18 +93,22 @@ class SingleChoiceItemsController<T>(
 
     private fun reviseIndex(index: Int): Int = index - 1
 
-    private fun getLastCheckedItem(outIndex: IntArray): Item<T>? {
-        val items = listAdapter?.items ?: return null
-        items.forEachIndexed { index, item ->
-            if (item is Item<*>) {
-                if (item.checked) {
-                    outIndex[0] = index
-                    @Suppress("UNCHECKED_CAST")
-                    return item as Item<T>
+    private fun lastCheckedItem(receiver: (index: Int, checkedItem: Item<T>?) -> Unit) {
+        val items = listAdapter?.items
+        if (items == null) {
+            receiver(-1, null)
+        } else {
+            items.forEachIndexed { index, item ->
+                if (item is Item<*>) {
+                    if (item.checked) {
+                        @Suppress("UNCHECKED_CAST")
+                        receiver(index, item as Item<T>)
+                        return
+                    }
                 }
             }
+            receiver(-1, null)
         }
-        return null
     }
 
     private class Item<T>(val data: T, var checked: Boolean, val disable: Boolean)
@@ -112,7 +116,6 @@ class SingleChoiceItemsController<T>(
     private inner class ItemViewBinder(
         private val listAdapter: RecyclerViewAdapter
     ) : AbstractItemViewBinder<Item<T>>() {
-        private val outIndex = intArrayOf(-1)
         override fun getLayoutId(): Int = R.layout.listitem_singlechoiceitems
         override fun onBindViewHolder(holder: CommonItemViewHolder, item: Item<T>, position: Int) {
             if (item.disable) {
@@ -131,19 +134,21 @@ class SingleChoiceItemsController<T>(
             holder.text(R.id.text, toReadable(item.data))
             holder.find<RadioButton>(R.id.radio).isChecked = item.checked
             holder.click(R.id.item_layout) {
-                outIndex[0] = -1
-                getLastCheckedItem(outIndex)?.also {
-                    it.checked = false
-                    listAdapter.notifyItemChanged(outIndex[0])
+                var lastIndex: Int = -1
+                lastCheckedItem { index, checkedItem ->
+                    lastIndex = index
+                    if (checkedItem != null) {
+                        checkedItem.checked = false
+                        listAdapter.notifyItemChanged(index)
+                    }
                 }
                 item.checked = true
                 listAdapter.notifyItemChanged(position)
-                if (outIndex[0] != position) {
+                if (lastIndex != position) {
                     itemClickCallback?.invoke(
                         dialog,
                         reviseIndex(position),
-                        item.data,
-                        item.checked
+                        item.data
                     )
                 }
             }

@@ -6,10 +6,13 @@
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
 import androidx.annotation.StringRes
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
@@ -31,32 +34,67 @@ class InputController(
     BasicControllerInterface by delegate {
 
     private var callback: InputCallback? = null
-    private val editText: EditText
+    private var onTextChangedCallback: InputCallback? = null
+    private val textInputLayout: TextInputLayout
+    private val textInputEditText: TextInputEditText
 
     init {
         val inflater = LayoutInflater.from(dialog.windowContext)
         val view = inflater.inflate(R.layout.part_dialog_input, null, false)
-        editText = view.findViewById(R.id.editText)
+        textInputLayout = view.findViewById(R.id.textInputLayout)
+        textInputEditText = view.findViewById(R.id.textInputEditText)
+        textInputEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                onTextChangedCallback?.invoke(dialog, s ?: "")
+            }
+        })
         attachView(view)
     }
 
-    fun inputType(inputType: Int) {
-        editText.inputType = inputType
+
+    fun error(text: CharSequence? = null) {
+        textInputLayout.error = text
+        textInputLayout.isErrorEnabled = text != null
     }
 
-    fun hint(@StringRes textRes: Int? = null, text: CharSequence? = null) {
-        textRes?.also { editText.setHint(textRes) }
-        text?.also { editText.hint = text }
+    fun helperText(text: CharSequence? = null) {
+        textInputLayout.helperText = text
+        textInputLayout.isHelperTextEnabled = text != null
     }
 
-    fun prefillText(@StringRes textRes: Int? = null, text: CharSequence? = null) {
-        textRes?.also { editText.setText(textRes) }
-        text?.also { editText.setText(text) }
-        editText.setSelection(editText.text?.length ?: 0)
+    fun hint(text: CharSequence? = null, enableAnimation: Boolean = true) {
+        textInputLayout.hint = text
+        textInputLayout.isHintEnabled = text != null
+        textInputLayout.isHintAnimationEnabled = enableAnimation
+    }
+
+    fun maxLength(maxLength: Int? = null) {
+        textInputLayout.counterMaxLength = maxLength ?: -1
+        textInputLayout.isCounterEnabled = maxLength != null
+    }
+
+    fun inputType(inputType: Int? = null) {
+        inputType?.let { textInputEditText.inputType = it }
+    }
+
+    fun prefill(@StringRes textRes: Int? = null, text: CharSequence? = null) {
+        textRes?.let { textInputEditText.setText(textRes) }
+        textInputEditText.setText(text)
     }
 
     fun callback(callback: InputCallback) {
         this.callback = callback
+    }
+
+    fun onTextChanged(callback: InputCallback) {
+        onTextChangedCallback = callback
+        callback(dialog, textInputEditText.text ?: "")
     }
 
     override fun positiveButton(
@@ -71,7 +109,7 @@ class InputController(
         click: DialogButtonClick
     ) {
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
-            callback?.invoke(dialog, editText.text)
+            callback?.invoke(dialog, textInputEditText.text ?: "")
             click(dialog)
         }
     }

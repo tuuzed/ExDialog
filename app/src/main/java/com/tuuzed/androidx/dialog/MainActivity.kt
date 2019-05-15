@@ -67,8 +67,8 @@ class MainActivity : AppCompatActivity() {
                 basic {
                     icon(R.mipmap.ic_launcher)
                     title(text = "标题")
-                    positiveButton(text = "确定", color = 0xFFFF5722.toInt())
-                    negativeButton(text = "取消", color = 0XFF80CBC4.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
                     neutralButton(text = "关闭", color = 0XFF757575.toInt(), enable = false)
                 }
             }
@@ -78,8 +78,8 @@ class MainActivity : AppCompatActivity() {
                 message {
                     title(text = "标题")
                     message(text = "这是一条消息。")
-                    positiveButton(text = "确定", color = 0xFFFF5722.toInt())
-                    negativeButton(text = "取消", color = 0XFF80CBC4.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
                     neutralButton(text = "关闭", color = 0XFF757575.toInt())
                 }
             }
@@ -93,8 +93,8 @@ class MainActivity : AppCompatActivity() {
                         for (i in 0..1000) s += it
                         s
                     })
-                    positiveButton(text = "确定", color = 0xFFFF5722.toInt())
-                    negativeButton(text = "取消", color = 0XFF80CBC4.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
                     neutralButton(text = "关闭", color = 0XFF757575.toInt())
                 }
             }
@@ -105,11 +105,13 @@ class MainActivity : AppCompatActivity() {
             ExDialog(this).show {
                 input {
                     title(text = "标题")
+                    hint("Hint")
+                    helperText("Helper")
                     callback { _, text ->
                         toast("$text")
                     }
-                    positiveButton(text = "确定", color = 0xFFFF5722.toInt())
-                    negativeButton(text = "取消", color = 0XFF80CBC4.toInt())
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
                     neutralButton(text = "关闭", color = 0XFF757575.toInt())
                 }
             }
@@ -224,8 +226,8 @@ class MainActivity : AppCompatActivity() {
                     for (i in 1..4) items.add("Item$i")
                     title(text = "标题")
                     items(items, disableIndices = listOf(0))
-                    itemClick { dialog, index, item, checked ->
-                        toast("index: $index, selected: $item")
+                    itemClick { _, index, selectedItem ->
+                        toast("index: $index, selectedItem: $selectedItem")
                     }
                     callback { _, index, selectedItem ->
                         toast("index: $index, selected: $selectedItem")
@@ -245,6 +247,9 @@ class MainActivity : AppCompatActivity() {
                     for (i in 1..4) items.add("Item$i")
                     title(text = "标题")
                     items(items, listOf(1, 3))
+                    itemClick { _, indices, selectedItems ->
+                        toast("indices: $indices, selectedItems: $selectedItems")
+                    }
                     callback { _, indices, selectedItems ->
                         toast("indices: $indices, selectedItems: $selectedItems")
                     }

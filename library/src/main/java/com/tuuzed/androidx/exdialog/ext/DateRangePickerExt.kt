@@ -72,7 +72,6 @@ class DateRangeController(
     }
 
 
-
     fun yearRange(max: Int = -1, min: Int = -1) {
         if (max > 0) {
             datePicker.setMaxYear(max)
@@ -86,12 +85,13 @@ class DateRangeController(
         datePicker.type = type
     }
 
-    fun beginDate(date: Date) {
-        beginDate = datePicker.dateFormat.let { it.parse(it.format(date)) }
-    }
-
-    fun endDate(date: Date) {
-        endDate = datePicker.dateFormat.let { it.parse(it.format(date)) }
+    fun dateRange(beginDate: Date? = null, endDate: Date? = null) {
+        if (beginDate != null) {
+            this.beginDate = datePicker.dateFormat.let { it.parse(it.format(beginDate)) }
+        }
+        if (endDate != null) {
+            this.endDate = datePicker.dateFormat.let { it.parse(it.format(endDate)) }
+        }
     }
 
     fun onDateChanged(callback: DateRangePickerCallback) {
