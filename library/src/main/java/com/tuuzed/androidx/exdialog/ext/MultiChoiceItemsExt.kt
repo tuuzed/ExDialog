@@ -51,17 +51,8 @@ class MultiChoiceItemsController<T>(
         this.callback = callback
     }
 
-    fun itemClick(callback: MultiChoiceItemsCallback<T>) {
+    fun onSelectedItemChanged(callback: MultiChoiceItemsCallback<T>) {
         this.itemClickCallback = callback
-    }
-
-    override fun onDialogShow(listener: (ExDialog) -> Unit) {
-        itemClickCallback?.also { callback ->
-            getCheckedItems { indices, items ->
-                callback(dialog, indices, items)
-            }
-        }
-        delegate.onDialogShow(listener)
     }
 
     @JvmOverloads
@@ -88,6 +79,11 @@ class MultiChoiceItemsController<T>(
         visible: Boolean?,
         click: DialogButtonClick?
     ) {
+        itemClickCallback?.also { callback ->
+            getCheckedItems { indices, items ->
+                callback(dialog, indices, items)
+            }
+        }
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.also { callback ->
                 getCheckedItems { indices, items ->

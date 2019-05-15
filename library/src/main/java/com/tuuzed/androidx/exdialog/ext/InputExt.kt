@@ -96,12 +96,7 @@ class InputController(
     fun onTextChanged(callback: InputCallback) {
         onTextChangedCallback = callback
     }
-
-    override fun onDialogShow(listener: (ExDialog) -> Unit) {
-        onTextChangedCallback?.invoke(dialog, textInputEditText.text ?: "")
-        delegate.onDialogShow(listener)
-    }
-
+    
     override fun positiveButton(
         textRes: Int?,
         text: CharSequence?,
@@ -113,6 +108,7 @@ class InputController(
         visible: Boolean?,
         click: DialogButtonClick?
     ) {
+        onTextChangedCallback?.invoke(dialog, textInputEditText.text ?: "")
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.invoke(dialog, textInputEditText.text ?: "")
             click?.invoke(dialog)

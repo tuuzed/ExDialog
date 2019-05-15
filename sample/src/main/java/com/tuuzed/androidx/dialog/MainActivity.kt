@@ -3,10 +3,7 @@ package com.tuuzed.androidx.dialog
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tuuzed.androidx.dialog.coroutines.async
@@ -31,28 +28,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_act)
         setSupportActionBar(toolbar)
+        initRecyclerView()
+        loadingSamples()
+        basicSamples()
+        inputSamples()
+        listsSamples()
+        datePickerSamples()
+        listAdapter.notifyDataSetChanged()
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        listAdapter = RecyclerViewAdapter.with(recyclerView)
-            .bind(ButtonItem::class.java, object : AbstractItemViewBinder<ButtonItem>() {
-                override fun getLayoutId(): Int = R.layout.main_listitem_button
-                override fun onBindViewHolder(holder: CommonItemViewHolder, item: ButtonItem, position: Int) {
-                    holder.text(R.id.button, item.text)
-                    holder.click(R.id.button) { item.itemClick() }
-                }
-            })
-            .bind(SegmentItem::class.java, object : AbstractItemViewBinder<SegmentItem>() {
-                override fun getLayoutId(): Int = R.layout.main_listitem_segment
-                override fun onBindViewHolder(holder: CommonItemViewHolder, item: SegmentItem, position: Int) {
-                    holder.text(R.id.text, item.text)
-                }
-            })
+    }
 
-        val loading = ExDialog(this).show { loading {} }.lifecycleOwner(this)
-        toolbar.postDelayed({ loading.dismiss() }, 1500)
 
-        SegmentItem("ExDialog").also { listAdapter.appendItems(it) }
-        ButtonItem("Loading") {
+    private fun loadingSamples() {
+        SegmentItem("LoadingSamples").also { listAdapter.appendItems(it) }
+        ButtonItem("Loading ") {
+            ExDialog(this).show {
+                loading { windowAnimations(ExDialog.WINDOW_ANIMATION_FADE) }
+            }
+        }.also { listAdapter.appendItems(it) }
+        ButtonItem("Loading + Message") {
             ExDialog(this).show {
                 loading {
                     windowAnimations(ExDialog.WINDOW_ANIMATION_FADE)
@@ -62,14 +56,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.also { listAdapter.appendItems(it) }
+    }
+
+    private fun basicSamples() {
+        SegmentItem("BasicSamples").also { listAdapter.appendItems(it) }
         ButtonItem("Basic") {
             ExDialog(this).show {
                 basic {
                     icon(R.mipmap.ic_launcher)
                     title(text = "标题")
-                    positiveButton()
-                    negativeButton()
-                    neutralButton(text = "关闭", enable = false)
+                    positiveButton(color = 0xFFFF5722.toInt())
+                    negativeButton(color = 0XFF80CBC4.toInt())
+                    neutralButton(color = 0XFF757575.toInt(), text = "关闭", enable = false)
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -78,8 +76,8 @@ class MainActivity : AppCompatActivity() {
                 message {
                     title(text = "标题")
                     message(text = "这是一条消息。")
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
+                    positiveButton()
+                    negativeButton()
                     neutralButton(text = "关闭", color = 0XFF757575.toInt())
                 }
             }
@@ -93,13 +91,16 @@ class MainActivity : AppCompatActivity() {
                         for (i in 0..1000) s += it
                         s
                     })
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(text = "关闭", color = 0XFF757575.toInt())
+                    positiveButton(text = "关闭")
                 }
             }
 
         }.also { listAdapter.appendItems(it) }
+
+    }
+
+    private fun inputSamples() {
+        SegmentItem("InputSamples").also { listAdapter.appendItems(it) }
         ButtonItem("Input") {
             ExDialog(this).show {
                 input {
@@ -109,13 +110,11 @@ class MainActivity : AppCompatActivity() {
                     callback { _, text ->
                         toast("$text")
                     }
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(text = "关闭", color = 0XFF757575.toInt())
+                    positiveButton()
+                    negativeButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
-
         ButtonItem("Non Empty Input") {
             ExDialog(this).show {
                 input {
@@ -130,9 +129,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.also { listAdapter.appendItems(it) }
+    }
 
+    private fun listsSamples() {
         SegmentItem("Lists").also { listAdapter.appendItems(it) }
-
         ButtonItem("Items") {
             ExDialog(this).show {
                 simpleItems<String> {
@@ -146,7 +146,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.also { listAdapter.appendItems(it) }
-
         ButtonItem("Lazy Items") {
             ExDialog(this).show {
                 simpleItems<String> {
@@ -232,7 +231,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.also { listAdapter.appendItems(it) }
-
         ButtonItem("Single Choice Items") {
             ExDialog(this).show {
                 singleChoiceItems<String> {
@@ -240,7 +238,7 @@ class MainActivity : AppCompatActivity() {
                     for (i in 1..4) items.add("Item$i")
                     title(text = "标题")
                     items(items, disableIndices = listOf(0))
-                    itemClick { _, index, selectedItem ->
+                    onSelectedItemChanged { _, index, selectedItem ->
                         toast("index: $index, selectedItem: $selectedItem")
                     }
                     callback { _, index, selectedItem ->
@@ -252,8 +250,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.also { listAdapter.appendItems(it) }
-
-
         ButtonItem("Multi Choice Items") {
             ExDialog(this).show {
                 multiChoiceItems<String> {
@@ -261,7 +257,7 @@ class MainActivity : AppCompatActivity() {
                     for (i in 1..4) items.add("Item$i")
                     title(text = "标题")
                     items(items, listOf(1, 3))
-                    itemClick { _, indices, selectedItems ->
+                    onSelectedItemChanged { _, indices, selectedItems ->
                         toast("indices: $indices, selectedItems: $selectedItems")
                     }
                     callback { _, indices, selectedItems ->
@@ -273,9 +269,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.also { listAdapter.appendItems(it) }
+    }
 
-
-
+    private fun datePickerSamples() {
         SegmentItem("DatePicker").also { listAdapter.appendItems(it) }
         ButtonItem("Date Picker") {
             ExDialog(this).show {
@@ -307,45 +303,30 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.also { listAdapter.appendItems(it) }
+    }
 
-
-
-        SegmentItem("System").also { listAdapter.appendItems(it) }
-        ButtonItem("System") {
-            AlertDialog.Builder(this)
-                .setIcon(R.mipmap.ic_launcher)
-                .setTitle("Title")
-                .setMultiChoiceItems(
-                    arrayOf("Item1", "Item2", "Item3", "Item4"),
-                    booleanArrayOf(false, false, false, false)
-                ) { _, _, _ -> }
-                .setPositiveButton("确定") { _, _ -> }
-                .setNegativeButton("取消", null)
-                .setNeutralButton("关闭", null)
-                .show()
-        }.also { listAdapter.appendItems(it) }
-
-
-        listAdapter.notifyDataSetChanged()
-
+    private fun initRecyclerView() {
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        listAdapter = RecyclerViewAdapter.with(recyclerView)
+            .bind(ButtonItem::class.java, object : AbstractItemViewBinder<ButtonItem>() {
+                override fun getLayoutId(): Int = R.layout.main_listitem_button
+                override fun onBindViewHolder(holder: CommonItemViewHolder, item: ButtonItem, position: Int) {
+                    holder.text(R.id.button, item.text)
+                    holder.click(R.id.button) { item.itemClick() }
+                }
+            })
+            .bind(SegmentItem::class.java, object : AbstractItemViewBinder<SegmentItem>() {
+                override fun getLayoutId(): Int = R.layout.main_listitem_segment
+                override fun onBindViewHolder(holder: CommonItemViewHolder, item: SegmentItem, position: Int) {
+                    holder.text(R.id.text, item.text)
+                }
+            })
     }
 
     private fun toast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).also {
             it.setGravity(Gravity.CENTER, 0, 0)
         }.show()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private class ButtonItem(var text: String, var itemClick: () -> Unit)

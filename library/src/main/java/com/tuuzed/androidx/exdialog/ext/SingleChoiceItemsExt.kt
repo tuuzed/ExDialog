@@ -50,7 +50,7 @@ class SingleChoiceItemsController<T>(
         this.callback = callback
     }
 
-    fun itemClick(callback: SingleChoiceItemsCallback<T>) {
+    fun onSelectedItemChanged(callback: SingleChoiceItemsCallback<T>) {
         this.itemClickCallback = callback
     }
 
@@ -66,20 +66,6 @@ class SingleChoiceItemsController<T>(
         )
     }
 
-
-    override fun onDialogShow(listener: (ExDialog) -> Unit) {
-        itemClickCallback?.also { callback ->
-            getLastCheckedItem { index, checkedItem ->
-                if (checkedItem == null) {
-                    callback(dialog, -1, null)
-                } else {
-                    callback(dialog, index, checkedItem.data)
-                }
-            }
-        }
-        delegate.onDialogShow(listener)
-    }
-
     override fun positiveButton(
         textRes: Int?,
         text: CharSequence?,
@@ -91,6 +77,15 @@ class SingleChoiceItemsController<T>(
         visible: Boolean?,
         click: DialogButtonClick?
     ) {
+        itemClickCallback?.also { callback ->
+            getLastCheckedItem { index, checkedItem ->
+                if (checkedItem == null) {
+                    callback(dialog, -1, null)
+                } else {
+                    callback(dialog, index, checkedItem.data)
+                }
+            }
+        }
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.also { callback ->
                 getLastCheckedItem { index, checkedItem ->
