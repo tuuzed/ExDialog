@@ -12,16 +12,24 @@
 >
 
 
-    <com.tuuzed.androidx.exdialog.internal.DialogLayout
-            android:id="@+id/dialog_layout"
-            android:layout_width="@dimen/ex_dialog_width"
+    <com.google.android.material.card.MaterialCardView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ed_basic_background"
-            android:orientation="vertical"
-            tools:layout_gravity="center"
-            android:minHeight="56dp"
-    >
+            android:layout_gravity="center"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="0dp">
 
-    </com.tuuzed.androidx.exdialog.internal.DialogLayout>
+
+        <com.tuuzed.androidx.exdialog.internal.DialogLayout
+                android:id="@+id/dialog_layout"
+                android:layout_width="@dimen/ex_dialog_width"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:layout_gravity="center"
+                android:minHeight="56dp"
+        />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </FrameLayout>

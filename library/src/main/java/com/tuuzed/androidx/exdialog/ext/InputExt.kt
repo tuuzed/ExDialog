@@ -5,7 +5,6 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
-import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -54,6 +53,8 @@ class InputController(
                 onTextChangedCallback?.invoke(dialog, s ?: "")
             }
         })
+        // 获取焦点，自动弹出软键盘
+        textInputEditText.requestFocus()
         attachView(view)
     }
 
@@ -73,7 +74,6 @@ class InputController(
         textInputLayout.isHintAnimationEnabled = enableAnimation
     }
 
-
     fun maxLength(maxLength: Int? = null) {
         textInputLayout.counterMaxLength = maxLength ?: -1
         textInputLayout.isCounterEnabled = maxLength != null
@@ -86,7 +86,7 @@ class InputController(
     fun prefill(@StringRes textRes: Int? = null, text: CharSequence? = null) {
         textRes?.let { textInputEditText.setText(textRes) }
         textInputEditText.setText(text)
-        textInputEditText.setSelection(textInputEditText.selectionEnd)
+        textInputEditText.setSelection(textInputEditText.text?.length ?: 0)
     }
 
     fun callback(callback: InputCallback) {
@@ -96,22 +96,13 @@ class InputController(
     fun onTextChanged(callback: InputCallback) {
         onTextChangedCallback = callback
     }
-    
-    override fun positiveButton(
-        textRes: Int?,
-        text: CharSequence?,
-        colorRes: Int?,
-        color: Int?,
-        iconRes: Int?,
-        icon: Drawable?,
-        enable: Boolean?,
-        visible: Boolean?,
-        click: DialogButtonClick?
-    ) {
+
+    override fun positiveButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
         onTextChangedCallback?.invoke(dialog, textInputEditText.text ?: "")
-        delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
+        delegate.positiveButton(textRes, text) {
             callback?.invoke(dialog, textInputEditText.text ?: "")
             click?.invoke(dialog)
         }
     }
+
 }

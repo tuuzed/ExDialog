@@ -5,7 +5,6 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -102,18 +101,8 @@ class DateRangeController(
         this.callback = callback
     }
 
-    override fun positiveButton(
-        textRes: Int?,
-        text: CharSequence?,
-        colorRes: Int?,
-        color: Int?,
-        iconRes: Int?,
-        icon: Drawable?,
-        enable: Boolean?,
-        visible: Boolean?,
-        click: DialogButtonClick?
-    ) {
-        delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
+    override fun positiveButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
+        delegate.positiveButton(textRes, text) {
             callback?.invoke(
                 dialog,
                 datePicker.dateFormat.let { it.parse(it.format(beginDate)) },

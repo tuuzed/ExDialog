@@ -5,7 +5,6 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
-import android.graphics.drawable.Drawable
 import android.widget.CheckBox
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
@@ -68,23 +67,13 @@ class MultiChoiceItemsController<T>(
         )
     }
 
-    override fun positiveButton(
-        textRes: Int?,
-        text: CharSequence?,
-        colorRes: Int?,
-        color: Int?,
-        iconRes: Int?,
-        icon: Drawable?,
-        enable: Boolean?,
-        visible: Boolean?,
-        click: DialogButtonClick?
-    ) {
+    override fun positiveButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
         itemClickCallback?.also { callback ->
             getCheckedItems { indices, items ->
                 callback(dialog, indices, items)
             }
         }
-        delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
+        delegate.positiveButton(textRes, text) {
             callback?.also { callback ->
                 getCheckedItems { indices, items ->
                     callback(dialog, indices, items)

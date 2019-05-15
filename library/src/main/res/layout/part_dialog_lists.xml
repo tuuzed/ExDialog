@@ -6,7 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:theme="@style/BaseExDialogTheme"
 >
     <com.tuuzed.androidx.exdialog.internal.DialogRecyclerView
             android:id="@+id/recyclerView"
@@ -24,7 +23,7 @@
             android:layout_marginTop="36dp"
             android:layout_marginBottom="36dp"
             android:layout_gravity="center"
-            app:SpinKit_Color="?attr/colorAccent"
+            app:SpinKit_Color="?attr/colorPrimary"
     />
 
     <com.tuuzed.androidx.exdialog.internal.DialogButton

@@ -14,7 +14,6 @@ import androidx.annotation.LayoutRes
 import androidx.core.content.res.ResourcesCompat
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
-import com.tuuzed.androidx.exdialog.internal.DialogButton
 import com.tuuzed.androidx.exdialog.internal.DialogButtonLayout
 import com.tuuzed.androidx.exdialog.internal.DialogLayout
 import com.tuuzed.androidx.exdialog.internal.DialogTitle
@@ -31,7 +30,6 @@ class BasicController(
     attachView: (View) -> Unit
 ) : ExDialogInterface by dialog,
     BasicControllerInterface {
-
 
     private val dialogLayout: DialogLayout
     private val dialogTitle: DialogTitle
@@ -71,137 +69,143 @@ class BasicController(
         }
     }
 
-    override fun icon(iconRes: Int?, icon: Drawable?, visible: Boolean?) {
+
+    override fun iconVisible(visible: Boolean) {
+        dialogTitle.titleIcon.visibility = if (visible) View.VISIBLE else View.GONE
+        dialogTitle.requestUpdateLayout()
+    }
+
+    override fun icon(iconRes: Int?, icon: Drawable?) {
         dialogTitle.titleIcon.also { titleIcon ->
             iconRes?.let { titleIcon.setImageResource(it) }
             icon?.let { titleIcon.setImageDrawable(it) }
-
-            visible?.let { titleIcon.visibility = if (it) View.VISIBLE else View.GONE }
+            titleIcon.visibility = View.VISIBLE
         }
         dialogTitle.requestUpdateLayout()
     }
 
-    override fun title(textRes: Int?, text: CharSequence?, colorRes: Int?, color: Int?, visible: Boolean?) {
+    override fun titleColor(colorRes: Int?, color: Int?) {
+        dialogTitle.titleText.also { titleText ->
+            colorRes?.let { titleText.setTextColor(resColor(it)) }
+            color?.let { titleText.setTextColor(it) }
+        }
+        dialogTitle.requestUpdateLayout()
+    }
+
+    override fun titleVisible(visible: Boolean) {
+        dialogTitle.titleText.visibility = if (visible) View.VISIBLE else View.GONE
+        dialogTitle.requestUpdateLayout()
+    }
+
+    override fun title(textRes: Int?, text: CharSequence?) {
         dialogTitle.titleText.also { titleText ->
             textRes?.let { titleText.setText(it) }
             text?.let { titleText.text = it }
-
-            colorRes?.let { titleText.setTextColor(resColor(it)) }
-            color?.let { titleText.setTextColor(it) }
-
-            visible?.let { titleText.visibility = if (it) View.VISIBLE else View.GONE }
-
+            titleText.visibility = View.VISIBLE
         }
         dialogTitle.requestUpdateLayout()
     }
 
-    override fun positiveButton(
-        textRes: Int?,
-        text: CharSequence?,
-        colorRes: Int?,
-        color: Int?,
-        iconRes: Int?,
-        icon: Drawable?,
-        enable: Boolean?,
-        visible: Boolean?,
-        click: DialogButtonClick?
-    ) {
-        setUpButton(
-            dialogButtonLayout.positiveButton,
-            textRes,
-            text,
-            colorRes,
-            color,
-            iconRes,
-            icon,
-            enable,
-            visible,
-            click
-        )
+    // ===
+    override fun positiveButtonColor(colorRes: Int?, color: Int?) {
+        val button = dialogButtonLayout.positiveButton
+        colorRes?.let { button.setButtonColor(resColor(it)) }
+        color?.let { button.setButtonColor(it) }
     }
 
-    override fun negativeButton(
-        textRes: Int?,
-        text: CharSequence?,
-        colorRes: Int?,
-        color: Int?,
-        iconRes: Int?,
-        icon: Drawable?,
-        enable: Boolean?,
-        visible: Boolean?,
-        click: DialogButtonClick?
-    ) {
-        setUpButton(
-            dialogButtonLayout.negativeButton,
-            textRes,
-            text,
-            colorRes,
-            color,
-            iconRes,
-            icon,
-            enable,
-            visible,
-            click
-        )
+    override fun positiveButtonIcon(iconRes: Int?, icon: Drawable?) {
+        val button = dialogButtonLayout.positiveButton
+        iconRes?.let { button.setIconResource(resColor(it)) }
+        icon?.let { button.icon = it }
     }
 
-    override fun neutralButton(
-        textRes: Int?,
-        text: CharSequence?,
-        colorRes: Int?,
-        color: Int?,
-        iconRes: Int?,
-        icon: Drawable?,
-        enable: Boolean?,
-        visible: Boolean?,
-        click: DialogButtonClick?
-    ) {
-        setUpButton(
-            dialogButtonLayout.neutralButton,
-            textRes,
-            text,
-            colorRes,
-            color,
-            iconRes,
-            icon,
-            enable,
-            visible,
-            click
-        )
+    override fun positiveButtonEnable(enable: Boolean) {
+        val button = dialogButtonLayout.positiveButton
+        button.isEnabled = enable
+    }
 
+    override fun positiveButtonVisible(visible: Boolean) {
+        val button = dialogButtonLayout.positiveButton
+        button.visibility = if (visible) View.VISIBLE else View.GONE
+        dialogButtonLayout.requestUpdateLayout()
+    }
+
+    override fun positiveButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
+        val button = dialogButtonLayout.positiveButton
+        textRes?.let { button.setText(it) }
+        text?.let { button.text = it }
+        button.visibility = View.VISIBLE
+        button.setOnClickListener { click?.invoke(dialog) }
+        dialogButtonLayout.requestUpdateLayout()
+    }
+
+    // ===
+    override fun negativeButtonColor(colorRes: Int?, color: Int?) {
+        val button = dialogButtonLayout.negativeButton
+        colorRes?.let { button.setButtonColor(resColor(it)) }
+        color?.let { button.setButtonColor(it) }
+    }
+
+    override fun negativeButtonIcon(iconRes: Int?, icon: Drawable?) {
+        val button = dialogButtonLayout.negativeButton
+        iconRes?.let { button.setIconResource(resColor(it)) }
+        icon?.let { button.icon = it }
+    }
+
+    override fun negativeButtonEnable(enable: Boolean) {
+        val button = dialogButtonLayout.negativeButton
+        button.isEnabled = enable
+    }
+
+    override fun negativeButtonVisible(visible: Boolean) {
+        val button = dialogButtonLayout.negativeButton
+        button.visibility = if (visible) View.VISIBLE else View.GONE
+        dialogButtonLayout.requestUpdateLayout()
+    }
+
+    override fun negativeButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
+        val button = dialogButtonLayout.negativeButton
+        textRes?.let { button.setText(it) }
+        text?.let { button.text = it }
+        button.visibility = View.VISIBLE
+        button.setOnClickListener { click?.invoke(dialog) }
+        dialogButtonLayout.requestUpdateLayout()
+    }
+
+    // ===
+    override fun neutralButtonColor(colorRes: Int?, color: Int?) {
+        val button = dialogButtonLayout.neutralButton
+        colorRes?.let { button.setButtonColor(resColor(it)) }
+        color?.let { button.setButtonColor(it) }
+    }
+
+    override fun neutralButtonIcon(iconRes: Int?, icon: Drawable?) {
+        val button = dialogButtonLayout.neutralButton
+        iconRes?.let { button.setIconResource(resColor(it)) }
+        icon?.let { button.icon = it }
+    }
+
+    override fun neutralButtonEnable(enable: Boolean) {
+        val button = dialogButtonLayout.neutralButton
+        button.isEnabled = enable
+    }
+
+    override fun neutralButtonVisible(visible: Boolean) {
+        val button = dialogButtonLayout.neutralButton
+        button.visibility = if (visible) View.VISIBLE else View.GONE
+        dialogButtonLayout.requestUpdateLayout()
+    }
+
+    override fun neutralButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
+        val button = dialogButtonLayout.neutralButton
+        textRes?.let { button.setText(it) }
+        text?.let { button.text = it }
+        button.visibility = View.VISIBLE
+        button.setOnClickListener { click?.invoke(dialog) }
+        dialogButtonLayout.requestUpdateLayout()
     }
 
 
     private fun resColor(@ColorRes colorRes: Int): Int =
         ResourcesCompat.getColor(dialog.windowContext.resources, colorRes, dialog.windowContext.theme)
-
-    private fun setUpButton(
-        button: DialogButton,
-        textRes: Int?,
-        text: CharSequence?,
-        colorRes: Int?,
-        color: Int?,
-        iconRes: Int?,
-        icon: Drawable?,
-        enable: Boolean?,
-        visible: Boolean?,
-        click: DialogButtonClick?
-    ) {
-        textRes?.let { button.setText(it) }
-        text?.let { button.text = it }
-
-        colorRes?.let { button.setButtonColor(resColor(it)) }
-        color?.let { button.setButtonColor(it) }
-
-        iconRes?.let { button.setIconResource(iconRes) }
-        icon?.let { button.icon = icon }
-
-        enable?.let { button.isEnabled = it }
-
-        visible?.let { button.visibility = if (it) View.VISIBLE else View.GONE }
-
-        button.setOnClickListener { click?.invoke(dialog) }
-
-        dialogButtonLayout.requestUpdateLayout()
-    }
 }

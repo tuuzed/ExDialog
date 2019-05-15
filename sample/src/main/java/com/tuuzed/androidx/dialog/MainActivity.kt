@@ -65,9 +65,10 @@ class MainActivity : AppCompatActivity() {
                 basic {
                     icon(R.mipmap.ic_launcher)
                     title(text = "标题")
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(color = 0XFF757575.toInt(), text = "关闭", enable = false)
+                    positiveButton()
+                    negativeButton()
+                    neutralButton(text = "关闭")
+                    neutralButtonEnable(false)
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -78,7 +79,8 @@ class MainActivity : AppCompatActivity() {
                     message(text = "这是一条消息。")
                     positiveButton()
                     negativeButton()
-                    neutralButton(text = "关闭", color = 0XFF757575.toInt())
+                    neutralButton(text = "关闭")
+                    neutralButtonColor(color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -124,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                         toast("$text")
                     }
                     onTextChanged { _, text ->
-                        positiveButton(enable = text.isNotEmpty())
+                        positiveButtonEnable(text.isNotEmpty())
                     }
                 }
             }
@@ -167,7 +169,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             } else {
                                 items(it)
-                                negativeButton(visible = false)
+                                negativeButtonVisible(false)
                                 positiveButton(text = "确定") { dialog ->
                                     dialog.dismiss()
                                 }
@@ -208,9 +210,9 @@ class MainActivity : AppCompatActivity() {
                         toast("index: $index, item: $item")
                         dialog.dismiss()
                     }
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(color = 0XFF757575.toInt())
+                    positiveButton()
+                    negativeButton()
+                    neutralButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -225,9 +227,9 @@ class MainActivity : AppCompatActivity() {
                         toast("index: $index, item: $item")
                         dialog.dismiss()
                     }
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(color = 0XFF757575.toInt())
+                    positiveButton()
+                    negativeButton()
+                    neutralButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -244,9 +246,9 @@ class MainActivity : AppCompatActivity() {
                     callback { _, index, selectedItem ->
                         toast("index: $index, selected: $selectedItem")
                     }
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(color = 0XFF757575.toInt())
+                    positiveButton()
+                    negativeButton()
+                    neutralButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -263,9 +265,9 @@ class MainActivity : AppCompatActivity() {
                     callback { _, indices, selectedItems ->
                         toast("indices: $indices, selectedItems: $selectedItems")
                     }
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(color = 0XFF757575.toInt())
+                    positiveButton()
+                    negativeButton()
+                    neutralButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -280,9 +282,8 @@ class MainActivity : AppCompatActivity() {
                     callback { _, date ->
                         toast(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(date))
                     }
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(color = 0XFF757575.toInt())
+                    positiveButton()
+                    negativeButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -297,9 +298,8 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
                     title(text = "标题")
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(color = 0XFF757575.toInt())
+                    positiveButton()
+                    negativeButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }

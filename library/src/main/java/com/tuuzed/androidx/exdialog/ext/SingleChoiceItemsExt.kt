@@ -5,7 +5,6 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
-import android.graphics.drawable.Drawable
 import android.widget.RadioButton
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
@@ -66,17 +65,7 @@ class SingleChoiceItemsController<T>(
         )
     }
 
-    override fun positiveButton(
-        textRes: Int?,
-        text: CharSequence?,
-        colorRes: Int?,
-        color: Int?,
-        iconRes: Int?,
-        icon: Drawable?,
-        enable: Boolean?,
-        visible: Boolean?,
-        click: DialogButtonClick?
-    ) {
+    override fun positiveButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
         itemClickCallback?.also { callback ->
             getLastCheckedItem { index, checkedItem ->
                 if (checkedItem == null) {
@@ -86,7 +75,7 @@ class SingleChoiceItemsController<T>(
                 }
             }
         }
-        delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
+        delegate.positiveButton(textRes, text) {
             callback?.also { callback ->
                 getLastCheckedItem { index, checkedItem ->
                     if (checkedItem == null) {
