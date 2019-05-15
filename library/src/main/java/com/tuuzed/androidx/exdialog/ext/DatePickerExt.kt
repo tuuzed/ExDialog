@@ -49,7 +49,7 @@ class DateController(
     }
 
     fun datePickerType(@DatePickerType type: Int) {
-        datePicker.type = type
+        datePicker.datePickerType = type
     }
 
     fun date(date: Date) {

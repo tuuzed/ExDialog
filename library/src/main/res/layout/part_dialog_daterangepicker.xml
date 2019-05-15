@@ -55,7 +55,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="16dp"
-            app:dp_textSize="14sp"
-            app:dp_type="ALL"/>
+            app:dp_datePickerType="YMDHM"
+    />
 
 </LinearLayout>

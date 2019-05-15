@@ -82,7 +82,7 @@ class DateRangeController(
     }
 
     fun datePickerType(@DatePickerType type: Int) {
-        datePicker.type = type
+        datePicker.datePickerType = type
     }
 
     fun dateRange(beginDate: Date? = null, endDate: Date? = null) {
