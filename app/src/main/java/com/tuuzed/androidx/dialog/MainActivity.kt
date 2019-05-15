@@ -67,9 +67,9 @@ class MainActivity : AppCompatActivity() {
                 basic {
                     icon(R.mipmap.ic_launcher)
                     title(text = "标题")
-                    positiveButton(color = 0xFFFF5722.toInt())
-                    negativeButton(color = 0XFF80CBC4.toInt())
-                    neutralButton(text = "关闭", color = 0XFF757575.toInt(), enable = false)
+                    positiveButton()
+                    negativeButton()
+                    neutralButton(text = "关闭", enable = false)
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -101,7 +101,6 @@ class MainActivity : AppCompatActivity() {
 
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Input") {
-
             ExDialog(this).show {
                 input {
                     title(text = "标题")
@@ -113,6 +112,21 @@ class MainActivity : AppCompatActivity() {
                     positiveButton(color = 0xFFFF5722.toInt())
                     negativeButton(color = 0XFF80CBC4.toInt())
                     neutralButton(text = "关闭", color = 0XFF757575.toInt())
+                }
+            }
+        }.also { listAdapter.appendItems(it) }
+
+        ButtonItem("Non Empty Input") {
+            ExDialog(this).show {
+                input {
+                    title(text = "标题")
+                    positiveButton()
+                    callback { _, text ->
+                        toast("$text")
+                    }
+                    onTextChanged { _, text ->
+                        positiveButton(enable = text.isNotEmpty())
+                    }
                 }
             }
         }.also { listAdapter.appendItems(it) }

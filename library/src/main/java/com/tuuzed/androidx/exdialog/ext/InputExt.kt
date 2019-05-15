@@ -57,7 +57,6 @@ class InputController(
         attachView(view)
     }
 
-
     fun error(text: CharSequence? = null) {
         textInputLayout.error = text
         textInputLayout.isErrorEnabled = text != null
@@ -74,6 +73,7 @@ class InputController(
         textInputLayout.isHintAnimationEnabled = enableAnimation
     }
 
+
     fun maxLength(maxLength: Int? = null) {
         textInputLayout.counterMaxLength = maxLength ?: -1
         textInputLayout.isCounterEnabled = maxLength != null
@@ -86,6 +86,7 @@ class InputController(
     fun prefill(@StringRes textRes: Int? = null, text: CharSequence? = null) {
         textRes?.let { textInputEditText.setText(textRes) }
         textInputEditText.setText(text)
+        textInputEditText.setSelection(textInputEditText.selectionEnd)
     }
 
     fun callback(callback: InputCallback) {
@@ -94,7 +95,11 @@ class InputController(
 
     fun onTextChanged(callback: InputCallback) {
         onTextChangedCallback = callback
-        callback(dialog, textInputEditText.text ?: "")
+    }
+
+    override fun onDialogShow(listener: (ExDialog) -> Unit) {
+        onTextChangedCallback?.invoke(dialog, textInputEditText.text ?: "")
+        delegate.onDialogShow(listener)
     }
 
     override fun positiveButton(
@@ -104,13 +109,13 @@ class InputController(
         color: Int?,
         iconRes: Int?,
         icon: Drawable?,
-        enable: Boolean,
-        visible: Boolean,
-        click: DialogButtonClick
+        enable: Boolean?,
+        visible: Boolean?,
+        click: DialogButtonClick?
     ) {
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.invoke(dialog, textInputEditText.text ?: "")
-            click(dialog)
+            click?.invoke(dialog)
         }
     }
 }

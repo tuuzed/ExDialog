@@ -5,7 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+>
 
     <com.tuuzed.androidx.datepicker.DatePicker
             android:id="@+id/datePicker"

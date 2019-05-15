@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/dialog_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:theme="@style/Theme_ExDialog"
+        android:theme="@style/BaseExDialogTheme"
         tools:background="#212121"
 >
 
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="?attr/exdialog_loading_background">
+            android:background="@drawable/ed_loading_background">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -32,8 +32,8 @@
                     style="@style/SpinKitView.Small.Wave"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginBottom="4dp"
-                    app:SpinKit_Color="?attr/colorAccent"/>
+                    app:SpinKit_Color="?attr/colorPrimary"
+                    android:layout_marginBottom="4dp"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/loadingText"

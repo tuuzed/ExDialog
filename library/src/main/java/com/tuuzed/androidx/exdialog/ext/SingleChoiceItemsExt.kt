@@ -66,6 +66,20 @@ class SingleChoiceItemsController<T>(
         )
     }
 
+
+    override fun onDialogShow(listener: (ExDialog) -> Unit) {
+        itemClickCallback?.also { callback ->
+            getLastCheckedItem { index, checkedItem ->
+                if (checkedItem == null) {
+                    callback(dialog, -1, null)
+                } else {
+                    callback(dialog, index, checkedItem.data)
+                }
+            }
+        }
+        delegate.onDialogShow(listener)
+    }
+
     override fun positiveButton(
         textRes: Int?,
         text: CharSequence?,
@@ -73,13 +87,13 @@ class SingleChoiceItemsController<T>(
         color: Int?,
         iconRes: Int?,
         icon: Drawable?,
-        enable: Boolean,
-        visible: Boolean,
-        click: DialogButtonClick
+        enable: Boolean?,
+        visible: Boolean?,
+        click: DialogButtonClick?
     ) {
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.also { callback ->
-                lastCheckedItem { index, checkedItem ->
+                getLastCheckedItem { index, checkedItem ->
                     if (checkedItem == null) {
                         callback(dialog, -1, null)
                     } else {
@@ -87,13 +101,13 @@ class SingleChoiceItemsController<T>(
                     }
                 }
             }
-            click(dialog)
+            click?.invoke(dialog)
         }
     }
 
     private fun reviseIndex(index: Int): Int = index - 1
 
-    private fun lastCheckedItem(receiver: (index: Int, checkedItem: Item<T>?) -> Unit) {
+    private fun getLastCheckedItem(receiver: (index: Int, checkedItem: Item<T>?) -> Unit) {
         val items = listAdapter?.items
         if (items == null) {
             receiver(-1, null)
@@ -122,7 +136,7 @@ class SingleChoiceItemsController<T>(
                 holder.itemView.also {
                     it.isClickable = false
                     it.isEnabled = false
-                    it.alpha = 0.2f
+                    it.alpha = 0.5f
                 }
             } else {
                 holder.itemView.also {
@@ -135,7 +149,7 @@ class SingleChoiceItemsController<T>(
             holder.find<RadioButton>(R.id.radio).isChecked = item.checked
             holder.click(R.id.item_layout) {
                 var lastIndex: Int = -1
-                lastCheckedItem { index, checkedItem ->
+                getLastCheckedItem { index, checkedItem ->
                     lastIndex = index
                     if (checkedItem != null) {
                         checkedItem.checked = false

@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+>
 
     <LinearLayout
             android:id="@+id/rg_begin_and_end"
@@ -22,7 +23,7 @@
                 android:background="@null"
                 android:button="@null"
                 android:checked="true"
-                android:textColor="#FF212121"
+                android:textColor="#FD000000"
                 android:gravity="center"
                 android:lineSpacingExtra="2dp"
                 android:textSize="12sp"
@@ -36,7 +37,7 @@
                 android:background="@null"
                 android:button="@null"
                 android:gravity="center"
-                android:textColor="#FF212121"
+                android:textColor="#FD000000"
                 android:lineSpacingExtra="2dp"
                 android:textSize="12sp"
                 tools:text="结束于\n2018-06-29 22:11"/>

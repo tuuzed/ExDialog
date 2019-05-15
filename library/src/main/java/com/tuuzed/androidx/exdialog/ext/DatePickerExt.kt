@@ -71,13 +71,13 @@ class DateController(
         color: Int?,
         iconRes: Int?,
         icon: Drawable?,
-        enable: Boolean,
-        visible: Boolean,
-        click: DialogButtonClick
+        enable: Boolean?,
+        visible: Boolean?,
+        click: DialogButtonClick?
     ) {
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.invoke(dialog, datePicker.dateFormat.let { it.parse(it.format(datePicker.date)) })
-            click(dialog)
+            click?.invoke(dialog)
         }
     }
 

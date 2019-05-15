@@ -5,10 +5,10 @@
         android:id="@+id/dialog_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:theme="@style/Theme_ExDialog"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         tools:background="#212121"
+        tools:theme="@style/BaseExDialogTheme"
 >
 
 
@@ -16,7 +16,7 @@
             android:id="@+id/dialog_layout"
             android:layout_width="@dimen/ex_dialog_width"
             android:layout_height="wrap_content"
-            android:background="?attr/exdialog_basic_background"
+            android:background="@drawable/ed_basic_background"
             android:orientation="vertical"
             tools:layout_gravity="center"
             android:minHeight="56dp"

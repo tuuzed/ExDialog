@@ -80,7 +80,7 @@ object MaterialButtonCompat {
                     colorBlue(color)
                 ),
                 argbColor(
-                    0.20f,
+                    0.50f,
                     colorRed(color),
                     colorGreen(color),
                     colorBlue(color)

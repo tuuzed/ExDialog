@@ -67,7 +67,7 @@ class SimpleItemsController<T>(
                 holder.itemView.also {
                     it.isClickable = false
                     it.isEnabled = false
-                    it.alpha = 0.2f
+                    it.alpha = 0.5f
                 }
             } else {
                 holder.itemView.also {

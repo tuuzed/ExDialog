@@ -109,9 +109,9 @@ class DateRangeController(
         color: Int?,
         iconRes: Int?,
         icon: Drawable?,
-        enable: Boolean,
-        visible: Boolean,
-        click: DialogButtonClick
+        enable: Boolean?,
+        visible: Boolean?,
+        click: DialogButtonClick?
     ) {
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.invoke(
@@ -119,7 +119,7 @@ class DateRangeController(
                 datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
                 datePicker.dateFormat.let { it.parse(it.format(endDate)) }
             )
-            click(dialog)
+            click?.invoke(dialog)
         }
     }
 

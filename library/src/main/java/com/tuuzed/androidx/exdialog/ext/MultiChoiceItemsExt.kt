@@ -55,6 +55,15 @@ class MultiChoiceItemsController<T>(
         this.itemClickCallback = callback
     }
 
+    override fun onDialogShow(listener: (ExDialog) -> Unit) {
+        itemClickCallback?.also { callback ->
+            getCheckedItems { indices, items ->
+                callback(dialog, indices, items)
+            }
+        }
+        delegate.onDialogShow(listener)
+    }
+
     @JvmOverloads
     fun items(items: List<T>, selectedIndices: List<Int> = emptyList(), disableIndices: List<Int> = emptyList()) {
         delegate.items(
@@ -75,9 +84,9 @@ class MultiChoiceItemsController<T>(
         color: Int?,
         iconRes: Int?,
         icon: Drawable?,
-        enable: Boolean,
-        visible: Boolean,
-        click: DialogButtonClick
+        enable: Boolean?,
+        visible: Boolean?,
+        click: DialogButtonClick?
     ) {
         delegate.positiveButton(textRes, text, colorRes, color, iconRes, icon, enable, visible) {
             callback?.also { callback ->
@@ -85,7 +94,7 @@ class MultiChoiceItemsController<T>(
                     callback(dialog, indices, items)
                 }
             }
-            click(dialog)
+            click?.invoke(dialog)
         }
     }
 
@@ -114,7 +123,7 @@ class MultiChoiceItemsController<T>(
                 holder.itemView.also {
                     it.isClickable = false
                     it.isEnabled = false
-                    it.alpha = 0.2f
+                    it.alpha = 0.5f
                 }
             } else {
                 holder.itemView.also {

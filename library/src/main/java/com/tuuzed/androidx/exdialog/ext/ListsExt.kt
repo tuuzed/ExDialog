@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.SpinKitView
 import com.github.ybq.android.spinkit.sprite.Sprite
-import com.google.android.material.button.MaterialButton
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
-import com.tuuzed.androidx.exdialog.internal.MaterialButtonCompat
+import com.tuuzed.androidx.exdialog.internal.DialogButton
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ListsControllerInterface
@@ -36,7 +35,7 @@ class ListsController(
     ListsControllerInterface {
 
     private val loadingIcon: SpinKitView
-    private val button: MaterialButton
+    private val button: DialogButton
     private val recyclerView: RecyclerView
     private val listAdapter: RecyclerViewAdapter
 
@@ -76,11 +75,7 @@ class ListsController(
     override fun showMessageView(text: CharSequence, @ColorInt color: Int?, click: () -> Unit) {
         button.text = text
         button.setOnClickListener { click() }
-
-        color?.also {
-            button.setTextColor(color)
-            MaterialButtonCompat.setRippleColor(button, it)
-        }
+        color?.let { button.setButtonColor(it) }
         loadingIcon.visibility = View.GONE
         button.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE

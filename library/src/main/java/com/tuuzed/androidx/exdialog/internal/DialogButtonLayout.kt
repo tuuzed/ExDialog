@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import com.google.android.material.button.MaterialButton
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.ext.dp
 
@@ -13,9 +12,9 @@ class DialogButtonLayout @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
 
-    val positiveButton: MaterialButton
-    val negativeButton: MaterialButton
-    val neutralButton: MaterialButton
+    val positiveButton: DialogButton
+    val negativeButton: DialogButton
+    val neutralButton: DialogButton
 
     init {
         View.inflate(context, R.layout.basic_dialog_layout_part_buttons, this)

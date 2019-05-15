@@ -9,10 +9,9 @@ import androidx.annotation.StyleRes
 import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 
 
-class ExDialog(
+class ExDialog constructor(
     val windowContext: Context
-) : Dialog(windowContext, R.style.Theme_ExDialog), ExDialogInterface {
-
+) : Dialog(windowContext, R.style.BaseExDialogTheme), ExDialogInterface {
 
     companion object Factory {
 
@@ -22,7 +21,6 @@ class ExDialog(
             private set
 
     }
-
 
     private var windowAnimations: Int? = null
 
