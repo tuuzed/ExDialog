@@ -5,6 +5,9 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
+import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
@@ -13,12 +16,25 @@ import com.tuuzed.androidx.exdialog.internal.interfaces.ListsControllerInterface
 import com.tuuzed.recyclerview.adapter.AbstractItemViewBinder
 import com.tuuzed.recyclerview.adapter.CommonItemViewHolder
 
-inline fun <T> ExDialog.simpleItems(
-    noinline toReadable: ItemToReadable<T> = { it.toString() },
-    func: SimpleItemsController<T>.() -> Unit
+fun <T> ExDialog.simpleItems(
+    @StringRes titleRes: Int? = null, title: CharSequence? = null,
+    @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
+    //
+    onClickItem: ItemsCallback<T>? = null,
+    items: List<T> = emptyList(),
+    disableIndices: List<Int> = emptyList(),
+    toReadable: ItemToReadable<T> = { it.toString() },
+    func: (SimpleItemsController<T>.() -> Unit)? = null
 ) {
-    lists {
-        func(SimpleItemsController(this@simpleItems, this, toReadable))
+    lists(titleRes, title, iconRes, icon) {
+
+        SimpleItemsController(this@simpleItems, this, toReadable).also {
+
+            it.onClickItem(onClickItem)
+            it.items(items, disableIndices)
+
+            func?.invoke(it)
+        }
     }
 }
 
@@ -31,7 +47,7 @@ class SimpleItemsController<T>(
     BasicControllerInterface by delegate,
     ListsControllerInterface by delegate {
 
-    private var itemClickCallback: ItemsCallback<T>? = null
+    private var choiceItemCallback: ItemsCallback<T>? = null
 
     init {
         delegate.config { _, listAdapter ->
@@ -40,8 +56,8 @@ class SimpleItemsController<T>(
         }
     }
 
-    fun itemClick(callback: ItemsCallback<T>) {
-        this.itemClickCallback = callback
+    fun onClickItem(callback: ItemsCallback<T>?) {
+        this.choiceItemCallback = callback
     }
 
     fun items(items: List<T>, disableIndices: List<Int> = emptyList()) {
@@ -78,16 +94,14 @@ class SimpleItemsController<T>(
             }
             holder.text(R.id.text, toReadable(item.data))
             holder.click(R.id.text) {
-                itemClickCallback?.invoke(
+                choiceItemCallback?.invoke(
                     dialog,
                     reviseIndex(position),
-                    item.data,
-                    true
+                    item.data
                 )
             }
         }
     }
-
 
 }
 

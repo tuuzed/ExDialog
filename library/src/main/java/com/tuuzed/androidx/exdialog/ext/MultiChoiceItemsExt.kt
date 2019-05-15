@@ -5,7 +5,10 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
+import android.graphics.drawable.Drawable
 import android.widget.CheckBox
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
@@ -15,13 +18,27 @@ import com.tuuzed.recyclerview.adapter.AbstractItemViewBinder
 import com.tuuzed.recyclerview.adapter.CommonItemViewHolder
 import com.tuuzed.recyclerview.adapter.RecyclerViewAdapter
 
-@JvmOverloads
-inline fun <T> ExDialog.multiChoiceItems(
-    noinline toReadable: ItemToReadable<T> = { it.toString() },
-    func: MultiChoiceItemsController<T>.() -> Unit
+fun <T> ExDialog.multiChoiceItems(
+    @StringRes titleRes: Int? = null, title: CharSequence? = null,
+    @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
+    //
+    onSelectedItemChanged: MultiChoiceItemsCallback<T>? = null,
+    callback: MultiChoiceItemsCallback<T>? = null,
+    items: List<T> = emptyList(),
+    selectedIndices: List<Int> = emptyList(),
+    disableIndices: List<Int> = emptyList(),
+    toReadable: ItemToReadable<T> = { it.toString() },
+    func: (MultiChoiceItemsController<T>.() -> Unit)? = null
 ) {
-    lists {
-        func(MultiChoiceItemsController(this@multiChoiceItems, this, toReadable))
+    lists(titleRes, title, iconRes, icon) {
+        MultiChoiceItemsController(this@multiChoiceItems, this, toReadable).also {
+
+            it.onSelectedItemChanged(onSelectedItemChanged)
+            it.callback(callback)
+            it.items(items, selectedIndices, disableIndices)
+
+            func?.invoke(it)
+        }
     }
 }
 
@@ -46,15 +63,14 @@ class MultiChoiceItemsController<T>(
         }
     }
 
-    fun callback(callback: MultiChoiceItemsCallback<T>) {
+    fun callback(callback: MultiChoiceItemsCallback<T>?) {
         this.callback = callback
     }
 
-    fun onSelectedItemChanged(callback: MultiChoiceItemsCallback<T>) {
+    fun onSelectedItemChanged(callback: MultiChoiceItemsCallback<T>?) {
         this.itemClickCallback = callback
     }
 
-    @JvmOverloads
     fun items(items: List<T>, selectedIndices: List<Int> = emptyList(), disableIndices: List<Int> = emptyList()) {
         delegate.items(
             listOf(
@@ -67,13 +83,19 @@ class MultiChoiceItemsController<T>(
         )
     }
 
-    override fun positiveButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
+
+    override fun positiveButton(
+        textRes: Int?, text: CharSequence?,
+        iconRes: Int?, icon: Drawable?,
+        colorRes: Int?, color: Int?,
+        click: DialogButtonClick?
+    ) {
         itemClickCallback?.also { callback ->
             getCheckedItems { indices, items ->
                 callback(dialog, indices, items)
             }
         }
-        delegate.positiveButton(textRes, text) {
+        delegate.positiveButton(textRes, text, iconRes, icon, colorRes, color) {
             callback?.also { callback ->
                 getCheckedItems { indices, items ->
                     callback(dialog, indices, items)

@@ -5,9 +5,12 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import com.tuuzed.androidx.exdialog.ExDialog
@@ -16,9 +19,31 @@ import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 import java.util.*
 
-inline fun ExDialog.dateRangePicker(func: DateRangeController.() -> Unit) {
-    customView {
-        func(DateRangeController(this@dateRangePicker, this) { customView(it) })
+fun ExDialog.dateRangePicker(
+    @StringRes titleRes: Int? = null, title: CharSequence? = null,
+    @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
+    //
+    @DatePickerType datePickerType: Int = DatePickerType.TYPE_YMDHM,
+    beginDate: Date? = null,
+    endDate: Date? = null,
+    onDateChanged: DateRangePickerCallback? = null,
+    callback: DateRangePickerCallback? = null,
+
+    func: (DateRangeController.() -> Unit)? = null
+) {
+    customView(titleRes, title, iconRes, icon) {
+        DateRangeController(this@dateRangePicker, this) {
+            customView(it)
+        }.also {
+
+            it.datePickerType(datePickerType)
+            it.dateRange(beginDate, endDate)
+            it.onDateChanged(onDateChanged)
+            it.callback(callback)
+
+
+            func?.invoke(it)
+        }
     }
 }
 
@@ -93,16 +118,21 @@ class DateRangeController(
         }
     }
 
-    fun onDateChanged(callback: DateRangePickerCallback) {
+    fun onDateChanged(callback: DateRangePickerCallback?) {
         this.dateChangedCallback = callback
     }
 
-    fun callback(callback: DateRangePickerCallback) {
+    fun callback(callback: DateRangePickerCallback?) {
         this.callback = callback
     }
 
-    override fun positiveButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
-        delegate.positiveButton(textRes, text) {
+    override fun positiveButton(
+        textRes: Int?, text: CharSequence?,
+        iconRes: Int?, icon: Drawable?,
+        colorRes: Int?, color: Int?,
+        click: DialogButtonClick?
+    ) {
+        delegate.positiveButton(textRes, text, iconRes, icon, colorRes, color) {
             callback?.invoke(
                 dialog,
                 datePicker.dateFormat.let { it.parse(it.format(beginDate)) },

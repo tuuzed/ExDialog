@@ -43,17 +43,16 @@ class MainActivity : AppCompatActivity() {
         SegmentItem("LoadingSamples").also { listAdapter.appendItems(it) }
         ButtonItem("Loading ") {
             ExDialog(this).show {
-                loading { windowAnimations(ExDialog.WINDOW_ANIMATION_FADE) }
+                windowAnimations(ExDialog.WINDOW_ANIMATION_FADE)
+                loading()
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Loading + Message") {
             ExDialog(this).show {
-                loading {
-                    windowAnimations(ExDialog.WINDOW_ANIMATION_FADE)
-                    canceledOnTouchOutside(false)
-                    onDialogDismiss { toast("onDismiss") }
-                    text("加载中...")
-                }
+                windowAnimations(ExDialog.WINDOW_ANIMATION_FADE)
+                canceledOnTouchOutside(false)
+                onDialogDismiss { toast("onDismiss") }
+                loading(text = "加载中...")
             }
         }.also { listAdapter.appendItems(it) }
     }
@@ -62,9 +61,7 @@ class MainActivity : AppCompatActivity() {
         SegmentItem("BasicSamples").also { listAdapter.appendItems(it) }
         ButtonItem("Basic") {
             ExDialog(this).show {
-                basic {
-                    icon(R.mipmap.ic_launcher)
-                    title(text = "标题")
+                basic(title = "标题", iconRes = R.mipmap.ic_launcher) {
                     positiveButton()
                     negativeButton()
                     neutralButton(text = "关闭")
@@ -74,60 +71,59 @@ class MainActivity : AppCompatActivity() {
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Message") {
             ExDialog(this).show {
-                message {
-                    title(text = "标题")
-                    message(text = "这是一条消息。")
+                message(title = "标题", message = "这是一条消息。") {
                     positiveButton()
                     negativeButton()
-                    neutralButton(text = "关闭")
-                    neutralButtonColor(color = 0XFF757575.toInt())
+                    neutralButton(text = "关闭", color = 0XFF757575.toInt())
                 }
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Long Message") {
             ExDialog(this).show {
-                message {
-                    title(text = "标题")
-                    message(text = "这是一条很长的消息。".let {
-                        var s = it
-                        for (i in 0..1000) s += it
-                        s
-                    })
+                val longMessage = "这是一条很长的消息。".let {
+                    var s = it
+                    for (i in 0..1000) s += it
+                    s
+                }
+                message(title = "标题", message = longMessage) {
                     positiveButton(text = "关闭")
                 }
             }
 
         }.also { listAdapter.appendItems(it) }
-
     }
 
     private fun inputSamples() {
         SegmentItem("InputSamples").also { listAdapter.appendItems(it) }
         ButtonItem("Input") {
             ExDialog(this).show {
-                input {
-                    title(text = "标题")
-                    hint("Hint")
-                    helperText("Helper")
-                    callback { _, text ->
+                input(
+                    title = "标题",
+                    hint = "Hint",
+                    helperText = "Helper",
+                    callback = { _, text ->
                         toast("$text")
                     }
+                ) {
                     positiveButton()
                     negativeButton()
                 }
+
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Non Empty Input") {
             ExDialog(this).show {
-                input {
-                    title(text = "标题")
-                    positiveButton()
-                    callback { _, text ->
+                input(
+                    title = "标题",
+                    callback = { _, text ->
                         toast("$text")
                     }
+                ) {
+                    title(text = "标题")
                     onTextChanged { _, text ->
                         positiveButtonEnable(text.isNotEmpty())
                     }
+                    positiveButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -137,22 +133,26 @@ class MainActivity : AppCompatActivity() {
         SegmentItem("Lists").also { listAdapter.appendItems(it) }
         ButtonItem("Items") {
             ExDialog(this).show {
-                simpleItems<String> {
-                    val items = mutableListOf<String>()
-                    for (i in 1..4) items.add("Item$i")
-                    items(items)
-                    itemClick { dialog, index, item, checked ->
-                        toast("index: $index, item: $item")
+                val items = (1..2).map { "Item$it" }
+                simpleItems(
+                    items = items,
+                    onClickItem = { dialog, index, checkedItem ->
+                        toast("index: $index, checkedItem: $checkedItem")
                         dialog.dismiss()
                     }
-                }
+                )
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Lazy Items") {
             ExDialog(this).show {
-                simpleItems<String> {
-                    canceledOnTouchOutside(false)
-                    title(text = "Lazy Items")
+                cancelable(false)
+                simpleItems<String>(
+                    title = "Lazy Items",
+                    onClickItem = { dialog, index, checkedItem ->
+                        toast("index: $index, checkedItem: $checkedItem")
+                        dialog.dismiss()
+                    }
+                ) {
                     var lazyLoadTask: (() -> Job)? = null
                     lazyLoadTask = {
                         async {
@@ -176,11 +176,8 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+                    showLoadingView()
                     val loadTask = lazyLoadTask()
-                    itemClick { dialog, index, item, checked ->
-                        toast("index: $index, item: $item")
-                        dialog.dismiss()
-                    }
                     onDialogDismiss { loadTask.safeCancel() }
                     negativeButton { it.dismiss() }
                 }
@@ -188,86 +185,72 @@ class MainActivity : AppCompatActivity() {
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Long Items") {
             ExDialog(this).show {
-                simpleItems<String> {
-                    val items = mutableListOf<String>()
-                    for (i in 1..100) items.add("Item$i")
-                    items(items)
-                    itemClick { dialog, index, item, checked ->
-                        toast("index: $index, item: $item")
+                val items = (1..100).map { "Item$it" }
+                simpleItems(
+                    title = "标题",
+                    items = items,
+                    onClickItem = { dialog, index, checkedItem ->
+                        toast("index: $index, checkedItem: $checkedItem")
                         dialog.dismiss()
                     }
+                ) {
+                    positiveButton()
+                    negativeButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Items + Title + Buttons") {
             ExDialog(this).show {
-                simpleItems<String> {
-                    val items = mutableListOf<String>()
-                    for (i in 1..4) items.add("Item$i")
-                    title(text = "标题")
-                    items(items)
-                    itemClick { dialog, index, item, checked ->
-                        toast("index: $index, item: $item")
+                val items = (1..4).map { "Item$it" }
+                simpleItems(
+                    title = "标题",
+                    items = items,
+                    onClickItem = { dialog, index, checkedItem ->
+                        toast("index: $index, checkedItem: $checkedItem")
                         dialog.dismiss()
                     }
+                ) {
                     positiveButton()
                     negativeButton()
-                    neutralButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
-        ButtonItem("Long Items + Title + Buttons") {
-            ExDialog(this).show {
-                simpleItems<String> {
-                    val items = mutableListOf<String>()
-                    for (i in 1..4) items.add("Item$i")
-                    title(text = "标题")
-                    items(items)
-                    itemClick { dialog, index, item, checked ->
-                        toast("index: $index, item: $item")
-                        dialog.dismiss()
-                    }
-                    positiveButton()
-                    negativeButton()
-                    neutralButton()
-                }
-            }
-        }.also { listAdapter.appendItems(it) }
+
         ButtonItem("Single Choice Items") {
             ExDialog(this).show {
-                singleChoiceItems<String> {
-                    val items = mutableListOf<String>()
-                    for (i in 1..4) items.add("Item$i")
-                    title(text = "标题")
-                    items(items, disableIndices = listOf(0))
-                    onSelectedItemChanged { _, index, selectedItem ->
-                        toast("index: $index, selectedItem: $selectedItem")
+                val items = (1..4).map { "Item$it" }
+                singleChoiceItems(
+                    title = "标题",
+                    items = items,
+                    disableIndices = listOf(0),
+                    onSelectedItemChanged = { _, selectedIndex, selectedItem ->
+                        toast("selectedIndex: $selectedIndex, selectedItem: $selectedItem")
+                    },
+                    callback = { _, selectedIndex, selectedItem ->
+                        toast("selectedIndex: $selectedIndex, selected: $selectedItem")
                     }
-                    callback { _, index, selectedItem ->
-                        toast("index: $index, selected: $selectedItem")
-                    }
+                ) {
                     positiveButton()
                     negativeButton()
-                    neutralButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Multi Choice Items") {
             ExDialog(this).show {
-                multiChoiceItems<String> {
-                    val items = mutableListOf<String>()
-                    for (i in 1..4) items.add("Item$i")
-                    title(text = "标题")
-                    items(items, listOf(1, 3))
-                    onSelectedItemChanged { _, indices, selectedItems ->
-                        toast("indices: $indices, selectedItems: $selectedItems")
+                val items = (1..4).map { "Item$it" }
+                multiChoiceItems(
+                    title = "标题",
+                    items = items,
+                    selectedIndices = listOf(1, 3),
+                    onSelectedItemChanged = { _, selectedIndices, selectedItems ->
+                        toast("selectedIndices: $selectedIndices, selectedItems: $selectedItems")
+                    },
+                    callback = { _, selectedIndices, selectedItems ->
+                        toast("selectedIndices: $selectedIndices, selectedItems: $selectedItems")
                     }
-                    callback { _, indices, selectedItems ->
-                        toast("indices: $indices, selectedItems: $selectedItems")
-                    }
+                ) {
                     positiveButton()
                     negativeButton()
-                    neutralButton()
                 }
             }
         }.also { listAdapter.appendItems(it) }
@@ -277,11 +260,12 @@ class MainActivity : AppCompatActivity() {
         SegmentItem("DatePicker").also { listAdapter.appendItems(it) }
         ButtonItem("Date Picker") {
             ExDialog(this).show {
-                datePicker {
-                    title(text = "标题")
-                    callback { _, date ->
+                datePicker(
+                    title = "标题",
+                    callback = { _, date ->
                         toast(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(date))
                     }
+                ) {
                     positiveButton()
                     negativeButton()
                 }
@@ -289,15 +273,14 @@ class MainActivity : AppCompatActivity() {
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Date Range Picker") {
             ExDialog(this).show {
-                dateRangePicker {
-                    callback { _, beginDate, endDate ->
-                        toast(
-                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(beginDate)
-                                    + " ~ " +
-                                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(endDate)
-                        )
+                dateRangePicker(
+                    title = "标题",
+                    callback = { _, beginDate, endDate ->
+                        toast(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).let {
+                            it.format(beginDate) + " ~ " + it.format(endDate)
+                        })
                     }
-                    title(text = "标题")
+                ) {
                     positiveButton()
                     negativeButton()
                 }

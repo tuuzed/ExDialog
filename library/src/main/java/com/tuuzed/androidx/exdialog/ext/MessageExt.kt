@@ -5,18 +5,33 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 
-inline fun ExDialog.message(func: MessageController.() -> Unit) {
-    customView {
-        func(MessageController(this@message, this) { customView(it) })
+fun ExDialog.message(
+    @StringRes titleRes: Int? = null, title: CharSequence? = null,
+    @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
+    //
+    @StringRes messageRes: Int? = null, message: CharSequence? = null,
+    func: (MessageController.() -> Unit)? = null
+) {
+    customView(titleRes, title, iconRes, icon) {
+        MessageController(this@message, this) {
+            customView(it)
+        }.also {
+            it.message(messageRes, message)
+            func?.invoke(it)
+        }
     }
 }
 
@@ -33,7 +48,6 @@ class MessageController(
         val inflater = LayoutInflater.from(dialog.windowContext)
         val view = inflater.inflate(R.layout.part_dialog_message, null, false)
         messageText = view.findViewById(R.id.messageText)
-
         attachView(view)
     }
 

@@ -5,10 +5,12 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -18,12 +20,34 @@ import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 
 
-inline fun ExDialog.input(func: InputController.() -> Unit) {
-    customView {
-        func(InputController(this@input, this) { customView(it) })
+fun ExDialog.input(
+    @StringRes titleRes: Int? = null, title: CharSequence? = null,
+    @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
+    //
+    helperText: CharSequence? = null,
+    hint: CharSequence? = null,
+    maxLength: Int? = null,
+    inputType: Int? = null,
+    prefill: CharSequence? = null,
+    callback: InputCallback? = null,
+    onTextChanged: InputCallback? = null,
+    func: (InputController.() -> Unit)? = null
+) {
+    customView(titleRes, title, iconRes, icon) {
+        InputController(this@input, this) {
+            customView(it)
+        }.also {
+            it.helperText(helperText)
+            it.hint(hint)
+            it.maxLength(maxLength)
+            it.inputType(inputType)
+            it.prefill(text = prefill)
+            it.callback(callback)
+            it.onTextChanged(onTextChanged)
+            func?.invoke(it)
+        }
     }
 }
-
 
 class InputController(
     private val dialog: ExDialog,
@@ -89,17 +113,22 @@ class InputController(
         textInputEditText.setSelection(textInputEditText.text?.length ?: 0)
     }
 
-    fun callback(callback: InputCallback) {
+    fun callback(callback: InputCallback?) {
         this.callback = callback
     }
 
-    fun onTextChanged(callback: InputCallback) {
+    fun onTextChanged(callback: InputCallback?) {
         onTextChangedCallback = callback
     }
 
-    override fun positiveButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
+    override fun positiveButton(
+        textRes: Int?, text: CharSequence?,
+        iconRes: Int?, icon: Drawable?,
+        colorRes: Int?, color: Int?,
+        click: DialogButtonClick?
+    ) {
         onTextChangedCallback?.invoke(dialog, textInputEditText.text ?: "")
-        delegate.positiveButton(textRes, text) {
+        delegate.positiveButton(textRes, text, iconRes, icon, colorRes, color) {
             callback?.invoke(dialog, textInputEditText.text ?: "")
             click?.invoke(dialog)
         }

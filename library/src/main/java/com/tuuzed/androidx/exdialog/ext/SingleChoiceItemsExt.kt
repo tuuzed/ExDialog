@@ -5,7 +5,10 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
+import android.graphics.drawable.Drawable
 import android.widget.RadioButton
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
@@ -15,13 +18,28 @@ import com.tuuzed.recyclerview.adapter.AbstractItemViewBinder
 import com.tuuzed.recyclerview.adapter.CommonItemViewHolder
 import com.tuuzed.recyclerview.adapter.RecyclerViewAdapter
 
-@JvmOverloads
-inline fun <T> ExDialog.singleChoiceItems(
-    noinline toReadable: ItemToReadable<T> = { it.toString() },
-    func: SingleChoiceItemsController<T>.() -> Unit
+fun <T> ExDialog.singleChoiceItems(
+    @StringRes titleRes: Int? = null, title: CharSequence? = null,
+    @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
+    //
+    onSelectedItemChanged: SingleChoiceItemsCallback<T>? = null,
+    callback: SingleChoiceItemsCallback<T>? = null,
+    items: List<T> = emptyList(),
+    selectedIndex: Int = -1,
+    disableIndices: List<Int> = emptyList(),
+
+    toReadable: ItemToReadable<T> = { it.toString() },
+    func: (SingleChoiceItemsController<T>.() -> Unit)? = null
 ) {
-    lists {
-        func(SingleChoiceItemsController(this@singleChoiceItems, this, toReadable))
+    lists(titleRes, title, iconRes, icon) {
+        SingleChoiceItemsController(this@singleChoiceItems, this, toReadable).also {
+
+            it.onSelectedItemChanged(onSelectedItemChanged)
+            it.callback(callback)
+            it.items(items, selectedIndex, disableIndices)
+
+            func?.invoke(it)
+        }
     }
 }
 
@@ -45,11 +63,11 @@ class SingleChoiceItemsController<T>(
         }
     }
 
-    fun callback(callback: SingleChoiceItemsCallback<T>) {
+    fun callback(callback: SingleChoiceItemsCallback<T>?) {
         this.callback = callback
     }
 
-    fun onSelectedItemChanged(callback: SingleChoiceItemsCallback<T>) {
+    fun onSelectedItemChanged(callback: SingleChoiceItemsCallback<T>?) {
         this.itemClickCallback = callback
     }
 
@@ -65,7 +83,12 @@ class SingleChoiceItemsController<T>(
         )
     }
 
-    override fun positiveButton(textRes: Int?, text: CharSequence?, click: DialogButtonClick?) {
+    override fun positiveButton(
+        textRes: Int?, text: CharSequence?,
+        iconRes: Int?, icon: Drawable?,
+        colorRes: Int?, color: Int?,
+        click: DialogButtonClick?
+    ) {
         itemClickCallback?.also { callback ->
             getLastCheckedItem { index, checkedItem ->
                 if (checkedItem == null) {
@@ -75,7 +98,7 @@ class SingleChoiceItemsController<T>(
                 }
             }
         }
-        delegate.positiveButton(textRes, text) {
+        delegate.positiveButton(textRes, text, iconRes, icon, colorRes, color) {
             callback?.also { callback ->
                 getLastCheckedItem { index, checkedItem ->
                     if (checkedItem == null) {
@@ -88,6 +111,7 @@ class SingleChoiceItemsController<T>(
             click?.invoke(dialog)
         }
     }
+
 
     private fun reviseIndex(index: Int): Int = index - 1
 

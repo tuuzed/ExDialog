@@ -18,6 +18,6 @@ typealias DateRangePickerCallback = (dialog: ExDialog, beginDate: Date, endDate:
 
 // Lists
 
-typealias ItemsCallback<T> = (dialog: ExDialog, index: Int, item: T, checked: Boolean) -> Unit
-typealias SingleChoiceItemsCallback<T> = (dialog: ExDialog, index: Int, selectedItem: T?) -> Unit
-typealias MultiChoiceItemsCallback<T> = (dialog: ExDialog, indices: List<Int>, selectedItems: List<T>) -> Unit
+typealias ItemsCallback<T> = (dialog: ExDialog, checkedIndex: Int, checkedItem: T) -> Unit
+typealias SingleChoiceItemsCallback<T> = (dialog: ExDialog, selectedIndex: Int, selectedItem: T?) -> Unit
+typealias MultiChoiceItemsCallback<T> = (dialog: ExDialog, selectedIndices: List<Int>, selectedItems: List<T>) -> Unit

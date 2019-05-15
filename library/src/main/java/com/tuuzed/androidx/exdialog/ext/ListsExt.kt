@@ -5,9 +5,12 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.SpinKitView
@@ -20,9 +23,18 @@ import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ListsControllerInterface
 import com.tuuzed.recyclerview.adapter.RecyclerViewAdapter
 
-inline fun ExDialog.lists(func: ListsController.() -> Unit) {
-    customView {
-        func(ListsController(this@lists, this) { customView(it) })
+fun ExDialog.lists(
+    @StringRes titleRes: Int? = null, title: CharSequence? = null,
+    @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
+    //
+    func: ListsController.() -> Unit
+) {
+    customView(titleRes, title, iconRes, icon) {
+        ListsController(this@lists, this) {
+            customView(it)
+        }.also {
+            func.invoke(it)
+        }
     }
 }
 

@@ -5,15 +5,30 @@
 
 package com.tuuzed.androidx.exdialog.ext
 
+import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 
-
-inline fun ExDialog.customView(func: CustomViewController.() -> Unit) {
-    basic { func(CustomViewController(this@customView, this)) }
+fun ExDialog.customView(
+    @StringRes titleRes: Int? = null, title: CharSequence? = null,
+    @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
+    //
+    @LayoutRes layoutId: Int? = null,
+    view: View? = null,
+    func: (CustomViewController.() -> Unit)? = null
+) {
+    basic(titleRes, title, iconRes, icon) {
+        CustomViewController(this@customView, this).also {
+            if (layoutId != null) it.customView(layoutId)
+            if (view != null) it.customView(view)
+            func?.invoke(it)
+        }
+    }
 }
 
 class CustomViewController(
