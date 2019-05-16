@@ -1,8 +1,3 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
@@ -24,21 +19,23 @@ fun <T> ExDialog.singleChoiceItems(
     //
     onSelectedItemChanged: SingleChoiceItemsCallback<T>? = null,
     callback: SingleChoiceItemsCallback<T>? = null,
-    items: List<T> = emptyList(),
-    selectedIndex: Int = -1,
-    disableIndices: List<Int> = emptyList(),
-
+    items: List<T>? = null,
+    selectedIndex: Int? = null,
+    disableIndices: List<Int>? = null,
+    //
     toReadable: ItemToReadable<T> = { it.toString() },
     func: (SingleChoiceItemsController<T>.() -> Unit)? = null
 ) {
     lists(titleRes, title, iconRes, icon) {
-        SingleChoiceItemsController(this@singleChoiceItems, this, toReadable).also {
+        SingleChoiceItemsController(
+            this@singleChoiceItems, this, toReadable
+        ).apply {
 
-            it.onSelectedItemChanged(onSelectedItemChanged)
-            it.callback(callback)
-            it.items(items, selectedIndex, disableIndices)
+            onSelectedItemChanged?.let { onSelectedItemChanged(it) }
+            callback?.let { callback(it) }
+            items?.let { items(it, selectedIndex ?: -1, disableIndices ?: emptyList()) }
 
-            func?.invoke(it)
+            func?.invoke(this)
         }
     }
 }

@@ -32,7 +32,7 @@
             android:maxLines="2"
             android:ellipsize="end"
             android:lineSpacingExtra="5dp"
-            android:textColor="#DE000000"
+            android:textColor="?android:attr/textColorPrimary"
             tools:text="Title"
     />
 

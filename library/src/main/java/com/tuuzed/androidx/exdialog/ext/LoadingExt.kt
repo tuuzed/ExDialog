@@ -1,9 +1,3 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused", "CanBeParameter", "InflateParams")
-
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.view.LayoutInflater
@@ -21,12 +15,15 @@ import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 fun ExDialog.loading(
     icon: Sprite? = null, @ColorRes iconColorRes: Int? = null, @ColorInt iconColor: Int? = null,
     text: String? = null, @ColorRes textColorRes: Int? = null, @ColorInt textColor: Int? = null,
+    //
     func: (LoadingController.() -> Unit)? = null
 ) {
     LoadingController(this) {
         setContentView(it)
     }.also {
-        it.icon(icon, iconColorRes, iconColor)
+        if (icon != null) {
+            it.icon(icon, iconColorRes, iconColor)
+        }
         if (text != null) {
             it.text(text, textColorRes, textColor)
         }

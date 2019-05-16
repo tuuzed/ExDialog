@@ -1,8 +1,3 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused", "CanBeParameter", "SetTextI18n", "InflateParams")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
@@ -23,26 +18,30 @@ fun ExDialog.dateRangePicker(
     @StringRes titleRes: Int? = null, title: CharSequence? = null,
     @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
     //
-    @DatePickerType datePickerType: Int = DatePickerType.TYPE_YMDHM,
+    @DatePickerType datePickerType: Int? = null,
+    minYear: Int? = null,
+    maxYear: Int? = null,
     beginDate: Date? = null,
     endDate: Date? = null,
     onDateChanged: DateRangePickerCallback? = null,
     callback: DateRangePickerCallback? = null,
-
+    //
     func: (DateRangeController.() -> Unit)? = null
 ) {
     customView(titleRes, title, iconRes, icon) {
         DateRangeController(this@dateRangePicker, this) {
             customView(it)
-        }.also {
+        }.apply {
 
-            it.datePickerType(datePickerType)
-            it.dateRange(beginDate, endDate)
-            it.onDateChanged(onDateChanged)
-            it.callback(callback)
+            datePickerType?.let { datePickerType(it) }
+            minYear?.let { minYear(it) }
+            maxYear?.let { maxYear(it) }
+            beginDate?.let { beginDate(it) }
+            endDate?.let { endDate(it) }
+            onDateChanged?.let { onDateChanged(it) }
+            callback?.let { callback(it) }
 
-
-            func?.invoke(it)
+            func?.invoke(this)
         }
     }
 }
@@ -96,23 +95,26 @@ class DateRangeController(
     }
 
 
-    fun yearRange(max: Int = -1, min: Int = -1) {
-        if (max > 0) {
-            datePicker.setMaxYear(max)
-        }
-        if (min > 0) {
-            datePicker.setMinYear(min)
-        }
+    fun minYear(minYear: Int? = null) {
+        minYear?.let { datePicker.setMinYear(it) }
+    }
+
+    fun maxYear(maxYear: Int? = null) {
+        maxYear?.let { datePicker.setMaxYear(it) }
     }
 
     fun datePickerType(@DatePickerType type: Int) {
         datePicker.datePickerType = type
     }
 
-    fun dateRange(beginDate: Date? = null, endDate: Date? = null) {
+    fun beginDate(beginDate: Date? = null) {
         if (beginDate != null) {
             this.beginDate = datePicker.dateFormat.let { it.parse(it.format(beginDate)) }
         }
+
+    }
+
+    fun endDate(endDate: Date? = null) {
         if (endDate != null) {
             this.endDate = datePicker.dateFormat.let { it.parse(it.format(endDate)) }
         }

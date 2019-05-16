@@ -1,8 +1,3 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused", "CanBeParameter", "InflateParams")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
@@ -31,20 +26,22 @@ fun ExDialog.input(
     prefill: CharSequence? = null,
     callback: InputCallback? = null,
     onTextChanged: InputCallback? = null,
+    //
     func: (InputController.() -> Unit)? = null
 ) {
     customView(titleRes, title, iconRes, icon) {
         InputController(this@input, this) {
             customView(it)
-        }.also {
-            it.helperText(helperText)
-            it.hint(hint)
-            it.maxLength(maxLength)
-            it.inputType(inputType)
-            it.prefill(text = prefill)
-            it.callback(callback)
-            it.onTextChanged(onTextChanged)
-            func?.invoke(it)
+        }.apply {
+            helperText?.let { helperText(it) }
+            hint?.let { hint(it) }
+            maxLength?.let { maxLength(it) }
+            inputType?.let { inputType(it) }
+            prefill?.let { prefill(text = it) }
+            callback?.let { callback(it) }
+            onTextChanged?.let { onTextChanged(it) }
+
+            func?.invoke(this)
         }
     }
 }

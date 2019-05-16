@@ -1,8 +1,3 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused", "CanBeParameter", "InflateParams")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
@@ -32,9 +27,7 @@ fun ExDialog.lists(
     customView(titleRes, title, iconRes, icon) {
         ListsController(this@lists, this) {
             customView(it)
-        }.also {
-            func.invoke(it)
-        }
+        }.apply(func)
     }
 }
 

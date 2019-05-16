@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:cardCornerRadius="4dp"
+            app:cardBackgroundColor="?android:attr/windowBackground"
             app:cardElevation="0dp">
 
 

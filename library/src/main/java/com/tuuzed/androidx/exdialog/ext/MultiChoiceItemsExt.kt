@@ -1,8 +1,3 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
@@ -24,20 +19,23 @@ fun <T> ExDialog.multiChoiceItems(
     //
     onSelectedItemChanged: MultiChoiceItemsCallback<T>? = null,
     callback: MultiChoiceItemsCallback<T>? = null,
-    items: List<T> = emptyList(),
-    selectedIndices: List<Int> = emptyList(),
-    disableIndices: List<Int> = emptyList(),
+    items: List<T>? = null,
+    selectedIndices: List<Int>? = null,
+    disableIndices: List<Int>? = null,
+    //
     toReadable: ItemToReadable<T> = { it.toString() },
     func: (MultiChoiceItemsController<T>.() -> Unit)? = null
 ) {
     lists(titleRes, title, iconRes, icon) {
-        MultiChoiceItemsController(this@multiChoiceItems, this, toReadable).also {
+        MultiChoiceItemsController(
+            this@multiChoiceItems, this, toReadable
+        ).apply {
 
-            it.onSelectedItemChanged(onSelectedItemChanged)
-            it.callback(callback)
-            it.items(items, selectedIndices, disableIndices)
+            onSelectedItemChanged?.let { onSelectedItemChanged(it) }
+            callback?.let { callback(it) }
+            items?.let { items(it, selectedIndices ?: emptyList(), disableIndices ?: emptyList()) }
 
-            func?.invoke(it)
+            func?.invoke(this)
         }
     }
 }
@@ -82,7 +80,6 @@ class MultiChoiceItemsController<T>(
             )
         )
     }
-
 
     override fun positiveButton(
         textRes: Int?, text: CharSequence?,

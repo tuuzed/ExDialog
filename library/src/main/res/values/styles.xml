@@ -26,7 +26,7 @@
         <!--阴影效果-->
         <item name="android:backgroundDimEnabled">true</item>
         <!--避免输入法遮挡键盘-->
-        <item name="android:windowSoftInputMode">adjustResize|stateAlwaysVisible</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
 </resources>

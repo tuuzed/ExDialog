@@ -1,8 +1,3 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import androidx.annotation.Keep

@@ -1,8 +1,3 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
@@ -21,19 +16,22 @@ fun <T> ExDialog.simpleItems(
     @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
     //
     onClickItem: ItemsCallback<T>? = null,
-    items: List<T> = emptyList(),
-    disableIndices: List<Int> = emptyList(),
+    items: List<T>? = null,
+    disableIndices: List<Int>? = null,
+    //
     toReadable: ItemToReadable<T> = { it.toString() },
     func: (SimpleItemsController<T>.() -> Unit)? = null
 ) {
     lists(titleRes, title, iconRes, icon) {
 
-        SimpleItemsController(this@simpleItems, this, toReadable).also {
+        SimpleItemsController(
+            this@simpleItems, this, toReadable
+        ).apply {
 
-            it.onClickItem(onClickItem)
-            it.items(items, disableIndices)
+            onClickItem?.let { onClickItem(it) }
+            items?.let { items(items, disableIndices ?: emptyList()) }
 
-            func?.invoke(it)
+            func?.invoke(this)
         }
     }
 }

@@ -1,16 +1,9 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused", "CanBeParameter")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.tuuzed.androidx.exdialog.ExDialog
@@ -23,14 +16,17 @@ fun ExDialog.message(
     @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
     //
     @StringRes messageRes: Int? = null, message: CharSequence? = null,
+    //
     func: (MessageController.() -> Unit)? = null
 ) {
     customView(titleRes, title, iconRes, icon) {
         MessageController(this@message, this) {
             customView(it)
-        }.also {
-            it.message(messageRes, message)
-            func?.invoke(it)
+        }.apply {
+            if (messageRes != null || message != null) {
+                message(messageRes, message)
+            }
+            func?.invoke(this)
         }
     }
 }

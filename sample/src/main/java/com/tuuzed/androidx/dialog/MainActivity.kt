@@ -1,10 +1,12 @@
 package com.tuuzed.androidx.dialog
 
+import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tuuzed.androidx.dialog.coroutines.async
 import com.tuuzed.androidx.dialog.coroutines.safeCancel
@@ -25,9 +27,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var listAdapter: RecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (
+            getSharedPreferences("theme", Context.MODE_PRIVATE).getBoolean("dark", false)
+        ) {
+            setTheme(R.style.AppDarkTheme_NoActionBar)
+        } else {
+            setTheme(R.style.AppTheme_NoActionBar)
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_act)
-        setSupportActionBar(toolbar)
+        initToolbar()
         initRecyclerView()
         loadingSamples()
         basicSamples()
@@ -35,9 +44,34 @@ class MainActivity : AppCompatActivity() {
         listsSamples()
         datePickerSamples()
         listAdapter.notifyDataSetChanged()
-
     }
 
+    private fun initToolbar() {
+        toolbar.also {
+            it.title = getString(R.string.app_name)
+            it.menu.add(0, 1, 0, "日间模式")
+            it.menu.add(0, 2, 0, "夜间模式")
+            it.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    1 -> {
+                        getSharedPreferences("theme", Context.MODE_PRIVATE).edit {
+                            putBoolean("dark", false)
+                        }
+                        restartActivity()
+                        true
+                    }
+                    2 -> {
+                        getSharedPreferences("theme", Context.MODE_PRIVATE).edit {
+                            putBoolean("dark", true)
+                        }
+                        restartActivity()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+    }
 
     private fun loadingSamples() {
         SegmentItem("LoadingSamples").also { listAdapter.appendItems(it) }
@@ -176,7 +210,6 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    showLoadingView()
                     val loadTask = lazyLoadTask()
                     onDialogDismiss { loadTask.safeCancel() }
                     negativeButton { it.dismiss() }
@@ -310,6 +343,11 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).also {
             it.setGravity(Gravity.CENTER, 0, 0)
         }.show()
+    }
+
+
+    private fun restartActivity() {
+        recreate()
     }
 
     private class ButtonItem(var text: String, var itemClick: () -> Unit)

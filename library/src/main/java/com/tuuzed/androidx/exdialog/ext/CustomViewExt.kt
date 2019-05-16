@@ -1,8 +1,3 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
@@ -20,13 +15,17 @@ fun ExDialog.customView(
     //
     @LayoutRes layoutId: Int? = null,
     view: View? = null,
+    //
     func: (CustomViewController.() -> Unit)? = null
 ) {
     basic(titleRes, title, iconRes, icon) {
-        CustomViewController(this@customView, this).also {
-            if (layoutId != null) it.customView(layoutId)
-            if (view != null) it.customView(view)
-            func?.invoke(it)
+        CustomViewController(
+            this@customView, this
+        ).apply {
+            layoutId?.let { customView(it) }
+            view?.let { customView(it) }
+
+            func?.invoke(this)
         }
     }
 }

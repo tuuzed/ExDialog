@@ -1,15 +1,13 @@
-@file:JvmName("ExDialogWrapper")
-@file:JvmMultifileClass
-
-@file:Suppress("unused", "CanBeParameter", "InflateParams")
-
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import androidx.annotation.*
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
 import com.tuuzed.androidx.exdialog.ExDialog
 import com.tuuzed.androidx.exdialog.R
@@ -22,20 +20,19 @@ import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 fun ExDialog.basic(
     @StringRes titleRes: Int? = null, title: CharSequence? = null,
     @DrawableRes iconRes: Int? = null, icon: Drawable? = null,
+    //
     func: (BasicController.() -> Unit)? = null
 ) {
     BasicController(this) {
         setContentView(it)
-    }.also {
-
+    }.apply {
         if (titleRes != null || title != null) {
-            it.title(titleRes, title)
+            title(titleRes, title)
         }
         if (iconRes != null || icon != null) {
-            it.icon(iconRes, icon)
+            icon(iconRes, icon)
         }
-
-        func?.invoke(it)
+        func?.invoke(this)
     }
 }
 
