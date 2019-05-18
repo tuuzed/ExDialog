@@ -1,14 +1,22 @@
 package com.tuuzed.androidx.exdialog.ext
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import com.tuuzed.androidx.exdialog.R
-import com.tuuzed.recyclerview.adapter.AbstractItemViewBinder
-import com.tuuzed.recyclerview.adapter.CommonItemViewHolder
 
 internal typealias Space = Unit
 
-internal val SpaceItemViewBinder = object : AbstractItemViewBinder<Space>() {
-    override fun getLayoutId(): Int = R.layout.listitem_space
-    override fun onBindViewHolder(holder: CommonItemViewHolder, item: Space, position: Int) {}
+internal val SpaceItemViewBinder = object : DialogListsAdapter.Binder<Space> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DialogListsAdapter.ViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(
+            R.layout.listitem_space, parent, false
+        )
+        return DialogListsAdapter.ViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: DialogListsAdapter.ViewHolder, position: Int, item: Space) {}
 }
 
 typealias ItemToReadable<T> = (data: T) -> String
+
+

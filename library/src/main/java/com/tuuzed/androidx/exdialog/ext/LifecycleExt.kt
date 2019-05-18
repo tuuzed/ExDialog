@@ -11,12 +11,12 @@ fun ExDialog.lifecycleOwner(owner: LifecycleOwner): ExDialog =
     lifecycleOwner(owner.lifecycle)
 
 fun ExDialog.lifecycleOwner(lifecycle: Lifecycle): ExDialog {
-    lifecycle.addObserver(MaterialDialogLifecycleObserver(this))
+    lifecycle.addObserver(ExDialogLifecycleObserver(this))
     return this
 }
 
 @Keep
-private class MaterialDialogLifecycleObserver(
+private class ExDialogLifecycleObserver(
     private val dialog: ExDialog
 ) : LifecycleObserver {
 

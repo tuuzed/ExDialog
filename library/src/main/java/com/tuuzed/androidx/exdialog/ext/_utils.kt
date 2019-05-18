@@ -1,17 +1,20 @@
 package com.tuuzed.androidx.exdialog.ext
 
+import android.content.Context
 import android.util.TypedValue
 import android.view.View
 import androidx.annotation.ColorInt
-import androidx.annotation.IntRange
+import androidx.annotation.ColorRes
 import androidx.annotation.FloatRange
+import androidx.annotation.IntRange
+import androidx.core.content.res.ResourcesCompat
 import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-val DatePicker.dateFormat: DateFormat
+internal val DatePicker.dateFormat: DateFormat
     get() {
         return when (this.datePickerType) {
             DatePickerType.TYPE_Y -> SimpleDateFormat("yyyy", Locale.CHINA)
@@ -22,6 +25,10 @@ val DatePicker.dateFormat: DateFormat
             else -> SimpleDateFormat("yyyy-MM-hh HH:mm", Locale.CHINA)
         }
     }
+
+internal fun Context.resColor(@ColorRes colorRes: Int): Int =
+    ResourcesCompat.getColor(this.resources, colorRes, this.theme)
+
 
 internal fun View.dp(value: Float): Int {
     return (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, resources.displayMetrics) + 0.5).toInt()

@@ -1,7 +1,11 @@
 package com.tuuzed.androidx.exdialog.ext
 
 import android.graphics.drawable.Drawable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.tuuzed.androidx.exdialog.ExDialog
@@ -9,9 +13,6 @@ import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.internal.interfaces.BasicControllerInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ExDialogInterface
 import com.tuuzed.androidx.exdialog.internal.interfaces.ListsControllerInterface
-import com.tuuzed.recyclerview.adapter.AbstractItemViewBinder
-import com.tuuzed.recyclerview.adapter.CommonItemViewHolder
-import com.tuuzed.recyclerview.adapter.RecyclerViewAdapter
 
 fun <T> ExDialog.singleChoiceItems(
     @StringRes titleRes: Int? = null, title: CharSequence? = null,
@@ -48,7 +49,7 @@ class SingleChoiceItemsController<T>(
     BasicControllerInterface by delegate,
     ListsControllerInterface by delegate {
 
-    private var listAdapter: RecyclerViewAdapter? = null
+    private var listAdapter: DialogListsAdapter? = null
     private var callback: SingleChoiceItemsCallback<T>? = null
     private var itemClickCallback: SingleChoiceItemsCallback<T>? = null
 
@@ -132,11 +133,16 @@ class SingleChoiceItemsController<T>(
 
     private class Item<T>(val data: T, var checked: Boolean, val disable: Boolean)
 
-    private inner class ItemViewBinder(
-        private val listAdapter: RecyclerViewAdapter
-    ) : AbstractItemViewBinder<Item<T>>() {
-        override fun getLayoutId(): Int = R.layout.listitem_singlechoiceitems
-        override fun onBindViewHolder(holder: CommonItemViewHolder, item: Item<T>, position: Int) {
+    private inner class ItemViewBinder(private val listAdapter: DialogListsAdapter) :
+        DialogListsAdapter.Binder<Item<T>> {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DialogListsAdapter.ViewHolder {
+            val itemView = LayoutInflater.from(parent.context).inflate(
+                R.layout.listitem_singlechoiceitems, parent, false
+            )
+            return DialogListsAdapter.ViewHolder(itemView)
+        }
+
+        override fun onBindViewHolder(holder: DialogListsAdapter.ViewHolder, position: Int, item: Item<T>) {
             if (item.disable) {
                 holder.itemView.also {
                     it.isClickable = false
@@ -150,9 +156,9 @@ class SingleChoiceItemsController<T>(
                     it.alpha = 1.0f
                 }
             }
-            holder.text(R.id.text, toReadable(item.data))
+            holder.find<TextView>(R.id.text).text = toReadable(item.data)
             holder.find<RadioButton>(R.id.radio).isChecked = item.checked
-            holder.click(R.id.item_layout) {
+            holder.find<View>(R.id.item_layout).setOnClickListener {
                 var lastIndex: Int = -1
                 getLastCheckedItem { index, checkedItem ->
                     lastIndex = index

@@ -8,6 +8,7 @@
        tools:orientation="horizontal"
        tools:background="@android:color/white"
        tools:parentTag="android.widget.LinearLayout"
+       tools:theme="@style/BaseExDialogTheme"
 >
 
     <com.tuuzed.androidx.exdialog.internal.DialogButton

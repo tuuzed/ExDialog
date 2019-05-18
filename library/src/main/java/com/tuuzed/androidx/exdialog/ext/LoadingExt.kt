@@ -50,18 +50,16 @@ class LoadingController(
 
     fun icon(icon: Sprite? = null, @ColorRes colorRes: Int? = null, @ColorInt color: Int? = null) {
         icon?.also { loadingIcon.setIndeterminateDrawable(it) }
-        colorRes?.also { loadingIcon.setColor(resColor(colorRes)) }
+        colorRes?.also { loadingIcon.setColor(dialog.context.resColor(colorRes)) }
         color?.also { loadingIcon.setColor(it) }
     }
 
     fun text(text: String? = null, @ColorRes colorRes: Int? = null, @ColorInt color: Int? = null) {
         loadingText.visibility = View.VISIBLE
         text?.also { loadingText.text = text }
-        colorRes?.also { loadingText.setTextColor(resColor(colorRes)) }
+        colorRes?.also { loadingText.setTextColor(dialog.context.resColor(colorRes)) }
         color?.also { loadingText.setTextColor(it) }
     }
 
-    private fun resColor(@ColorRes colorRes: Int): Int =
-        ResourcesCompat.getColor(dialog.windowContext.resources, colorRes, dialog.windowContext.theme)
 
 }

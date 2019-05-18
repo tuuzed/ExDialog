@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Loading + Message") {
             ExDialog(this).show {
-                windowAnimations(ExDialog.WINDOW_ANIMATION_FADE)
+                windowAnimations(ExDialog.WINDOW_ANIMATION_SLIDE)
                 canceledOnTouchOutside(false)
                 onDialogDismiss { toast("onDismiss") }
                 loading(text = "加载中...")
@@ -142,7 +142,6 @@ class MainActivity : AppCompatActivity() {
                     positiveButton()
                     negativeButton()
                 }
-
             }
         }.also { listAdapter.appendItems(it) }
         ButtonItem("Non Empty Input") {
@@ -197,7 +196,7 @@ class MainActivity : AppCompatActivity() {
                             items
                         } then {
                             if (it.size < 50) {
-                                showMessageView("加载失败，点击重试。", 0xFF5DA017.toInt()) {
+                                showMessageView(text = "加载失败，点击重试。") {
                                     showLoadingView()
                                     lazyLoadTask?.invoke()
                                 }

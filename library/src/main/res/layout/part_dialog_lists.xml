@@ -7,6 +7,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
 >
+
     <com.tuuzed.androidx.exdialog.internal.DialogRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -34,6 +35,7 @@
             android:layout_height="match_parent"
             android:paddingTop="36dp"
             android:paddingBottom="36dp"
+            app:dialog_button_color="?attr/colorPrimary"
             tools:text="加载失败，点击重试"
     />
 
