@@ -28,6 +28,9 @@ class DialogListsAdapter : RecyclerView.Adapter<DialogListsAdapter.ViewHolder>()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        if (binders.size < viewType - 1) {
+            throw IllegalStateException("Not viewType ($viewType) type.")
+        }
         val binder = binders[viewType]
         return binder.onCreateViewHolder(parent, viewType)
     }
@@ -36,6 +39,9 @@ class DialogListsAdapter : RecyclerView.Adapter<DialogListsAdapter.ViewHolder>()
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val viewType = getItemViewType(position)
+        if (binders.size < viewType - 1) {
+            throw IllegalStateException("Not viewType ($viewType) type.")
+        }
         @Suppress("UNCHECKED_CAST")
         val binder = binders[viewType] as Binder<in Any>
         val item = items[position]
