@@ -15,8 +15,8 @@ fun ExDialog.datePicker(
     minYear: Int = -1,
     maxYear: Int = -1,
     date: Date = Date(),
-    watcher: DatePickerCallback? = null,
-    callback: DatePickerCallback? = null
+    watcher: DatePickerWatcher = null,
+    callback: DatePickerCallback = null
 ) {
     val flag = "ExDialog#datePicker".hashCode()
     customViewFlag = flag

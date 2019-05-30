@@ -30,13 +30,43 @@ fun ExDialog.input(
     )
     val textInputLayout: TextInputLayout = customView.findViewById(R.id.textInputLayout)
     val textInputEditText: TextInputEditText = customView.findViewById(R.id.textInputEditText)
-    val errorText = arrayOf("")
+    val errorText: Array<CharSequence> = arrayOf("")
     textInputEditText.apply {
+        addTextChangedListener { text ->
+            // 空验证
+            if (allowEmpty) {
+                setPositiveButtonEnable(true)
+            } else {
+                setPositiveButtonEnable(!text.isNullOrEmpty())
+            }
+            // 长度验证
+            if (maxLength == -1) {
+                setPositiveButtonEnable(true)
+            } else {
+                setPositiveButtonEnable(text?.length ?: 0 <= maxLength)
+            }
+            // 自定义验证器验证
+            if (validator != null) {
+                val testPass = validator.invoke(this@input, text ?: "", errorText)
+                if (testPass) {
+                    textInputLayout.isErrorEnabled = true
+                    textInputLayout.error = errorText[0]
+                    setPositiveButtonEnable(false)
+                } else {
+                    if (helperText != null) {
+                        textInputLayout.isHelperTextEnabled = true
+                        textInputLayout.helperText = helperText
+                    }
+                    textInputLayout.isErrorEnabled = false
+                    setPositiveButtonEnable(true)
+                }
+            }
+            watcher?.invoke(this@input, text ?: "")
+        }
         setText(prefill)
         setSelection(prefill?.length ?: 0)
         setHint(hint)
         inputType?.also { setInputType(it) }
-        setPositiveButtonEnable(!allowEmpty && text.isNullOrEmpty())
     }
     textInputLayout.apply {
         helperText?.also {
@@ -48,25 +78,6 @@ fun ExDialog.input(
             counterMaxLength = maxLength
         }
     }
-    textInputEditText.addTextChangedListener { text ->
-        // 长度验证
-        setPositiveButtonEnable(maxLength != -1 && text?.length ?: 0 > maxLength)
-        // 空验证
-        setPositiveButtonEnable(!allowEmpty && text.isNullOrEmpty())
-        // 自定义验证器验证
-        if (validator?.invoke(text ?: "", errorText) == true) {
-            textInputLayout.isErrorEnabled = true
-            textInputLayout.error = errorText[0]
-            setPositiveButtonEnable(false)
-        } else {
-            helperText?.also {
-                textInputLayout.isHelperTextEnabled = true
-                textInputLayout.helperText = helperText
-            }
-            setPositiveButtonEnable(true)
-        }
-        watcher?.invoke(this, text ?: "")
-    }
     customView(view = customView)
     addEventWatcher { _, event ->
         when (event) {
@@ -75,6 +86,36 @@ fun ExDialog.input(
                 textInputEditText.requestFocus()
                 textInputEditText.post {
                     toggleSoftInput(textInputEditText, true)
+                }
+                textInputEditText.text.also { text ->
+                    // 空验证
+                    if (allowEmpty) {
+                        setPositiveButtonEnable(true)
+                    } else {
+                        setPositiveButtonEnable(!text.isNullOrEmpty())
+                    }
+                    // 长度验证
+                    if (maxLength == -1) {
+                        setPositiveButtonEnable(true)
+                    } else {
+                        setPositiveButtonEnable(text?.length ?: 0 <= maxLength)
+                    }
+                    // 自定义验证器验证
+                    if (validator != null) {
+                        val testPass = validator.invoke(this@input, text ?: "", errorText)
+                        if (testPass) {
+                            textInputLayout.isErrorEnabled = true
+                            textInputLayout.error = errorText[0]
+                            setPositiveButtonEnable(false)
+                        } else {
+                            if (helperText != null) {
+                                textInputLayout.isHelperTextEnabled = true
+                                textInputLayout.helperText = helperText
+                            }
+                            textInputLayout.isErrorEnabled = false
+                            setPositiveButtonEnable(true)
+                        }
+                    }
                 }
             }
             ExDialogEvent.ON_DISMISS -> {

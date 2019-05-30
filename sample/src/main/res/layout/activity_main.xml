@@ -21,11 +21,19 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <FrameLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:orientation="vertical"
     >
+        <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/cb_material"
+                android:layout_margin="16dp"
+                android:text="Material Theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -35,7 +43,7 @@
                 android:scrollbars="vertical"
                 tools:listitem="@layout/main_listitem_button"/>
 
-    </FrameLayout>
+    </LinearLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

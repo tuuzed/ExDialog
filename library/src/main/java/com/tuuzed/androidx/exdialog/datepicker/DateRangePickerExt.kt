@@ -19,8 +19,8 @@ fun ExDialog.dateRangePicker(
     maxYear: Int = -1,
     beginDate: Date = Date(),
     endDate: Date = Date(),
-    watcher: DateRangePickerWatcher? = null,
-    callback: DateRangePickerCallback? = null
+    watcher: DateRangePickerWatcher = null,
+    callback: DateRangePickerCallback = null
 ) {
     val flag = "ExDialog#dateRangePicker".hashCode()
     customViewFlag = flag

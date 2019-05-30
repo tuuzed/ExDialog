@@ -12,6 +12,8 @@ buildscript {
             'core_ktx'        : 'androidx.core:core-ktx:1.2.0-alpha01',
             'material'        : 'com.google.android.material:material:1.1.0-alpha06',
             'kotlin'          : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+            'datepicker'      : "com.tuuzed.androidx.datepicker:datepicker:1.0.0",
+            'android_spinkit' : "com.github.ybq:Android-SpinKit:1.2.0",
             // test
             'junit'           : 'junit:junit:4.12',
             'runner'          : 'androidx.test:runner:1.1.1',
@@ -20,7 +22,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.1'
@@ -35,7 +37,7 @@ allprojects {
         maven { url 'https://dl.bintray.com/tuuzed/maven' }
         google()
         jcenter()
-        
+
     }
 }
 

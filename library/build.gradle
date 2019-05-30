@@ -28,9 +28,8 @@ dependencies {
     implementation deps.core_ktx
     implementation deps.appcompat
     implementation deps.material
-
-    api 'com.github.ybq:Android-SpinKit:1.2.0'
-    api 'com.tuuzed.androidx.datepicker:datepicker:1.0.0'
+    api deps.datepicker
+    api deps.android_spinkit
 
     testImplementation deps.junit
     androidTestImplementation deps.runner
