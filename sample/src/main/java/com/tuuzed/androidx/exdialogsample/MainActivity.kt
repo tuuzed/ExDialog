@@ -1,6 +1,7 @@
 package com.tuuzed.androidx.exdialogsample
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
@@ -18,6 +19,7 @@ import com.tuuzed.androidx.exdialog.datepicker.datePicker
 import com.tuuzed.androidx.exdialog.datepicker.dateRangePicker
 import com.tuuzed.androidx.exdialog.input.input
 import com.tuuzed.androidx.exdialog.loading.loading
+import com.tuuzed.androidx.exdialog.progressbar.progressBar
 import com.tuuzed.androidx.list.adapter.CommonViewHolder
 import com.tuuzed.androidx.list.adapter.ItemViewBinder
 import com.tuuzed.androidx.list.adapter.ListAdapter
@@ -32,20 +34,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var listAdapter: ListAdapter
 
     private val material: Boolean get() = cb_material.isChecked
+    private val sp: SharedPreferences get() = getSharedPreferences("theme", Context.MODE_PRIVATE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (
-            getSharedPreferences("theme", Context.MODE_PRIVATE).getBoolean("dark", false)
-        ) {
-            setTheme(R.style.AppDarkTheme_NoActionBar)
-        } else {
-            setTheme(R.style.AppTheme_NoActionBar)
-        }
+        val dark = sp.getBoolean("dark", false)
+        setTheme(if (dark) R.style.AppDarkTheme_NoActionBar else R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         cxt = this
         setContentView(R.layout.activity_main)
-        initToolbar()
-
+        setSupportActionBar(toolbar)
+        cb_dark.isChecked = dark
+        cb_dark.setOnCheckedChangeListener { _, isChecked ->
+            sp.edit {
+                putBoolean("dark", isChecked)
+            }
+            recreate()
+        }
         listAdapter = ListAdapter()
 
         listAdapter.bind(ButtonItem::class.java, ButtonItemViewBinder())
@@ -59,6 +63,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun samples() {
+        segment("ProgressBar")
+        button("Progress Bar") {
+            ExDialog(cxt).show(material) {
+                title(text = "请稍后")
+                progressBar()
+                negativeButton()
+            }
+        }
+        button("Progress Bar") {
+            ExDialog(cxt).show(material) {
+                title(text = "请稍后")
+                progressBar(text = "加载中...")
+                negativeButton()
+            }
+        }
         segment("Loading")
         button("Basic Loading") {
             ExDialog(cxt).show(material) { loading() }
@@ -246,27 +265,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun initToolbar() {
-        toolbar.also {
-            it.title = getString(R.string.app_name)
-            it.menu.add(0, 1, 0, "切换主题")
-            it.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    1 -> {
-                        val dark = getSharedPreferences("theme", Context.MODE_PRIVATE).getBoolean("dark", false)
-                        getSharedPreferences("theme", Context.MODE_PRIVATE).edit {
-                            putBoolean("dark", !dark)
-                        }
-                        recreate()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
-    }
-
 
     private var _toast: Toast? = null
     private fun toast(text: String) {

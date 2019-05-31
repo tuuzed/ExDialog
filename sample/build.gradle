@@ -22,14 +22,18 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(":library")
+
+    implementation project(':basic')
+    implementation project(':datepicker')
+    implementation project(':loading')
+    implementation project(':progressbar')
+
     implementation deps.kotlin
     implementation deps.appcompat
     implementation deps.core_ktx
     implementation deps.constraintlayout
     implementation deps.material
     implementation deps.list_adapter
-
 
     testImplementation deps.junit
     androidTestImplementation deps.runner

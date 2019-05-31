@@ -27,22 +27,38 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:orientation="vertical"
     >
-        <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/cb_material"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:text="Material Theme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:orientation="vertical"
                 android:scrollbars="vertical"
                 tools:listitem="@layout/main_listitem_button"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cb_material"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="Material"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cb_dark"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+
 
     </LinearLayout>
 

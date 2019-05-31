@@ -13,7 +13,7 @@ bintray {
     configurations = ['archives'] //When uploading configuration files
     pkg {
         repo = 'maven'
-        name = "$group:${project.artifactId ?: project.name}"
+        name = "$group:${project.name}"
         desc = 'Android ExDialog'
         websiteUrl = siteUrl
         issueTrackerUrl = "$siteUrl/issues"
