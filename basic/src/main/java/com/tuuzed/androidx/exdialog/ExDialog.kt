@@ -191,7 +191,7 @@ class ExDialog constructor(
         this.contentViewIdentifier = CONTENT_VIEW_MESSAGE
     }
 
-    fun items(items: Array<out CharSequence>, callback: ItemsCallback) {
+    fun items(items: Array<out CharSequence>, callback: ItemsCallback = null) {
         this.items = items
         this.itemsCallback = callback
         this.contentViewIdentifier = CONTENT_VIEW_ITEMS
@@ -200,8 +200,8 @@ class ExDialog constructor(
     fun singleChoiceItems(
         items: Array<out CharSequence>,
         checkedIndex: Int = -1,
-        watcher: SingleChoiceItemsWatcher,
-        callback: SingleChoiceItemsCallback
+        watcher: SingleChoiceItemsWatcher = null,
+        callback: SingleChoiceItemsCallback = null
     ) {
         this.items = items
         this.singleChoiceCheckedIndex = checkedIndex
@@ -213,8 +213,8 @@ class ExDialog constructor(
     fun multiChoiceItems(
         items: Array<out CharSequence>,
         checkedIndices: IntArray = IntArray(0),
-        watcher: MultiChoiceItemsWatcher,
-        callback: MultiChoiceItemsCallback
+        watcher: MultiChoiceItemsWatcher = null,
+        callback: MultiChoiceItemsCallback = null
     ) {
         this.items = items
         this.multiChoiceCheckedIndices = SparseBooleanArray(items.size)

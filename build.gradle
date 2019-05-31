@@ -47,7 +47,7 @@ allprojects {
 }
 
 group = 'com.tuuzed.androidx.exdialog'
-version = '0.5.1-alpha01'
+version = '0.5.1-alpha02'
 
 task clean(type: Delete) {
     delete rootProject.buildDir
