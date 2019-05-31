@@ -1,0 +1,4 @@
+<resources>
+    <string name="begin_date">开始于\n%1$s</string>
+    <string name="end_date">结束于\n%1$s</string>
+</resources>

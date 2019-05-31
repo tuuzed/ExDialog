@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="4dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:mpb_progressStyle="horizontal"
+            app:mpb_progressTint="?attr/colorPrimary"
+            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+    />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/progressbar_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="14sp"
+            android:maxLength="10"
+            android:ellipsize="end"
+            android:visibility="visible"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:maxLines="1"
+            tools:text="加载中..."/>
+
+</LinearLayout>
