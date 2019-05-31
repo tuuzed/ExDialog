@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -30,7 +28,7 @@ dependencies {
     implementation deps.core_ktx
     implementation deps.constraintlayout
     implementation deps.material
-    implementation 'com.tuuzed.androidx.list:adapter-ktx:3.0.0-alpha11'
+    implementation deps.list_adapter
 
 
     testImplementation deps.junit

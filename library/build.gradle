@@ -1,13 +1,18 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'gitvc-gradle-plugin'
+
+group = rootProject.group
+version = rootProject.version
+ext.artifactId = "exdialog"
 
 android {
     compileSdkVersion targetSdk
     defaultConfig {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
-        versionCode 1
-        versionName "1.0"
+        versionCode GitVC.VERSION_CODE
+        versionName version
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -36,3 +41,5 @@ dependencies {
     androidTestImplementation deps.espresso_core
 
 }
+
+apply from: '../publish.gradle'

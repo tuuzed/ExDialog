@@ -18,22 +18,21 @@ class ExDialog constructor(
 ) : DialogInterface {
 
     companion object {
-        const val FLAG_NONE = 0
+        private const val CONTENT_VIEW_NONE = 0
         // 消息
-        const val FLAG_MESSAGE = 1
+        private const val CONTENT_VIEW_MESSAGE = 1
         // 列表
-        const val FLAG_ITEMS = 2
+        private const val CONTENT_VIEW_ITEMS = 2
         // 单选列表
-        const val FLAG_SINGLE_CHOICE_ITEMS = 3
+        private const val CONTENT_VIEW_SINGLE_CHOICE_ITEMS = 3
         // 多选列表
-        const val FLAG_MULTI_CHOICE_ITEMS = 4
+        private const val CONTENT_VIEW_MULTI_CHOICE_ITEMS = 4
         // 自定义View
-        const val FLAG_CUSTOM_VIEW = 5
+        private const val CONTENT_VIEW_CUSTOM_VIEW = 5
     }
 
     private var alertDialog: AlertDialog? = null
     private val eventWatchers = CopyOnWriteArrayList<WeakReference<ExDialogEventWatcher>>()
-    val window: Window? get() = alertDialog?.window
 
     private var cancelable: Boolean? = null
     private var canceledOnTouchOutside: Boolean? = null
@@ -41,8 +40,7 @@ class ExDialog constructor(
     private var icon: Drawable? = null
     private var title: CharSequence? = null
     //
-    private var mutexViewFlag = FLAG_NONE
-    var customViewFlag = -1
+    var contentViewIdentifier = CONTENT_VIEW_NONE
     //
     private var message: CharSequence? = null
     // 列表
@@ -54,7 +52,6 @@ class ExDialog constructor(
     private var multiChoiceItemsWatcher: MultiChoiceItemsWatcher = null
     private var multiChoiceItemsCallback: MultiChoiceItemsCallback = null
     private var multiChoiceCheckedIndices: SparseBooleanArray = SparseBooleanArray(0)
-
 
     // CustomView
     private var customViewLayoutRes: Int = View.NO_ID
@@ -97,14 +94,14 @@ class ExDialog constructor(
             }
             .setPositiveButtonIcon(positiveButtonIcon)
             .setPositiveButton(positiveButtonText) { _, _ ->
-                when (mutexViewFlag) {
+                when (contentViewIdentifier) {
                     // 单选列表
-                    FLAG_SINGLE_CHOICE_ITEMS -> singleChoiceItemsCallback?.invoke(
+                    CONTENT_VIEW_SINGLE_CHOICE_ITEMS -> singleChoiceItemsCallback?.invoke(
                         this,
                         singleChoiceCheckedIndex
                     )
                     // 多选列表
-                    FLAG_MULTI_CHOICE_ITEMS -> multiChoiceItemsCallback?.invoke(
+                    CONTENT_VIEW_MULTI_CHOICE_ITEMS -> multiChoiceItemsCallback?.invoke(
                         this,
                         multiChoiceCheckedIndices.indices(true)
                     )
@@ -114,29 +111,29 @@ class ExDialog constructor(
             }
             .setOnCancelListener { eventWatchers.forEach { it.get()?.invoke(this, ExDialogEvent.ON_CANCEL) } }
             .setOnDismissListener { eventWatchers.forEach { it.get()?.invoke(this, ExDialogEvent.ON_DISMISS) } }
-        when (mutexViewFlag) {
+        when (contentViewIdentifier) {
             // 消息
-            FLAG_MESSAGE -> builder.setMessage(message)
+            CONTENT_VIEW_MESSAGE -> builder.setMessage(message)
             // 列表
-            FLAG_ITEMS -> builder.setItems(items) { _, which ->
+            CONTENT_VIEW_ITEMS -> builder.setItems(items) { _, which ->
                 itemsCallback?.invoke(this, which)
             }
             // 单选列表
-            FLAG_SINGLE_CHOICE_ITEMS -> builder.setSingleChoiceItems(
+            CONTENT_VIEW_SINGLE_CHOICE_ITEMS -> builder.setSingleChoiceItems(
                 items, singleChoiceCheckedIndex
             ) { _, which ->
                 singleChoiceCheckedIndex = which
                 singleChoiceItemsWatcher?.invoke(this, which)
             }
             // 多选列表
-            FLAG_MULTI_CHOICE_ITEMS -> builder.setMultiChoiceItems(
+            CONTENT_VIEW_MULTI_CHOICE_ITEMS -> builder.setMultiChoiceItems(
                 items, multiChoiceCheckedIndices.values()
             ) { _, which, isChecked ->
                 multiChoiceCheckedIndices.put(which, isChecked)
                 multiChoiceItemsWatcher?.invoke(this, which, isChecked)
             }
             // 自定义View
-            FLAG_CUSTOM_VIEW -> if (customView != null) {
+            CONTENT_VIEW_CUSTOM_VIEW -> if (customView != null) {
                 builder.setView(customView)
             } else if (customViewLayoutRes != View.NO_ID) {
                 builder.setView(customViewLayoutRes)
@@ -169,6 +166,8 @@ class ExDialog constructor(
         eventWatchers.clear()
     }
 
+    val window: Window? get() = alertDialog?.window
+
     fun cancelable(flag: Boolean) {
         this.cancelable = flag
     }
@@ -187,13 +186,13 @@ class ExDialog constructor(
 
     fun message(@StringRes textRes: Int = View.NO_ID, text: CharSequence? = null) {
         this.message = resolveString(context, textRes, text)
-        this.mutexViewFlag = FLAG_MESSAGE
+        this.contentViewIdentifier = CONTENT_VIEW_MESSAGE
     }
 
     fun items(items: Array<out CharSequence>, callback: ItemsCallback) {
         this.items = items
         this.itemsCallback = callback
-        this.mutexViewFlag = FLAG_ITEMS
+        this.contentViewIdentifier = CONTENT_VIEW_ITEMS
     }
 
     fun singleChoiceItems(
@@ -206,7 +205,7 @@ class ExDialog constructor(
         this.singleChoiceCheckedIndex = checkedIndex
         this.singleChoiceItemsWatcher = watcher
         this.singleChoiceItemsCallback = callback
-        this.mutexViewFlag = FLAG_SINGLE_CHOICE_ITEMS
+        this.contentViewIdentifier = CONTENT_VIEW_SINGLE_CHOICE_ITEMS
     }
 
     fun multiChoiceItems(
@@ -222,14 +221,14 @@ class ExDialog constructor(
         }
         this.multiChoiceItemsWatcher = watcher
         this.multiChoiceItemsCallback = callback
-        this.mutexViewFlag = FLAG_MULTI_CHOICE_ITEMS
+        this.contentViewIdentifier = CONTENT_VIEW_MULTI_CHOICE_ITEMS
     }
 
 
     fun customView(@LayoutRes layoutRes: Int = View.NO_ID, view: View? = null) {
         this.customViewLayoutRes = layoutRes
         this.customView = view
-        this.mutexViewFlag = FLAG_CUSTOM_VIEW
+        this.contentViewIdentifier = CONTENT_VIEW_CUSTOM_VIEW
     }
 
     fun setNeutralButtonEnable(enable: Boolean) {

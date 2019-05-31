@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">library</string>
+    <string name="begin_date">begin date\n%1$s</string>
+    <string name="end_date">end date\n%1$s</string>
 </resources>

@@ -29,7 +29,8 @@
     >
         <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cb_material"
-                android:layout_margin="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:text="Material Theme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

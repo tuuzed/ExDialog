@@ -19,7 +19,7 @@ fun ExDialog.datePicker(
     callback: DatePickerCallback = null
 ) {
     val flag = "ExDialog#datePicker".hashCode()
-    customViewFlag = flag
+    contentViewIdentifier = flag
 
     val customView = LayoutInflater.from(context).inflate(
         R.layout.exdialog_datepicker, null, false
@@ -32,8 +32,11 @@ fun ExDialog.datePicker(
     datePicker.setOnDateChangedListener { watcher?.invoke(this, it) }
     customView(view = customView)
     addEventWatcher { _, event ->
-        if (event == ExDialogEvent.ON_CLICK_POSITIVE_BUTTON && customViewFlag == flag) {
-            callback?.invoke(this, datePicker.date)
+        if (event == ExDialogEvent.ON_CLICK_POSITIVE_BUTTON && contentViewIdentifier == flag) {
+            callback?.invoke(
+                this,
+                datePicker.dateFormat.let { it.parse(it.format(datePicker.date)) }
+            )
         }
     }
 }

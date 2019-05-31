@@ -23,7 +23,7 @@ fun ExDialog.input(
     callback: InputCallback? = null
 ) {
     val flag = "ExDialog#input".hashCode()
-    customViewFlag = flag
+    contentViewIdentifier = flag
 
     val customView = LayoutInflater.from(context).inflate(
         R.layout.exdialog_edittext, null, false
@@ -122,7 +122,7 @@ fun ExDialog.input(
                 toggleSoftInput(textInputEditText, false)
             }
             ExDialogEvent.ON_CLICK_POSITIVE_BUTTON -> {
-                if (customViewFlag == flag) {
+                if (contentViewIdentifier == flag) {
                     callback?.invoke(this, textInputEditText.text ?: "")
                 }
             }

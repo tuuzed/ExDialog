@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun samples() {
-        segment("LoadingSamples")
+        segment("Loading")
         button("Basic Loading") {
             ExDialog(cxt).show(material) { loading() }
         }
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                 loading(text = "加载中...", icon = Circle())
             }
         }
-        segment("BasicSamples")
+        segment("Basic")
         button("Message") {
             ExDialog(this).show(material) {
                 title(text = "标题")
@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
                 negativeButton()
             }
         }
-        segment("InputSamples")
+        segment("Input")
         button("Input") {
             ExDialog(this).show(material) {
                 title(text = "标题")
@@ -267,8 +267,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private var _toast: Toast? = null
     private fun toast(text: String) {
+        _toast?.cancel()
         Toast.makeText(this, text, Toast.LENGTH_SHORT).also {
+            _toast = it
             it.setGravity(Gravity.CENTER, 0, 0)
         }.show()
     }

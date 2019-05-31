@@ -10,7 +10,6 @@ import com.github.ybq.android.spinkit.SpinKitView
 import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.Wave
 import com.tuuzed.androidx.exdialog.ExDialog
-import com.tuuzed.androidx.exdialog.ExDialogEvent
 import com.tuuzed.androidx.exdialog.R
 import com.tuuzed.androidx.exdialog.resolveColor
 
@@ -21,7 +20,7 @@ fun ExDialog.loading(
 ) {
 
     val flag = "ExDialog#loading".hashCode()
-    customViewFlag = flag
+    contentViewIdentifier = flag
 
     val customView = LayoutInflater.from(context).inflate(
         R.layout.exdialog_loading, null, false

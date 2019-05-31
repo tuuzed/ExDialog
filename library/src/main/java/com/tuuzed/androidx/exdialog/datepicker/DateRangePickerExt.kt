@@ -23,7 +23,7 @@ fun ExDialog.dateRangePicker(
     callback: DateRangePickerCallback = null
 ) {
     val flag = "ExDialog#dateRangePicker".hashCode()
-    customViewFlag = flag
+    contentViewIdentifier = flag
 
     var selectedBegin = true
     var _beginDate = beginDate
@@ -41,10 +41,10 @@ fun ExDialog.dateRangePicker(
     datePicker.setOnDateChangedListener { date ->
         if (selectedBegin) {
             _beginDate = date
-            beginText.text = "开始于\n${datePicker.dateFormat.format(_beginDate)}"
+            beginText.text = context.resString(R.string.begin_date, datePicker.dateFormat.format(_beginDate))
         } else {
             _endDate = date
-            endText.text = "结束于\n${datePicker.dateFormat.format(_endDate)}"
+            endText.text = context.resString(R.string.end_date, datePicker.dateFormat.format(_endDate))
         }
         setPositiveButtonEnable(_beginDate.time <= _endDate.time)
         watcher?.invoke(this,
@@ -52,8 +52,8 @@ fun ExDialog.dateRangePicker(
             datePicker.dateFormat.let { it.parse(it.format(_endDate)) }
         )
     }
-    beginText.text = "开始于\n${datePicker.dateFormat.format(_beginDate)}"
-    endText.text = "结束于\n${datePicker.dateFormat.format(_endDate)}"
+    beginText.text = context.resString(R.string.begin_date, datePicker.dateFormat.format(_beginDate))
+    endText.text = context.resString(R.string.end_date, datePicker.dateFormat.format(_endDate))
 
     beginText.setOnClickListener {
         selectedBegin = true
@@ -70,7 +70,7 @@ fun ExDialog.dateRangePicker(
     beginText.performClick()
     customView(view = customView)
     addEventWatcher { _, event ->
-        if (event == ExDialogEvent.ON_CLICK_POSITIVE_BUTTON && customViewFlag == flag) {
+        if (event == ExDialogEvent.ON_CLICK_POSITIVE_BUTTON && contentViewIdentifier == flag) {
             callback?.invoke(this,
                 datePicker.dateFormat.let { it.parse(it.format(_beginDate)) },
                 datePicker.dateFormat.let { it.parse(it.format(_endDate)) }
@@ -78,4 +78,3 @@ fun ExDialog.dateRangePicker(
         }
     }
 }
-

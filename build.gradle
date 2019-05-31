@@ -12,8 +12,9 @@ buildscript {
             'core_ktx'        : 'androidx.core:core-ktx:1.2.0-alpha01',
             'material'        : 'com.google.android.material:material:1.1.0-alpha06',
             'kotlin'          : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
-            'datepicker'      : "com.tuuzed.androidx.datepicker:datepicker:1.0.0",
+            'datepicker'      : "com.tuuzed.androidx.datepicker:datepicker:1.0.1",
             'android_spinkit' : "com.github.ybq:Android-SpinKit:1.2.0",
+            'list_adapter'    : "com.tuuzed.androidx.list:adapter-ktx:3.0.0-alpha11",
             // test
             'junit'           : 'junit:junit:4.12',
             'runner'          : 'androidx.test:runner:1.1.1',
@@ -27,8 +28,11 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        //
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        //
+        classpath 'com.tuuzed.gradle.plugin:gitvc:0.1.2'
     }
 }
 
@@ -40,6 +44,9 @@ allprojects {
 
     }
 }
+
+group = 'com.tuuzed.androidx.exdialog'
+version = '0.5.0-alpha01'
 
 task clean(type: Delete) {
     delete rootProject.buildDir
