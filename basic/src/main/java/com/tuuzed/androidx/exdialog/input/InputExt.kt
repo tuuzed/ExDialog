@@ -50,16 +50,16 @@ fun ExDialog.input(
             if (validator != null) {
                 val testPass = validator.invoke(this@input, text ?: "", errorText)
                 if (testPass) {
-                    textInputLayout.isErrorEnabled = true
-                    textInputLayout.error = errorText[0]
-                    setPositiveButtonEnable(false)
-                } else {
                     if (helperText != null) {
                         textInputLayout.isHelperTextEnabled = true
                         textInputLayout.helperText = helperText
                     }
                     textInputLayout.isErrorEnabled = false
                     setPositiveButtonEnable(true)
+                } else {
+                    textInputLayout.isErrorEnabled = true
+                    textInputLayout.error = errorText[0]
+                    setPositiveButtonEnable(false)
                 }
             }
             watcher?.invoke(this@input, text ?: "")
@@ -105,16 +105,16 @@ fun ExDialog.input(
                     if (validator != null) {
                         val testPass = validator.invoke(this@input, text ?: "", errorText)
                         if (testPass) {
-                            textInputLayout.isErrorEnabled = true
-                            textInputLayout.error = errorText[0]
-                            setPositiveButtonEnable(false)
-                        } else {
                             if (helperText != null) {
                                 textInputLayout.isHelperTextEnabled = true
                                 textInputLayout.helperText = helperText
                             }
                             textInputLayout.isErrorEnabled = false
                             setPositiveButtonEnable(true)
+                        } else {
+                            textInputLayout.isErrorEnabled = true
+                            textInputLayout.error = errorText[0]
+                            setPositiveButtonEnable(false)
                         }
                     }
                 }

@@ -55,10 +55,10 @@
             android:id="@+id/date_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
             android:paddingEnd="8dp"
             android:paddingRight="8dp"
             android:paddingTop="16dp"
+            android:paddingBottom="8dp"
             app:dp_datePickerType="YMDHM"
             app:dp_textColor="?android:attr/textColorPrimary"
     />
