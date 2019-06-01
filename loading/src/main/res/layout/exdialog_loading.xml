@@ -14,14 +14,13 @@
             style="@style/SpinKitView.Small.Wave"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:SpinKit_Color="?attr/colorPrimary"
-            android:layout_marginBottom="4dp"/>
+            app:SpinKit_Color="?attr/colorPrimary"/>
 
     <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/loading_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="14sp"
             android:maxLength="10"
