@@ -14,7 +14,7 @@ dependencies {
     implementation 'com.tuuzed.androidx.exdialog:basic:latest.release'
     implementation 'com.tuuzed.androidx.exdialog:datepicker:latest.release'
     implementation 'com.tuuzed.androidx.exdialog:loading:latest.release'
-    implementation 'com.tuuzed.androidx.exdialog:progreesbar:latest.release'
+    implementation 'com.tuuzed.androidx.exdialog:progressbar:latest.release'
     
     
 }
