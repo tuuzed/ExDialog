@@ -11,11 +11,11 @@ repositories {
 
 dependencies {
 
-    implementation 'com.tuuzed.androidx.exdialog:basic:latest.release'
-    implementation 'com.tuuzed.androidx.exdialog:datepicker:latest.release'
-    implementation 'com.tuuzed.androidx.exdialog:loading:latest.release'
-    implementation 'com.tuuzed.androidx.exdialog:progressbar:latest.release'
-    
+    def exdialog_version = 'latest.release'
+    implementation "com.tuuzed.androidx.exdialog:basic:$exdialog_version"
+    implementation "com.tuuzed.androidx.exdialog:datepicker:$exdialog_version"
+    implementation "com.tuuzed.androidx.exdialog:loading:$exdialog_version"
+    implementation "com.tuuzed.androidx.exdialog:progressbar:$exdialog_version"
     
 }
 ```
