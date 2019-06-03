@@ -6,7 +6,6 @@ import android.widget.TextView
 import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import com.tuuzed.androidx.exdialog.ExDialog
-import com.tuuzed.androidx.exdialog.ExDialogEvent
 import java.util.*
 
 
@@ -21,8 +20,8 @@ fun ExDialog.dateRangePicker(
     watcher: DateRangePickerWatcher = null,
     callback: DateRangePickerCallback = null
 ) {
-    val flag = "ExDialog#dateRangePicker".hashCode()
-    contentViewIdentifier = flag
+    val type = "ExDialog#dateRangePicker".hashCode()
+    customViewType = type
 
     var selectedBegin = true
     var beginDate = beginDate
@@ -69,7 +68,7 @@ fun ExDialog.dateRangePicker(
     beginText.performClick()
     customView(view = customView)
     addEventWatcher { _, event ->
-        if (event == ExDialogEvent.ON_CLICK_POSITIVE_BUTTON && contentViewIdentifier == flag) {
+        if (event == ExDialog.ON_CLICK_POSITIVE_BUTTON && customViewType == type) {
             callback?.invoke(this,
                 datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
                 datePicker.dateFormat.let { it.parse(it.format(endDate)) }

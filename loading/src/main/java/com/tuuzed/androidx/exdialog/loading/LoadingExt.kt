@@ -17,9 +17,8 @@ fun ExDialog.loading(
     icon: Sprite = Wave(), @ColorRes iconColorRes: Int = View.NO_ID, @ColorInt iconColor: Int = -1,
     text: CharSequence? = null, @ColorRes textColorRes: Int = View.NO_ID, @ColorInt textColor: Int = -1
 ) {
-
-    val flag = "ExDialog#loading".hashCode()
-    contentViewIdentifier = flag
+    val type = "ExDialog#loading".hashCode()
+    customViewType = type
 
     val customView = LayoutInflater.from(context).inflate(
         R.layout.exdialog_loading, null, false

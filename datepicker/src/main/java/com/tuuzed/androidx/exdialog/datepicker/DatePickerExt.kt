@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import com.tuuzed.androidx.exdialog.ExDialog
-import com.tuuzed.androidx.exdialog.ExDialogEvent
 import java.util.*
+
 
 @SuppressLint("InflateParams")
 fun ExDialog.datePicker(
@@ -17,8 +17,8 @@ fun ExDialog.datePicker(
     watcher: DatePickerWatcher = null,
     callback: DatePickerCallback = null
 ) {
-    val flag = "ExDialog#datePicker".hashCode()
-    contentViewIdentifier = flag
+    val type = "ExDialog#datePicker".hashCode()
+    customViewType = type
 
     val customView = LayoutInflater.from(context).inflate(
         R.layout.exdialog_datepicker, null, false
@@ -31,7 +31,7 @@ fun ExDialog.datePicker(
     datePicker.setOnDateChangedListener { watcher?.invoke(this, it) }
     customView(view = customView)
     addEventWatcher { _, event ->
-        if (event == ExDialogEvent.ON_CLICK_POSITIVE_BUTTON && contentViewIdentifier == flag) {
+        if (event == ExDialog.ON_CLICK_POSITIVE_BUTTON && customViewType == type) {
             callback?.invoke(
                 this,
                 datePicker.dateFormat.let { it.parse(it.format(datePicker.date)) }

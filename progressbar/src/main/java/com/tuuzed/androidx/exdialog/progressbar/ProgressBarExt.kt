@@ -14,8 +14,8 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 fun ExDialog.progressBar(
     text: CharSequence? = null, @ColorRes textColorRes: Int = View.NO_ID, @ColorInt textColor: Int = -1
 ) {
-    val flag = "ExDialog#progressBar".hashCode()
-    contentViewIdentifier = flag
+    val type = "ExDialog#progressBar".hashCode()
+    customViewType = type
 
     val customView = LayoutInflater.from(context).inflate(
         R.layout.exdialog_progressbar, null, false
