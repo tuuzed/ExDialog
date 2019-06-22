@@ -20,12 +20,53 @@ class ExDialog constructor(
 ) : DialogInterface {
 
     companion object {
+        /**
+         * 对话框显示前
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.show
+         */
         const val ON_PRE_SHOW = 1
+        /**
+         * 对话框显示
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.show
+         */
         const val ON_SHOW = 2
+        /**
+         * 取消
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.cancel
+         */
         const val ON_CANCEL = 3
+        /**
+         * 关闭
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.dismiss
+         */
         const val ON_DISMISS = 4
+        /**
+         * 点击Positive按钮
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.positiveButton
+         */
         const val ON_CLICK_POSITIVE_BUTTON = 5
+        /**
+         * 点击Negative按钮
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.negativeButton
+         */
         const val ON_CLICK_NEGATIVE_BUTTON = 6
+        /**
+         * 点击Neutral按钮
+         *
+         * @see ExDialog.neutralButton
+         */
         const val ON_CLICK_NEUTRAL_BUTTON = 7
 
         private const val CONTENT_VIEW_NONE = 0
@@ -41,17 +82,27 @@ class ExDialog constructor(
         private const val CONTENT_VIEW_CUSTOM_VIEW = 5
     }
 
-    private var alertDialog: AlertDialog? = null
+    /**
+     * 事件观察者列表
+     */
     private val eventWatcherList = CopyOnWriteArrayList<ExDialogEventWatcher>()
+    /**
+     * 对话框
+     */
+    private var alertDialog: AlertDialog? = null
 
     private var cancelable: Boolean? = null
     private var canceledOnTouchOutside: Boolean? = null
 
     private var icon: Drawable? = null
     private var title: CharSequence? = null
-    //
+    /**
+     * ContentView 标识
+     */
     private var contentViewIdentifier = CONTENT_VIEW_NONE
-    // 自定义View类型
+    /**
+     * 自定义View类型
+     */
     var customViewType = 0
     //
     private var message: CharSequence? = null
@@ -90,9 +141,9 @@ class ExDialog constructor(
     private var positiveButtonColor: Int? = null
     private var positiveButtonCallback: ExDialogCallback = null
 
-    fun show(material: Boolean = true, func: ExDialog.() -> Unit): ExDialog {
+    fun show(materialTheme: Boolean = true, func: ExDialog.() -> Unit): ExDialog {
         func(this)
-        val builder = createAlertDialogBuilder(material).setIcon(icon)
+        val builder = createAlertDialogBuilder(materialTheme).setIcon(icon)
             .setTitle(title)
             .setNeutralButtonIcon(neutralButtonIcon)
             .setNeutralButton(neutralButtonText) { _, _ ->
@@ -304,11 +355,13 @@ class ExDialog constructor(
         eventWatcherList.remove(watcher)
     }
 
-    private fun createAlertDialogBuilder(material: Boolean) = if (material) try {
-        MaterialAlertDialogBuilder(context)
-    } catch (e: Exception) {
-        AlertDialog.Builder(context)
-    } else {
-        AlertDialog.Builder(context)
-    }
+    private fun createAlertDialogBuilder(materialTheme: Boolean) =
+        if (materialTheme) try {
+            MaterialAlertDialogBuilder(context)
+        } catch (e: Exception) {
+            AlertDialog.Builder(context)
+        } else {
+            AlertDialog.Builder(context)
+        }
+
 }
