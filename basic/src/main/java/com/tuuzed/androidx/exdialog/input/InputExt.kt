@@ -8,8 +8,8 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.tuuzed.androidx.exdialog.ExDialog
-import com.tuuzed.androidx.exdialog.ExDialogEvent
 import com.tuuzed.androidx.exdialog.R
+
 
 @SuppressLint("InflateParams")
 fun ExDialog.input(
@@ -23,8 +23,8 @@ fun ExDialog.input(
     watcher: TextWatcher? = null,
     callback: InputCallback? = null
 ) {
-    val flag = "ExDialog#input".hashCode()
-    contentViewIdentifier = flag
+    val type = "ExDialog#input".hashCode()
+    customViewType = type
 
     val customView = LayoutInflater.from(context).inflate(
         R.layout.exdialog_edittext, null, false
@@ -82,7 +82,7 @@ fun ExDialog.input(
     customView(view = customView)
     addEventWatcher { _, event ->
         when (event) {
-            ExDialogEvent.ON_SHOW -> {
+            ExDialog.ON_SHOW -> {
                 window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                 textInputEditText.requestFocus()
                 textInputEditText.post {
@@ -119,11 +119,11 @@ fun ExDialog.input(
                     }
                 }
             }
-            ExDialogEvent.ON_DISMISS -> {
+            ExDialog.ON_DISMISS -> {
                 toggleSoftInput(textInputEditText, false)
             }
-            ExDialogEvent.ON_CLICK_POSITIVE_BUTTON -> {
-                if (contentViewIdentifier == flag) {
+            ExDialog.ON_CLICK_POSITIVE_BUTTON -> {
+                if (customViewType == type) {
                     callback?.invoke(this, textInputEditText.text ?: "")
                 }
             }

@@ -14,7 +14,6 @@ import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ybq.android.spinkit.style.Circle
 import com.tuuzed.androidx.exdialog.ExDialog
-import com.tuuzed.androidx.exdialog.ExDialogEvent
 import com.tuuzed.androidx.exdialog.datepicker.datePicker
 import com.tuuzed.androidx.exdialog.datepicker.dateRangePicker
 import com.tuuzed.androidx.exdialog.input.input
@@ -87,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                 canceledOnTouchOutside(false)
                 loading(text = "加载中...")
                 addEventWatcher { _, event ->
-                    if (event == ExDialogEvent.ON_DISMISS) {
+                    if (event == ExDialog.ON_DISMISS) {
                         toast("onDismiss")
                     }
                 }

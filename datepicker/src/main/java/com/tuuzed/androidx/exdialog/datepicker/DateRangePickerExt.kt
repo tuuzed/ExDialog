@@ -6,11 +6,10 @@ import android.widget.TextView
 import com.tuuzed.androidx.datepicker.DatePicker
 import com.tuuzed.androidx.datepicker.DatePickerType
 import com.tuuzed.androidx.exdialog.ExDialog
-import com.tuuzed.androidx.exdialog.ExDialogEvent
 import java.util.*
 
 
-@Suppress("LocalVariableName")
+@Suppress("LocalVariableName", "NAME_SHADOWING")
 @SuppressLint("InflateParams", "SetTextI18n")
 fun ExDialog.dateRangePicker(
     @DatePickerType datePickerType: Int = DatePickerType.TYPE_YMDHM,
@@ -21,12 +20,12 @@ fun ExDialog.dateRangePicker(
     watcher: DateRangePickerWatcher = null,
     callback: DateRangePickerCallback = null
 ) {
-    val flag = "ExDialog#dateRangePicker".hashCode()
-    contentViewIdentifier = flag
+    val type = "ExDialog#dateRangePicker".hashCode()
+    customViewType = type
 
     var selectedBegin = true
-    var _beginDate = beginDate
-    var _endDate = endDate
+    var beginDate = beginDate
+    var endDate = endDate
     val customView = LayoutInflater.from(context).inflate(
         R.layout.exdialog_daterangepicker, null, false
     )
@@ -39,20 +38,20 @@ fun ExDialog.dateRangePicker(
     datePicker.datePickerType = datePickerType
     datePicker.setOnDateChangedListener { date ->
         if (selectedBegin) {
-            _beginDate = date
-            beginText.text = context.resString(R.string.begin_date, datePicker.dateFormat.format(_beginDate))
+            beginDate = date
+            beginText.text = context.resString(R.string.begin_date, datePicker.dateFormat.format(beginDate))
         } else {
-            _endDate = date
-            endText.text = context.resString(R.string.end_date, datePicker.dateFormat.format(_endDate))
+            endDate = date
+            endText.text = context.resString(R.string.end_date, datePicker.dateFormat.format(endDate))
         }
-        setPositiveButtonEnable(_beginDate.time <= _endDate.time)
+        setPositiveButtonEnable(beginDate.time <= endDate.time)
         watcher?.invoke(this,
-            datePicker.dateFormat.let { it.parse(it.format(_beginDate)) },
-            datePicker.dateFormat.let { it.parse(it.format(_endDate)) }
+            datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
+            datePicker.dateFormat.let { it.parse(it.format(endDate)) }
         )
     }
-    beginText.text = context.resString(R.string.begin_date, datePicker.dateFormat.format(_beginDate))
-    endText.text = context.resString(R.string.end_date, datePicker.dateFormat.format(_endDate))
+    beginText.text = context.resString(R.string.begin_date, datePicker.dateFormat.format(beginDate))
+    endText.text = context.resString(R.string.end_date, datePicker.dateFormat.format(endDate))
 
     beginText.setOnClickListener {
         selectedBegin = true
@@ -69,10 +68,10 @@ fun ExDialog.dateRangePicker(
     beginText.performClick()
     customView(view = customView)
     addEventWatcher { _, event ->
-        if (event == ExDialogEvent.ON_CLICK_POSITIVE_BUTTON && contentViewIdentifier == flag) {
+        if (event == ExDialog.ON_CLICK_POSITIVE_BUTTON && customViewType == type) {
             callback?.invoke(this,
-                datePicker.dateFormat.let { it.parse(it.format(_beginDate)) },
-                datePicker.dateFormat.let { it.parse(it.format(_endDate)) }
+                datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
+                datePicker.dateFormat.let { it.parse(it.format(endDate)) }
             )
         }
     }

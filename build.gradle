@@ -3,7 +3,7 @@
 buildscript {
     ext.minSdk = 14
     ext.targetSdk = 28
-    ext.kotlin_version = '1.3.31'
+    ext.kotlin_version = '1.3.40'
     ext.deps = [
             'appcompat'          : 'androidx.appcompat:appcompat:1.1.0-alpha05',
             'annotation'         : 'androidx.annotation:annotation:1.1.0-rc01',
@@ -47,7 +47,7 @@ allprojects {
 }
 
 group = 'com.tuuzed.androidx.exdialog'
-version = '1.0.0-rc01'
+version = '1.0.0'
 
 task clean(type: Delete) {
     delete rootProject.buildDir

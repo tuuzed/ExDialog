@@ -10,9 +10,9 @@ import android.widget.Button
 import androidx.annotation.*
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.tuuzed.androidx.exdialog.internal.adjustButtonColor
 import com.tuuzed.androidx.exdialog.internal.indices
 import com.tuuzed.androidx.exdialog.internal.values
-import java.lang.ref.WeakReference
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ExDialog constructor(
@@ -20,6 +20,55 @@ class ExDialog constructor(
 ) : DialogInterface {
 
     companion object {
+        /**
+         * 对话框显示前
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.show
+         */
+        const val ON_PRE_SHOW = 1
+        /**
+         * 对话框显示
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.show
+         */
+        const val ON_SHOW = 2
+        /**
+         * 取消
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.cancel
+         */
+        const val ON_CANCEL = 3
+        /**
+         * 关闭
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.dismiss
+         */
+        const val ON_DISMISS = 4
+        /**
+         * 点击Positive按钮
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.positiveButton
+         */
+        const val ON_CLICK_POSITIVE_BUTTON = 5
+        /**
+         * 点击Negative按钮
+         *
+         * @see ExDialog.addEventWatcher
+         * @see ExDialog.negativeButton
+         */
+        const val ON_CLICK_NEGATIVE_BUTTON = 6
+        /**
+         * 点击Neutral按钮
+         *
+         * @see ExDialog.neutralButton
+         */
+        const val ON_CLICK_NEUTRAL_BUTTON = 7
+
         private const val CONTENT_VIEW_NONE = 0
         // 消息
         private const val CONTENT_VIEW_MESSAGE = 1
@@ -33,16 +82,28 @@ class ExDialog constructor(
         private const val CONTENT_VIEW_CUSTOM_VIEW = 5
     }
 
+    /**
+     * 事件观察者列表
+     */
+    private val eventWatcherList = CopyOnWriteArrayList<ExDialogEventWatcher>()
+    /**
+     * 对话框
+     */
     private var alertDialog: AlertDialog? = null
-    private val eventWatchers = CopyOnWriteArrayList<WeakReference<ExDialogEventWatcher>>()
 
     private var cancelable: Boolean? = null
     private var canceledOnTouchOutside: Boolean? = null
 
     private var icon: Drawable? = null
     private var title: CharSequence? = null
-    //
-    var contentViewIdentifier = CONTENT_VIEW_NONE
+    /**
+     * ContentView 标识
+     */
+    private var contentViewIdentifier = CONTENT_VIEW_NONE
+    /**
+     * 自定义View类型
+     */
+    var customViewType = 0
     //
     private var message: CharSequence? = null
     // 列表
@@ -80,18 +141,18 @@ class ExDialog constructor(
     private var positiveButtonColor: Int? = null
     private var positiveButtonCallback: ExDialogCallback = null
 
-    fun show(material: Boolean = true, func: ExDialog.() -> Unit): ExDialog {
+    fun show(materialTheme: Boolean = true, func: ExDialog.() -> Unit): ExDialog {
         func(this)
-        val builder = createAlertDialogBuilder(material).setIcon(icon)
+        val builder = createAlertDialogBuilder(materialTheme).setIcon(icon)
             .setTitle(title)
             .setNeutralButtonIcon(neutralButtonIcon)
             .setNeutralButton(neutralButtonText) { _, _ ->
-                eventWatchers.forEach { it.get()?.invoke(this, ExDialogEvent.ON_CLICK_NEUTRAL_BUTTON) }
+                eventWatcherList.forEach { it.invoke(this, ON_CLICK_NEUTRAL_BUTTON) }
                 neutralButtonCallback?.invoke(this)
             }
             .setNegativeButtonIcon(negativeButtonIcon)
             .setNegativeButton(negativeButtonText) { _, _ ->
-                eventWatchers.forEach { it.get()?.invoke(this, ExDialogEvent.ON_CLICK_NEGATIVE_BUTTON) }
+                eventWatcherList.forEach { it.invoke(this, ON_CLICK_NEGATIVE_BUTTON) }
                 negativeButtonCallback?.invoke(this)
             }
             .setPositiveButtonIcon(positiveButtonIcon)
@@ -108,11 +169,16 @@ class ExDialog constructor(
                         multiChoiceCheckedIndices.indices(true)
                     )
                 }
-                eventWatchers.forEach { it.get()?.invoke(this, ExDialogEvent.ON_CLICK_POSITIVE_BUTTON) }
+                eventWatcherList.forEach { it.invoke(this, ON_CLICK_POSITIVE_BUTTON) }
                 positiveButtonCallback?.invoke(this)
             }
-            .setOnCancelListener { eventWatchers.forEach { it.get()?.invoke(this, ExDialogEvent.ON_CANCEL) } }
-            .setOnDismissListener { eventWatchers.forEach { it.get()?.invoke(this, ExDialogEvent.ON_DISMISS) } }
+            .setOnCancelListener {
+                eventWatcherList.forEach { it.invoke(this, ON_CANCEL) }
+            }
+            .setOnDismissListener {
+                eventWatcherList.forEach { it.invoke(this, ON_DISMISS) }
+                eventWatcherList.clear()
+            }
         when (contentViewIdentifier) {
             // 消息
             CONTENT_VIEW_MESSAGE -> builder.setMessage(message)
@@ -145,16 +211,16 @@ class ExDialog constructor(
             alertDialog = this
             cancelable?.let { setCancelable(it) }
             canceledOnTouchOutside?.let { setCanceledOnTouchOutside(it) }
-            eventWatchers.forEach { it.get()?.invoke(this@ExDialog, ExDialogEvent.ON_PRE_SHOW) }
+            eventWatcherList.forEach { it.invoke(this@ExDialog, ON_PRE_SHOW) }
             show()
             // 设置按钮颜色
             neutralButton = getButton(DialogInterface.BUTTON_NEUTRAL)
             negativeButton = getButton(DialogInterface.BUTTON_NEGATIVE)
             positiveButton = getButton(DialogInterface.BUTTON_POSITIVE)
-            com.tuuzed.androidx.exdialog.internal.adjustButtonColor(neutralButton, neutralButtonColor)
-            com.tuuzed.androidx.exdialog.internal.adjustButtonColor(negativeButton, negativeButtonColor)
-            com.tuuzed.androidx.exdialog.internal.adjustButtonColor(positiveButton, positiveButtonColor)
-            eventWatchers.forEach { it.get()?.invoke(this@ExDialog, ExDialogEvent.ON_SHOW) }
+            adjustButtonColor(neutralButton, neutralButtonColor)
+            adjustButtonColor(negativeButton, negativeButtonColor)
+            adjustButtonColor(positiveButton, positiveButtonColor)
+            eventWatcherList.forEach { it.invoke(this@ExDialog, ON_SHOW) }
         }
         return this
     }
@@ -165,7 +231,6 @@ class ExDialog constructor(
 
     override fun dismiss() {
         alertDialog?.dismiss()
-        eventWatchers.clear()
     }
 
     val window: Window? get() = alertDialog?.window
@@ -283,24 +348,20 @@ class ExDialog constructor(
 
 
     fun addEventWatcher(watcher: ExDialogEventWatcher) {
-        eventWatchers.add(WeakReference(watcher))
+        eventWatcherList.add(watcher)
     }
 
     fun removeEventWatcher(watcher: ExDialogEventWatcher) {
-        var entry: WeakReference<ExDialogEventWatcher>? = null
-        eventWatchers.forEach {
-            if (it.get() == watcher) {
-                entry = it
-            }
-        }
-        eventWatchers.remove(entry)
+        eventWatcherList.remove(watcher)
     }
 
-    private fun createAlertDialogBuilder(material: Boolean) = if (material) try {
-        MaterialAlertDialogBuilder(context)
-    } catch (e: Exception) {
-        AlertDialog.Builder(context)
-    } else {
-        AlertDialog.Builder(context)
-    }
+    private fun createAlertDialogBuilder(materialTheme: Boolean) =
+        if (materialTheme) try {
+            MaterialAlertDialogBuilder(context)
+        } catch (e: Exception) {
+            AlertDialog.Builder(context)
+        } else {
+            AlertDialog.Builder(context)
+        }
+
 }
