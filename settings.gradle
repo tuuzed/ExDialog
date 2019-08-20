@@ -1,1 +1,5 @@
-include ':sample', ':basic', ':datepicker', ':loading', ':progressbar'
+include ':exdialog-sample'
+include ':exdialog-basic'
+include ':exdialog-datepicker'
+include ':exdialog-loading'
+include ':exdialog-progressbar'

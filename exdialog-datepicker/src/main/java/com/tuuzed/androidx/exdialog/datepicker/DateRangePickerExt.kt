@@ -39,19 +39,20 @@ fun ExDialog.dateRangePicker(
     datePicker.setOnDateChangedListener { date ->
         if (selectedBegin) {
             beginDate = date
-            beginText.text = context.resString(R.string.begin_date, datePicker.dateFormat.format(beginDate))
+            beginText.text = context.resString(R.string.begin_date, formatDate(beginDate, datePickerType))
         } else {
             endDate = date
-            endText.text = context.resString(R.string.end_date, datePicker.dateFormat.format(endDate))
+            endText.text = context.resString(R.string.end_date, formatDate(endDate, datePickerType))
         }
         setPositiveButtonEnable(beginDate.time <= endDate.time)
-        watcher?.invoke(this,
-            datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
-            datePicker.dateFormat.let { it.parse(it.format(endDate)) }
+        watcher?.invoke(
+            this,
+            parseDate(formatDate(beginDate, datePickerType), datePickerType),
+            parseDate(formatDate(endDate, datePickerType), datePickerType)
         )
     }
-    beginText.text = context.resString(R.string.begin_date, datePicker.dateFormat.format(beginDate))
-    endText.text = context.resString(R.string.end_date, datePicker.dateFormat.format(endDate))
+    beginText.text = context.resString(R.string.begin_date, formatDate(beginDate, datePickerType))
+    endText.text = context.resString(R.string.end_date, formatDate(endDate, datePickerType))
 
     beginText.setOnClickListener {
         selectedBegin = true
@@ -69,9 +70,10 @@ fun ExDialog.dateRangePicker(
     customView(view = customView)
     addEventWatcher { _, event ->
         if (event == ExDialog.ON_CLICK_POSITIVE_BUTTON && customViewType == type) {
-            callback?.invoke(this,
-                datePicker.dateFormat.let { it.parse(it.format(beginDate)) },
-                datePicker.dateFormat.let { it.parse(it.format(endDate)) }
+            callback?.invoke(
+                this,
+                parseDate(formatDate(beginDate, datePickerType), datePickerType),
+                parseDate(formatDate(endDate, datePickerType), datePickerType)
             )
         }
     }

@@ -8,11 +8,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/basic" />
-            <option value="$PROJECT_DIR$/datepicker" />
-            <option value="$PROJECT_DIR$/loading" />
-            <option value="$PROJECT_DIR$/progressbar" />
-            <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/exdialog-basic" />
+            <option value="$PROJECT_DIR$/exdialog-datepicker" />
+            <option value="$PROJECT_DIR$/exdialog-loading" />
+            <option value="$PROJECT_DIR$/exdialog-progressbar" />
+            <option value="$PROJECT_DIR$/exdialog-sample" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
