@@ -1,6 +1,6 @@
 # ExDialog
 
-[ ![Download](https://api.bintray.com/packages/tuuzed/maven/com.tuuzed.exdialog:basic/images/download.svg) ](https://bintray.com/tuuzed/maven/com.tuuzed.exdialog:basic/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/tuuzed/maven/com.tuuzed.exdialog%3Aexdialog-basic/images/download.svg) ](https://bintray.com/tuuzed/maven/com.tuuzed.exdialog%3Aexdialog-basic/_latestVersion)
 
 ### 添加依赖
 
