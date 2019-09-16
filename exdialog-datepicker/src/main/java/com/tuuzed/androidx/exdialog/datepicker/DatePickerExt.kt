@@ -32,7 +32,10 @@ fun ExDialog.datePicker(
     customView(view = customView)
     addEventWatcher { _, event ->
         if (event == ExDialog.ON_CLICK_POSITIVE_BUTTON && customViewType == type) {
-            callback?.invoke(this, parseDate(formatDate(date, datePickerType), datePickerType))
+            callback?.invoke(
+                this,
+                parseDate(formatDate(datePicker.date, datePickerType), datePickerType)
+            )
         }
     }
 }

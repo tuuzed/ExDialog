@@ -37,7 +37,7 @@ allprojects {
 }
 
 group = 'com.tuuzed.exdialog'
-version = '1.5.1'
+version = '1.5.2'
 
 task clean(type: Delete) {
     delete rootProject.buildDir
